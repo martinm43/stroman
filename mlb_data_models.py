@@ -9,7 +9,7 @@ class BaseModel(Model):
     class Meta:
         database = database
 
-class Teams(BaseModel):
+class Team(BaseModel):
     abbreviation = TextField(null=True)
     city = TextField(null=True) #for weather matching purposes
     league = TextField(null=True)
@@ -20,9 +20,11 @@ class Teams(BaseModel):
     class Meta:
         db_table = 'teams'
 
-class Games(BaseModel): #initialize with default values
+class Game(BaseModel): #initialize with default values
     away_team = TextField(null=True)
     home_team = TextField(null=True)
+    away_pts = IntegerField(null=True)
+    home_pts = IntegerField(null=True)
 
     class Meta:
         db_table = 'games'
