@@ -24,4 +24,5 @@ mlb_schedule_2018=pd.read_excel('MLB_schedule_2018_1_.xls',header=None)
 mlb_array=mlb_schedule_2018.as_matrix()
 
 mlb_team_list=mlb_array[0,2:].tolist()
+mlb_team_list.sort()
 pprint(mlb_team_list)
