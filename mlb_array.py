@@ -29,7 +29,13 @@ pprint(mlb_team_list)
 
 id_dict=[{'id':i+1,'Abbreviation':abbrev} for i,abbrev in enumerate(mlb_team_list)]
 
-#trial for row 1 with real data
-for j in range(2,mlb_array.shape[1]):
-    #date,column header team, opponent
-    print mlb_array[1,1],mlb_array[0,j],mlb_array[1,j]
+for i in range(1,mlb_array.shape[0]):    
+    #trial for row 1 with real data
+    for j in range(2,mlb_array.shape[1]):
+        #date,column header team, opponent
+        if str(mlb_array[i,j])!='nan':
+            #date,home team,away team
+            if mlb_array[i,j][0]=='@':
+                print mlb_array[i,1],mlb_array[i,j].replace('@',''),mlb_array[0,j]
+            else:
+                print mlb_array[i,1],mlb_array[0,j],mlb_array[i,j]    
