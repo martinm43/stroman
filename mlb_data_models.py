@@ -25,5 +25,5 @@ class Games(BaseModel): #initialize with default values
     home_team = TextField(null=True)
 
     class Meta:
-        db_table = 'teams'
+        db_table = 'games'
 
