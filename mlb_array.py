@@ -26,3 +26,10 @@ mlb_array=mlb_schedule_2018.as_matrix()
 mlb_team_list=mlb_array[0,2:].tolist()
 mlb_team_list.sort()
 pprint(mlb_team_list)
+
+id_dict=[{'id':i+1,'Abbreviation':abbrev} for i,abbrev in enumerate(mlb_team_list)]
+
+#trial for row 1 with real data
+for j in range(2,mlb_array.shape[1]):
+    #date,column header team, opponent
+    print mlb_array[1,1],mlb_array[0,j],mlb_array[1,j]
