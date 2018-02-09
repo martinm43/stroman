@@ -1,4 +1,4 @@
-from mlb_data_models import Teams, Games
+from mlb_data_models import Team, Game
 
-Teams.create_table(True)
-Games.create_table(True)
+Team.create_table(True)
+Game.create_table(True)
