@@ -28,6 +28,7 @@ class Game(BaseModel): #initialize with default values
     home_pts = IntegerField(null=True)
     away_pitcher_id = IntegerField(null=True)
     home_pitcher_id = IntegerField(null=True)
+    scheduled_date = DateTimeField(null=True)
 
     class Meta:
         db_table = 'games'
