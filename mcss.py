@@ -13,11 +13,8 @@ from supports import dict_search
 
 #Future games.
 x=Game.select().where(Game.scheduled_date>=datetime.datetime.now())
-#id,scheduled_date,away_team,home_team
-x=[[i.id,i.scheduled_date,i.away_team,i.home_team] for i in x]
-pprint(x)
+game_dict_list=[dict(zip(['id','scheduled_date','away_team','home_team'],[i.id,i.scheduled_date,i.away_team,i.home_team])) for i in x]
 
-#
 #Analytics component - get ratings (this is ptsaverages and ratings_calculations under the old scheme
 #TBD - for now use a dummy - these are the 2017 end of season ranks
 ratings=[{'abbreviation':'Ana','rating':0.1},
@@ -56,9 +53,15 @@ for i,x in enumerate(ratings):
 
 #End of manual ratings.
 
-#Build a function of a function (I think decorators do this).
+#Build a function of a function (I think decorators do this) - research later.
 def get_rating(_ratings,id):
     return dict_search(_ratings,'team_id',id,'rating')
 
+#monte_carlo_calculation component
+for x in game_dict_list:
+    x['differential']=get_rating(ratings,x['home_team'])-get_rating(ratings,x['away_team'])
+    x['home_win_probability']=SRS_regress(x['differential'])
+
+pprint(game_dict_list)
 
 
