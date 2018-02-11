@@ -22,8 +22,10 @@ class Team(BaseModel):
         db_table = 'teams'
 
 class Game(BaseModel): #initialize with default values
-    away_team = TextField(null=True)
-    home_team = TextField(null=True)
+    away_team_name = TextField(null=True)
+    home_team_name = TextField(null=True)
+    away_team = IntegerField(null=True)
+    home_team = IntegerField(null=True)
     away_pts = IntegerField(null=True)
     home_pts = IntegerField(null=True)
     away_pitcher_id = IntegerField(null=True)
@@ -32,4 +34,12 @@ class Game(BaseModel): #initialize with default values
 
     class Meta:
         db_table = 'games'
+
+class SRSRating(BaseModel): #initialize with default values
+    rating_date = DateTimeField(null=True)
+    team_id = IntegerField(null=True)
+    rating = FloatField(null=True)
+
+    class Meta:
+        db_table = 'SRS_ratings'
 
