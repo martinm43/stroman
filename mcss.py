@@ -7,6 +7,7 @@ import datetime
 from mlb_data_models import Game
 from pprint import pprint
 from james import SRS_regress
+from supports import dict_search
 
 #Known wins - to be implemented, not yet required for obvious reasons.
 
@@ -16,6 +17,7 @@ x=Game.select().where(Game.scheduled_date>=datetime.datetime.now())
 x=[[i.id,i.scheduled_date,i.away_team,i.home_team] for i in x]
 pprint(x)
 
+#
 #Analytics component - get ratings (this is ptsaverages and ratings_calculations under the old scheme
 #TBD - for now use a dummy - these are the 2017 end of season ranks
 ratings=[{'abbreviation':'Ana','rating':0.1},
@@ -54,6 +56,9 @@ for i,x in enumerate(ratings):
 
 #End of manual ratings.
 
-#
+#Build a function of a function (I think decorators do this).
+def get_rating(_ratings,id):
+    return dict_search(_ratings,'team_id',id,'rating')
+
 
 
