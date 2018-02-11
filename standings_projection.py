@@ -62,6 +62,5 @@ for x in game_dict_list:
     x['differential']=get_rating(ratings,x['home_team'])-get_rating(ratings,x['away_team'])
     x['home_win_probability']=SRS_regress(x['differential'])
 
-pprint(game_dict_list)
-
+#simulation component
 
