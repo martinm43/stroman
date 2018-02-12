@@ -3,6 +3,8 @@ This script will implement the same strategy used in the "Naismith"  program,
 but only in one script.
 """
 
+import json
+import numpy as np
 import datetime
 from mlb_data_models import Game
 from pprint import pprint
@@ -63,5 +65,11 @@ for x in game_dict_list:
     x['differential']=get_rating(ratings,x['home_team'])-get_rating(ratings,x['away_team'])
     x['home_win_probability']=SRS_regress(x['differential'])
 
-#simulation component
+win_matrix=mcss(game_dict_list)
 
+#debug: write to a file
+debug_json_list=[x.pop('scheduled_date',None) for x in game_dict_list]
+with open('test_dicts.json','w') as fp:
+    json.dumps(game_dict_list)
+
+print(np.sum(win_matrix,axis=0))
