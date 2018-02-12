@@ -48,7 +48,7 @@ ratings=[{'abbreviation':'Ana','rating':0.1},
 {'abbreviation':'StL','rating':0.2},
 {'abbreviation':'Tam','rating':0.1},
 {'abbreviation':'Tex','rating':0.0},
-{'abbreviation':'Tor','rating':-0.3},
+{'abbreviation':'Tor','rating':0.0}, #edited, because I am a shameless homer (and because the first half hell season isn't representative)
 {'abbreviation':'Was','rating':0.6}]
 
 for i,x in enumerate(ratings):

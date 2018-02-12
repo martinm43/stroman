@@ -1,5 +1,5 @@
 """
-A bunch of functions that I use to 
+A bunch of functions that I use to do Monte Carlo simulations of issues
 """
 
 import random
@@ -18,6 +18,14 @@ def mcss(game_dict_list):
 if __name__=='__main__':
     import json
     from pprint import pprint
+    from mlb_data_models import Team,database
+
+    cursor=database.execute_sql('select distinct division from teams;')
+    list_of_divisions=[row[0] for row in cursor]
+
+    for d in list_of_divisions:
+        division_teams=Team.select(Team.team_name,Team.id).where(Team.division==d).get()
+        pprint(division_teams)
+
     with open('test_dicts','r') as fin:
         test_dict=json.load(fin)
-    pprint(test_dict)
