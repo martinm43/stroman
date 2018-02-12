@@ -68,8 +68,12 @@ for x in game_dict_list:
 win_matrix=mcss(game_dict_list)
 
 #debug: write to a file
-debug_json_list=[x.pop('scheduled_date',None) for x in game_dict_list]
-with open('test_dicts.json','w') as fp:
-    json.dumps(game_dict_list)
+debug_json_list=game_dict_list
+for x in debug_json_list:
+    x.pop('scheduled_date',None)
+pprint(debug_json_list)
+
+with open('test_dicts','w') as fout:
+    json.dump(debug_json_list,fout)
 
 print(np.sum(win_matrix,axis=0))

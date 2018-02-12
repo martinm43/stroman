@@ -1,3 +1,7 @@
+"""
+A bunch of functions that I use to 
+"""
+
 import random
 import numpy as np
 
@@ -12,4 +16,8 @@ def mcss(game_dict_list):
     return win_matrix
     
 if __name__=='__main__':
-    main()
+    import json
+    from pprint import pprint
+    with open('test_dicts','r') as fin:
+        test_dict=json.load(fin)
+    pprint(test_dict)
