@@ -44,5 +44,6 @@ if __name__=='__main__':
         for t in dt:
             other_division_team_ids=[x['team_id'] for x in dt if x['team_id']!=t['team_id']]
             division_wins=sum([win_matrix[i-1,t['team_id']-1] for i in other_division_team_ids])
-            print(t['team_name'])
-            pprint(division_wins)
+            t['division_wins']=division_wins
+    
+    pprint(league_teams)
