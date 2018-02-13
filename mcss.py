@@ -24,8 +24,8 @@ if __name__=='__main__':
     cursor=database.execute_sql('select distinct division from teams;')
     list_of_divisions=[row[0] for row in cursor]
 
-    division_teams=Team.select(Team.team_name,Team.id,Team.division)
-    division_teams=[dict(zip(['team_name','team_id','division'],[x.team_name,x.id,x.division])) for x in division_teams]
+    league_teams=Team.select(Team.team_name,Team.id,Team.division)
+    league_teams=[dict(zip(['team_name','team_id','division'],[x.team_name,x.id,x.division])) for x in league_teams]
 
     with open('test_dicts','r') as fin:
         test_dict=json.load(fin)
@@ -33,7 +33,16 @@ if __name__=='__main__':
     win_matrix=mcss(test_dict)
 
     total_wins=np.sum(win_matrix,axis=0)
-    for x in division_teams:
+    #Raw win totals.
+    for x in league_teams:
         x['total_wins']=total_wins[x['team_id']-1]
 
-    pprint(division_teams)
+    pprint(league_teams)
+    #Division win totals and eventually division leaders
+    for d in list_of_divisions:
+        dt=[x for x in league_teams if x['division']==d]
+        for t in dt:
+            other_division_team_ids=[x['team_id'] for x in dt if x['team_id']!=t['team_id']]
+            division_wins=sum([win_matrix[i-1,t['team_id']-1] for i in other_division_team_ids])
+            print(t['team_name'])
+            pprint(division_wins)
