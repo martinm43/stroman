@@ -24,8 +24,8 @@ if __name__=='__main__':
     cursor=database.execute_sql('select distinct division from teams;')
     list_of_divisions=[row[0] for row in cursor]
 
-    league_teams=Team.select(Team.team_name,Team.id,Team.division)
-    league_teams=[dict(zip(['team_name','team_id','division'],[x.team_name,x.id,x.division])) for x in league_teams]
+    league_teams=Team.select(Team.team_name,Team.id,Team.division,Team.league)
+    league_teams=[dict(zip(['team_name','team_id','division','league'],[x.team_name,x.id,x.division,x.league])) for x in league_teams]
 
     with open('test_dicts','r') as fin:
         test_dict=json.load(fin)
@@ -43,7 +43,10 @@ if __name__=='__main__':
         dt=[x for x in league_teams if x['division']==d]
         for t in dt:
             other_division_team_ids=[x['team_id'] for x in dt if x['team_id']!=t['team_id']]
+            other_league_team_ids=[x['team_id'] for x in league_teams if x['league']==t['league']]
             division_wins=sum([win_matrix[i-1,t['team_id']-1] for i in other_division_team_ids])
             t['division_wins']=division_wins
+            league_wins=sum([win_matrix[i-1,t['team_id']-1] for i in other_league_team_ids])
+            t['league_wins']=league_wins
     
     pprint(league_teams)
