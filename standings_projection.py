@@ -32,7 +32,7 @@ ratings=[{'abbreviation':'Ana','rating':0.1},
 {'abbreviation':'Col','rating':0.3},
 {'abbreviation':'Det','rating':-0.8},
 {'abbreviation':'Fla','rating':-0.5},
-{'abbreviation':'Hou','rating':-9.9},
+{'abbreviation':'Hou','rating':1.2},
 {'abbreviation':'Kan','rating':-0.4},
 {'abbreviation':'Los','rating':0.9},
 {'abbreviation':'Mil','rating':0.1},
@@ -71,9 +71,7 @@ win_matrix=mcss(game_dict_list)
 debug_json_list=game_dict_list
 for x in debug_json_list:
     x.pop('scheduled_date',None)
-pprint(debug_json_list)
 
 with open('test_dicts','w') as fout:
     json.dump(debug_json_list,fout)
 
-print(np.sum(win_matrix,axis=0))

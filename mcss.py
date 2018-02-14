@@ -50,4 +50,5 @@ if __name__=='__main__':
             t['league_wins']=league_wins
 
         #sort list of dicts             
-        pprint(dt)
+        new_dt=sorted(dt, key=lambda k: (-k['total_wins'],-k['division_wins'],-k['league_wins']))
+        pprint(new_dt)
