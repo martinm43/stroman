@@ -48,5 +48,6 @@ if __name__=='__main__':
             t['division_wins']=division_wins
             league_wins=sum([win_matrix[i-1,t['team_id']-1] for i in other_league_team_ids])
             t['league_wins']=league_wins
-    
-    pprint(league_teams)
+
+        #sort list of dicts             
+        pprint(dt)
