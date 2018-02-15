@@ -51,4 +51,10 @@ if __name__=='__main__':
 
         #sort list of dicts             
         new_dt=sorted(dt, key=lambda k: (-k['total_wins'],-k['division_wins'],-k['league_wins']))
-        pprint(new_dt)
+        for i,d in enumerate(new_dt):
+            d['div_rank']=i+1
+            if d['div_rank']==1:
+                d['div_winner']=True
+            else:
+                d['div_winner']=False
+    pprint(league_teams)
