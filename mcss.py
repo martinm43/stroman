@@ -15,18 +15,6 @@ def mcss(game_dict_list):
             win_matrix[x['away_team']-1,x['home_team']-1]+=1
     return win_matrix
 
-def tiebreaker(team_1_dict,team_2_dict,win_matrix):
-    pprint(team_1_dict)
-    pprint(team_2_dict)
-    #1: head to head
-    if team_1_dict["total_wins"]>team_2_dict["total_wins"]:
-        return 1
-    elif team_2_dict["total_wins"]>team_1_dict["total_wins"]:
-        return 2 
-    #2: division
-    #3: league
-    return 0
-    
 if __name__=='__main__':
     import json
     import numpy as np
@@ -63,7 +51,11 @@ if __name__=='__main__':
 
         #sort list of dicts             
         new_dt=sorted(dt, key=lambda k: (-k['total_wins'],-k['division_wins'],-k['league_wins']))
-        #pprint(new_dt)
+        for i,d in enumerate(new_dt):
+            d['div_rank']=i+1
+            if d['div_rank']==1:
+                d['div_winner']=True
+            else:
+                d['div_winner']=False
 
-
-    print(tiebreaker(new_dt[0],new_dt[1],win_matrix))
+    pprint(league_teams)
