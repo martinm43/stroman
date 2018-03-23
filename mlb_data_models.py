@@ -17,6 +17,7 @@ class Team(BaseModel):
     team = IntegerField(db_column='team_id', null=True)
     team_name = TextField(null=True)
     stadium_type = TextField(null=True)
+    mlbgames_name = TextField(null=True)
 
     class Meta:
         db_table = 'teams'
@@ -31,6 +32,7 @@ class Game(BaseModel): #initialize with default values
     away_pitcher_id = IntegerField(null=True)
     home_pitcher_id = IntegerField(null=True)
     scheduled_date = DateTimeField(null=True)
+    mlbgames_id_str = TextField(null=True)
 
     class Meta:
         db_table = 'games'

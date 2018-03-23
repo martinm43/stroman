@@ -40,7 +40,7 @@ if __name__=='__main__':
         test_dict=json.load(fin)
 
     #Iterative functionality (# of sims) to be added
-    ite=100000
+    ite=20000
     for i_ite in range(0,ite):
         win_matrix=mcss(test_dict)
 
