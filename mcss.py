@@ -1,5 +1,14 @@
 """
 A bunch of functions that I use to do Monte Carlo simulations of issues
+Performs Monte Carlo simulation using MLB
+schedule and then determines playoff teams.
+
+Tiebreaker logic to be developed. 
+Other functionality (such as processing daily updates)
+are far more important.
+
+MAM
+
 """
 
 import random
@@ -30,32 +39,36 @@ if __name__=='__main__':
     with open('test_dicts','r') as fin:
         test_dict=json.load(fin)
 
-    win_matrix=mcss(test_dict)
+    #Iterative functionality (# of sims) to be added
+    ite=100000
+    for i_ite in range(0,ite):
+        win_matrix=mcss(test_dict)
 
-    total_wins=np.sum(win_matrix,axis=0)
-    #Raw win totals.
-    for x in league_teams:
-        x['total_wins']=total_wins[x['team_id']-1]
+        total_wins=np.sum(win_matrix,axis=0)
+        #Raw win totals.
+        for x in league_teams:
+            x['total_wins']=total_wins[x['team_id']-1]
 
-    #pprint(league_teams)
-    #Division win totals and eventually division leaders
-    for d in list_of_divisions:
-        dt=[x for x in league_teams if x['division']==d]
-        for t in dt:
-            other_division_team_ids=[x['team_id'] for x in dt if x['team_id']!=t['team_id']]
-            other_league_team_ids=[x['team_id'] for x in league_teams if x['league']==t['league']]
-            division_wins=sum([win_matrix[i-1,t['team_id']-1] for i in other_division_team_ids])
-            t['division_wins']=division_wins
-            league_wins=sum([win_matrix[i-1,t['team_id']-1] for i in other_league_team_ids])
-            t['league_wins']=league_wins
+        #pprint(league_teams)
+        #Division win totals and eventually division leaders
+        for d in list_of_divisions:
+            dt=[x for x in league_teams if x['division']==d]
+            for t in dt:
+                other_division_team_ids=[x['team_id'] for x in dt if x['team_id']!=t['team_id']]
+                other_league_team_ids=[x['team_id'] for x in league_teams if x['league']==t['league']]
+                division_wins=sum([win_matrix[i-1,t['team_id']-1] for i in other_division_team_ids])
+                t['division_wins']=division_wins
+                league_wins=sum([win_matrix[i-1,t['team_id']-1] for i in other_league_team_ids])
+                t['league_wins']=league_wins
 
-        #sort list of dicts             
-        new_dt=sorted(dt, key=lambda k: (-k['total_wins'],-k['division_wins'],-k['league_wins']))
-        for i,d in enumerate(new_dt):
-            d['div_rank']=i+1
-            if d['div_rank']==1:
-                d['div_winner']=True
-            else:
-                d['div_winner']=False
+            #sort list of dicts             
+            new_dt=sorted(dt, key=lambda k: (-k['total_wins'],-k['division_wins'],-k['league_wins']))
+            for i,d in enumerate(new_dt):
+                d['div_rank']=i+1
+                if d['div_rank']==1:
+                    d['div_winner']=True
+                else:
+                    d['div_winner']=False
 
-    pprint(league_teams)
+        #print('Iteration number '+str(i_ite)+':')
+        #pprint(league_teams)
