@@ -1,3 +1,11 @@
+"""
+Regression functions for calculating
+binomial win percentages
+
+Named after the pioneer Bill James.
+
+"""
+
 #Selection of mathematical models for MLB win predictions
 
 def runs_regress(dpts):
