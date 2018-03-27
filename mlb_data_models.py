@@ -27,12 +27,14 @@ class Game(BaseModel): #initialize with default values
     home_team_name = TextField(null=True)
     away_team = IntegerField(null=True)
     home_team = IntegerField(null=True)
-    away_pts = IntegerField(null=True)
-    home_pts = IntegerField(null=True)
+    away_runs = IntegerField(null=True)
+    home_runs = IntegerField(null=True)
     away_pitcher_id = IntegerField(null=True)
     home_pitcher_id = IntegerField(null=True)
     scheduled_date = DateTimeField(null=True)
-    mlbgames_id_str = TextField(unique=True)
+    mlbgame_away_team_name = TextField(null=True)
+    mlbgame_home_team_name = TextField(null=True)
+    mlbgame_id_str = TextField(null=True)
 
     class Meta:
         db_table = 'games'
