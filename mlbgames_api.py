@@ -1,3 +1,10 @@
+"""
+Gets data from the mlbgame api
+and then updates the existing db entries
+
+Need to doublecheck/tune algo
+"""
+
 from __future__ import print_function 
 import mlbgame
 from datetime import datetime, timedelta
