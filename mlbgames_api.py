@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from mlb_data_models import Game, Team
 from pprint import pprint
 
-game_d=datetime.today()-timedelta(days=2)
+game_d=datetime.today()-timedelta(days=1)
 
 print("Getting games from "+game_d.strftime("%Y-%m-%d"))
 
