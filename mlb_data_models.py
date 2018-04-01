@@ -35,6 +35,7 @@ class Game(BaseModel): #initialize with default values
     mlbgame_away_team_name = TextField(null=True)
     mlbgame_home_team_name = TextField(null=True)
     mlbgame_id_str = TextField(null=True)
+    is_postphoned = IntegerField(null=True)
 
     class Meta:
         db_table = 'games'
