@@ -8,6 +8,7 @@ Need to doublecheck/tune algo
 from __future__ import print_function 
 import mlbgame
 from datetime import datetime, timedelta
+from supports import teams_index_matcher
 from mlb_data_models import Game, Team
 from pprint import pprint
 
@@ -17,17 +18,6 @@ print("Getting games from "+game_d.strftime("%Y-%m-%d"))
 
 month = mlbgame.games(game_d.year,game_d.month,game_d.day)
 games = mlbgame.combine_games(month)
-
-#print(type(games[0]))
-
-#Does not work for spring training games. Should test
-#on March 28.
-#for g in games: 
-#    pprint([g.away_team,g.away_team_runs,\
-#            g.home_team,g.home_team_runs])
-
-#print('Game properties')
-#print(dir(games[0]))
 
 game_list=[]
 
@@ -55,10 +45,6 @@ for game in games:
 #adhoc team processing
 teams_index=Team.select(Team.id,Team.mlbgames_name).execute()
 teams_index=[{'team_id':t.id,'mlbgames_name':t.mlbgames_name} for t in teams_index]
-def teams_index_matcher(teams_index,namestr):
-    team_ind=[t['team_id'] for t in teams_index if t['mlbgames_name']==namestr][0]
-    print(team_ind)
-    return team_ind
 
 pprint(teams_index)
 for g in game_list:
