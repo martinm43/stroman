@@ -55,14 +55,12 @@ ballrows=c.execute(str_input).fetchall()
 
 #Dec 29 2016 edit: Obtain an up-to-date list of wins from the nba_py_api_data database
 c=conn.cursor()
-#str_input='SELECT away_team_id, away_pts, home_team_id, home_pts FROM games WHERE scheduled_date <='+datetime.now()+' AND scheduled_date >= '+str(season_start)
-#gameslist=c.execute(str_input).fetchall()
 gameslist=Game.select().where(Game.scheduled_date<datetime.now())
 gameslist=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in gameslist]
+print(len(gameslist))
 pprint(gameslist)
 #Hardcoded solution to "incorporating past wins while projecting into the future" problem
 winlist=[x[0] if x[1]>x[3] else x[2] for x in gameslist]
-#winlist=[0 for x in gameslist]
 
 winrows=[]
 for i in range(1,31):
@@ -70,13 +68,12 @@ for i in range(1,31):
 
 #Split data into games that have already occured and games that are to occur. Also grab a set of games
 #for the model
-futuredata=[row for row in ballrows if row[1]>=datetime.now()]
-pastdata=[row for row in ballrows if row[1]<datetime.now()]
+futuredata=[row for row in ballrows if datetime.strptime(row[1][0:10],'%Y-%m-%d')>=datetime.now()]
+pastdata=[row for row in ballrows if datetime.strptime(row[1][0:10],'%Y-%m-%d')<datetime.now()]
 print('Number of games to be played: '+str(len(futuredata)))
 print('Number of games already played: '+str(len(pastdata)))
 
 #Write out the results
 list_to_csv(wkdir+'outfile_wins.csv',winrows)
-
 list_to_csv(wkdir+'outfile_future_games.csv',futuredata)
 
