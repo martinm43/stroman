@@ -18,7 +18,6 @@ Now using models.
 import sqlite3
 import os,sys,time
 from pprint import pprint
-#get the conversion function
 from datetime import datetime, timedelta
 from mlb_data_models import Game
 wkdir = os.path.dirname(os.path.realpath(__file__))+'/'
@@ -57,6 +56,5 @@ print('Number of games already played: '+str(len(pastdata)))
 
 #Write out the results
 list_to_csv(wkdir+'outfile_wins.csv',winrows)
-
 list_to_csv(wkdir+'outfile_future_games.csv',futuredata)
 
