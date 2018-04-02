@@ -18,6 +18,7 @@ import sqlite3
 import os,sys,time
 from pprint import pprint
 #get the conversion function
+from datetime import datetime
 from dbtools.access_nba_data import epochtime,current_season
 from mlb_data_models import Game, Team
 
@@ -48,14 +49,17 @@ season_start=epochtime('Mar 1 '+season)-31536000
 #create ballrows list of tuples (all games) using the database
 conn=sqlite3.connect(wkdir+filename)
 c=conn.cursor()
-str_input='select id, scheduled_date, away_team,away_runs,home_team,home_runs\
+str_input='select id, scheduled_date, away_team,away_runs,home_team,home_runs \
           from games order by scheduled_date asc'
 ballrows=c.execute(str_input).fetchall()
 
 #Dec 29 2016 edit: Obtain an up-to-date list of wins from the nba_py_api_data database
 c=conn.cursor()
-str_input='SELECT away_team_id, away_pts, home_team_id, home_pts FROM games WHERE datetime<='+str(cutdate)+' AND datetime >= '+str(season_start)
-gameslist=c.execute(str_input).fetchall()
+#str_input='SELECT away_team_id, away_pts, home_team_id, home_pts FROM games WHERE scheduled_date <='+datetime.now()+' AND scheduled_date >= '+str(season_start)
+#gameslist=c.execute(str_input).fetchall()
+gameslist=Game.select().where(Game.scheduled_date<datetime.now())
+gameslist=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in gameslist]
+pprint(gameslist)
 #Hardcoded solution to "incorporating past wins while projecting into the future" problem
 winlist=[x[0] if x[1]>x[3] else x[2] for x in gameslist]
 #winlist=[0 for x in gameslist]
@@ -66,8 +70,8 @@ for i in range(1,31):
 
 #Split data into games that have already occured and games that are to occur. Also grab a set of games
 #for the model
-futuredata=[row for row in ballrows if row[1]>=cutdate]
-pastdata=[row for row in ballrows if row[1]<cutdate]
+futuredata=[row for row in ballrows if row[1]>=datetime.now()]
+pastdata=[row for row in ballrows if row[1]<datetime.now()]
 print('Number of games to be played: '+str(len(futuredata)))
 print('Number of games already played: '+str(len(pastdata)))
 
