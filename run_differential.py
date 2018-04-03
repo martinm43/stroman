@@ -20,6 +20,7 @@ from pprint import pprint
 import numpy as np
 from datetime import datetime,timedelta
 from mlb_data_models import Game
+from supports import list_to_csv
 
 #needs to be adjusted for baseball
 home_team_adv = 2.0
@@ -61,11 +62,23 @@ for i in range(0,len(diff_matrix)):
 
 pprint(diff_matrix)
 
-list_of_means.sort(key = lambda x:x['team_mean'], reverse = True)
+diff_list=diff_matrix.tolist()
+
+pprint(diff_list)
+
+#Print to screen.
+
+for i,x in enumerate(diff_list):
+    print('Team '+str(i+1)+' has a run differential of '+'{0}'.format(x[6])+\
+          ', scoring '+'{0}'.format(x[0])+' runs while allowing '+\
+          '{0}'.format(x[1])+' runs')
 
 #Write list of point differentials to a file for use by other programs
-csvfile_out = open(wkdir+'run_diff_vector.csv','wb')
-csvwriter = csv.writer(csvfile_out)
-for row in vector_of_means:
-    csvwriter.writerow(row)
-csvfile_out.close()
+#csvfile_out = open(wkdir+'run_diff_vector.csv','wb')
+#csvwriter = csv.writer(csvfile_out)
+vector_of_means=[[x[6]] for x in diff_list]
+print(vector_of_means)
+#for row in vector_of_means:
+#    csvwriter.writerow(row)
+#csvfile_out.close()
+list_to_csv('run_diff_vector.csv',vector_of_means)

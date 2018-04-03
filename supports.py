@@ -21,6 +21,16 @@ def dict_search(list_of_dicts,key1,key_value1,key2):
     else:
         return x[0][key2]
 
+def list_to_csv(csvfile,list_of_lists):
+    import csv
+    csvfile_out = open(csvfile,'wb')
+    csvwriter = csv.writer(csvfile_out)
+    for row in list_of_lists:
+        #Only need to print the visiting and home team scores and names.
+        csvwriter.writerow(row)
+    csvfile_out.close()
+    return 1
+
 if __name__=="__main__":
     #test abbrev to id
     print(abbrev_to_id('Ana'))
