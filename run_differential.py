@@ -19,11 +19,13 @@ import csv
 from pprint import pprint
 import numpy as np
 from datetime import datetime,timedelta
-from mlb_data_models import Game
+from mlb_data_models import Game, Team
 from supports import list_to_csv
 
-#needs to be adjusted for baseball
-home_team_adv = 2.0
+def id_to_mlbgames_name(id):
+    t=Team.select().where(Team.id==id)
+    t=[x.mlbgames_name for x in t][0]
+    return t
 
 wkdir = os.path.dirname(os.path.realpath(__file__))+'/'
 
@@ -40,6 +42,7 @@ vector_of_means = []
 
 games=Game.select().where(Game.scheduled_date>=analysis_start_date,Game.scheduled_date<=analysis_end_date-timedelta(days=1))
 games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
+
 
 # Create a 30x7 vector: rows are teams, columns are "RUNS SCORED", "RUNS ALLOWED", "GAMES PLAYED", 
 # "AVERAGE RUNS SCORED", "AVERAGE RUNS ALLOWED", "AVERAGE RUN DIFFERENTIAL", "RUN DIFFERENTIAL"
@@ -60,16 +63,16 @@ for i in range(0,len(diff_matrix)):
     diff_matrix[i,5]=diff_matrix[i,3]-diff_matrix[i,4]
     diff_matrix[i,6]=diff_matrix[i,5]*diff_matrix[i,2]
 
-pprint(diff_matrix)
+#p#print(diff_matrix)
 
 diff_list=diff_matrix.tolist()
 
-pprint(diff_list)
+#p#print(diff_list)
 
 #Print to screen.
 
 for i,x in enumerate(diff_list):
-    print('Team '+str(i+1)+' has a run differential of '+'{0}'.format(x[6])+\
+    print('The '+id_to_mlbgames_name(i+1)+' have a run differential of '+'{0}'.format(x[6])+\
           ', scoring '+'{0}'.format(x[0])+' runs while allowing '+\
           '{0}'.format(x[1])+' runs')
 
@@ -77,7 +80,7 @@ for i,x in enumerate(diff_list):
 #csvfile_out = open(wkdir+'run_diff_vector.csv','wb')
 #csvwriter = csv.writer(csvfile_out)
 vector_of_means=[[x[6]] for x in diff_list]
-print(vector_of_means)
+#print(vector_of_means)
 #for row in vector_of_means:
 #    csvwriter.writerow(row)
 #csvfile_out.close()
