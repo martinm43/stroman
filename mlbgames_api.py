@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from supports import teams_index_matcher
 from mlb_data_models import Game, Team
 from pprint import pprint
+import sqlite3
 
 game_d=datetime.today()-timedelta(days=1)
 
@@ -53,7 +54,10 @@ for g in game_list:
 
 print('Processing complete. Adding games into database')
 pprint(game_list[0])
+
 for g in game_list:
+    game_scheduled_date=datetime.strptime(g['scheduled_date'],'%Y-%m-%d')
+    print(Game.scheduled_date-game_scheduled_date)
     Game.update(away_runs=g['away_runs'],home_runs=g['home_runs']).\
-         where(Game.scheduled_date-g['scheduled_date']<86400,\
+         where(Game.scheduled_date==game_scheduled_date,\
                Game.away_team==g['away_team'],Game.home_team==g['home_team']).execute()
