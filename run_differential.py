@@ -25,7 +25,7 @@ from mlb_data_models import Game, Team
 from supports import list_to_csv, id_to_mlbgames_name
 
 #define factor
-pythag_factor=2.0
+pythag_factor=1.83 # As used by baseball reference.
 
 wkdir = os.path.dirname(os.path.realpath(__file__))+'/'
 
