@@ -12,6 +12,8 @@ Maximum margin of victory: 15
 Start date: 4 weeks before analysis
 End date: Current day
 
+Also does "pythagorean win expectation"
+
 """
 import sqlite3
 import os
@@ -22,10 +24,8 @@ from datetime import datetime,timedelta
 from mlb_data_models import Game, Team
 from supports import list_to_csv, id_to_mlbgames_name
 
-#def id_to_mlbgames_name(id):
-#    t=Team.select().where(Team.id==id)
-#    t=[x.mlbgames_name for x in t][0]
-#    return t
+#define factor
+pythag_factor=2.0
 
 wkdir = os.path.dirname(os.path.realpath(__file__))+'/'
 
@@ -44,9 +44,10 @@ games=Game.select().where(Game.scheduled_date>=analysis_start_date,Game.schedule
 games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 
 
-# Create a 30x7 vector: rows are teams, columns are "RUNS SCORED", "RUNS ALLOWED", "GAMES PLAYED", 
+# Create a 30x8 vector: rows are teams, columns are "RUNS SCORED", "RUNS ALLOWED", "GAMES PLAYED", 
 # "AVERAGE RUNS SCORED", "AVERAGE RUNS ALLOWED", "AVERAGE RUN DIFFERENTIAL", "RUN DIFFERENTIAL"
-diff_matrix=np.zeros((30,7))
+# "PYTHAGOREAN_WINS"
+diff_matrix=np.zeros((30,8))
 for g in games:
     #Away team.
     diff_matrix[g[0]-1,0]+=g[1]
@@ -62,19 +63,24 @@ for i in range(0,len(diff_matrix)):
     diff_matrix[i,4]=diff_matrix[i,1]/diff_matrix[i,2]
     diff_matrix[i,5]=diff_matrix[i,3]-diff_matrix[i,4]
     diff_matrix[i,6]=diff_matrix[i,5]*diff_matrix[i,2]
+    diff_matrix[i,7]=diff_matrix[i,0]**pythag_factor/(diff_matrix[i,0]**pythag_factor+diff_matrix[i,1]**pythag_factor)
 
 #p#print(diff_matrix)
 
 diff_list=diff_matrix.tolist()
 
-#p#print(diff_list)
+pprint(diff_list)
 
 #Print to screen.
 
+print('Listing run differentials:')
 for i,x in enumerate(diff_list):
     print('The '+id_to_mlbgames_name(i+1)+' have a run differential of '+'{0}'.format(x[6])+\
           ', scoring '+'{0}'.format(x[0])+' runs while allowing '+\
-          '{0}'.format(x[1])+' runs')
+          '{0}'.format(x[1])+' runs.')
+print('Listing pythagorean win expectancies: ')
+for i,x in enumerate(diff_list):
+    print(id_to_mlbgames_name(i+1)+': '+'{:.1f}'.format(x[7]*162))
 
 #Write list of point differentials to a file for use by other programs
 #csvfile_out = open(wkdir+'run_diff_vector.csv','wb')
