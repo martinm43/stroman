@@ -13,7 +13,7 @@ from mlb_data_models import Game, Team
 from pprint import pprint
 import sqlite3
 
-game_d=datetime.today()-timedelta(days=1)
+game_d=datetime.today()-timedelta(days=3)
 
 print("Getting games from "+game_d.strftime("%Y-%m-%d"))
 
@@ -22,7 +22,11 @@ games = mlbgame.combine_games(month)
 
 game_list=[]
 
-print('Attempting to use the solution to the issue on SO provided by Trevor V')
+#Following segment is based on the solution
+#provided by Trevor V in the Github.
+#Tries to see if a game has data available, processes it.
+#If not, returns an error and the unique "mlbid" of the game
+#that has ostensibly been PPD.
 
 for game in games: 
     try: 
@@ -38,7 +42,6 @@ for game in games:
               'home_runs':stats.home_batting.r,\
               'mlbgame_id_str':game.game_id,\
               'scheduled_date':game_d.strftime('%Y-%m-%d')}
-        #pprint(game_dict)
         game_list.append(game_dict)
     except ValueError:
         print('Unable to find data for game_id: {0}'.format(game.game_id))
@@ -47,17 +50,15 @@ for game in games:
 teams_index=Team.select(Team.id,Team.mlbgames_name).execute()
 teams_index=[{'team_id':t.id,'mlbgames_name':t.mlbgames_name} for t in teams_index]
 
-pprint(teams_index)
 for g in game_list:
     g['away_team']=teams_index_matcher(teams_index,g['mlbgame_away_team_name'])
     g['home_team']=teams_index_matcher(teams_index,g['mlbgame_home_team_name'])
 
 print('Processing complete. Adding games into database')
-pprint(game_list[0])
 
 for g in game_list:
     game_scheduled_date=datetime.strptime(g['scheduled_date'],'%Y-%m-%d')
-    print(Game.scheduled_date-game_scheduled_date)
     Game.update(away_runs=g['away_runs'],home_runs=g['home_runs']).\
          where(Game.scheduled_date==game_scheduled_date,\
+               Game.is_postphoned==0,\
                Game.away_team==g['away_team'],Game.home_team==g['home_team']).execute()

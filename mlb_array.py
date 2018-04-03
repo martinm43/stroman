@@ -1,5 +1,10 @@
 # coding: utf-8
 """
+INITIAL SETUP SCRIPT
+
+ONLY USED TO CREATE THE INITIAL SEASON SCHEDULE
+DO NOT USE ONCE INITIAL SETUP IS COMPLETE!
+
 mlb_array
 
 The objectives of this script are to:

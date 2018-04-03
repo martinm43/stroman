@@ -2,6 +2,7 @@
 
 """
 This file has been stripped to provide the solution to the Peewee operational error "too many SQL variables"
+allowing for the insertion of a large number of dicts containing game data all at once.
 Note that the "get max SQL variables" functionality appears to only work on certain platforms
 """
 

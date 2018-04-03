@@ -1,5 +1,14 @@
 """
-A bunch of functions that I use to do Monte Carlo simulations of issues
+This function is intended to take the 'key stats' of two teams
+and apply tiebreaker logic to determine who wins.
+
+Note that, per MLB, should two teams be tied for a division title 
+or the wild card, a 'play in game' is required regardless of whether both
+teams would make it in.
+
+Simulating that logic poses an intense challenge, and at the time of writing
+(April 2018) it is not an immediate concern.
+
 """
 
 def tiebreaker(team_1_dict,team_2_dict,win_matrix):

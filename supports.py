@@ -1,14 +1,12 @@
 """
-Gets data from the mlbgame api
-and then updates the existing db entries
-
-Need to doublecheck/tune algo
+These scripts are "helper scripts" largely for the purpose
+of converting between various forms of team identifications
+using the "Team" table in the database.
 """
 from mlb_data_models import Team
 
 def teams_index_matcher(teams_index,namestr):
     team_ind=[t['team_id'] for t in teams_index if t['mlbgames_name']==namestr][0]
-    print(team_ind)
     return team_ind
 
 def abbrev_to_id(abbrev):

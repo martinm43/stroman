@@ -4,13 +4,8 @@ Season Games Splitter
 This program splits the season into "games that have already been played"
 and determines which games have already been won.
 
-Automatic mode is triggered by adding "AUTO" to the script invocation.
-In automatic mode, the current season is cut based on the current date 
-(Not yet implemented.)
-
 --MA Miller
 
-Now using models.
 """
 
 
