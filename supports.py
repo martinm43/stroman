@@ -33,6 +33,13 @@ def list_to_csv(csvfile,list_of_lists):
     csvfile_out.close()
     return 1
 
+def id_to_mlbgames_name(id):
+    from mlb_data_models import Team
+    t=Team.select().where(Team.id==id)
+    t=[x.mlbgames_name for x in t][0]
+    return t
+
+
 if __name__=="__main__":
     #test abbrev to id
     print(abbrev_to_id('Ana'))

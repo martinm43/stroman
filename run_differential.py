@@ -20,12 +20,12 @@ from pprint import pprint
 import numpy as np
 from datetime import datetime,timedelta
 from mlb_data_models import Game, Team
-from supports import list_to_csv
+from supports import list_to_csv, id_to_mlbgames_name
 
-def id_to_mlbgames_name(id):
-    t=Team.select().where(Team.id==id)
-    t=[x.mlbgames_name for x in t][0]
-    return t
+#def id_to_mlbgames_name(id):
+#    t=Team.select().where(Team.id==id)
+#    t=[x.mlbgames_name for x in t][0]
+#    return t
 
 wkdir = os.path.dirname(os.path.realpath(__file__))+'/'
 
