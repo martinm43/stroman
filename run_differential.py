@@ -40,8 +40,9 @@ vector_of_means = []
 games=Game.select().where(Game.scheduled_date>=analysis_start_date,Game.scheduled_date<=analysis_end_date-timedelta(days=1))
 games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 
-#create a 30x3 vector: rows are teams, columns are "RUNS SCORED", "RUNS ALLOWED", "GAMES PLAYED"
-diff_matrix=np.zeros((30,3))
+# Create a 30x7 vector: rows are teams, columns are "RUNS SCORED", "RUNS ALLOWED", "GAMES PLAYED", 
+# "AVERAGE RUNS SCORED", "AVERAGE RUNS ALLOWED", "AVERAGE RUN DIFFERENTIAL", "RUN DIFFERENTIAL"
+diff_matrix=np.zeros((30,7))
 for g in games:
     #Away team.
     diff_matrix[g[0]-1,0]+=g[1]
@@ -51,6 +52,12 @@ for g in games:
     diff_matrix[g[2]-1,0]+=g[3]
     diff_matrix[g[2]-1,1]+=g[1]
     diff_matrix[g[2]-1,2]+=1
+
+for i in range(0,len(diff_matrix)):
+    diff_matrix[i,3]=diff_matrix[i,0]/diff_matrix[i,2]
+    diff_matrix[i,4]=diff_matrix[i,1]/diff_matrix[i,2]
+    diff_matrix[i,5]=diff_matrix[i,3]-diff_matrix[i,4]
+    diff_matrix[i,6]=diff_matrix[i,5]*diff_matrix[i,2]
 
 pprint(diff_matrix)
 
