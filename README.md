@@ -14,5 +14,5 @@ TBD:
 Update pitching data in table
 Report the 'analytics' along with conventional wins in a table
 Playoff stuff - odds, etc. (This is probably a Canada Day Weekend type project at the earliest).
-
+Create a daily summary in the style of the Basketball reports
 
