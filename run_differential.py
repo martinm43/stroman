@@ -15,6 +15,7 @@ End date: Current day
 Also does "pythagorean win expectation"
 
 """
+from __future__ import print_function, division
 import sqlite3
 import os
 import csv

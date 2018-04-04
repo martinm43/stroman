@@ -69,7 +69,7 @@ if burke_solve==1:
 else:
     burkelist=None
 #Debug
-print('Printing Burke Ratings.')
+print('Printing Burke Ratings (ratings based on strength of schedule and any perceived home field advantage).')
 if burkelist!=None:
   for i, burke_value in enumerate(burkelist):
       print('The Burke rating of the '+id_to_mlbgames_name(i+1)+' is '+str(burke_value[0]))

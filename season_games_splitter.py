@@ -10,6 +10,7 @@ and determines which games have already been won.
 
 
 #Replace Excel Program with Python routine.
+from __future__ import print_function, division
 import sqlite3
 import os,sys,time
 from pprint import pprint
@@ -32,7 +33,6 @@ def list_to_csv(csvfile,list_of_lists):
 #Need to add 'and not postphoned'.
 played_games=Game.select().where(Game.scheduled_date<datetime.today()-timedelta(days=1)).order_by(Game.scheduled_date) 
 played_games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in played_games]
-pprint(played_games)
 
 winlist=[x[0] if x[1]>x[3] else x[2] for x in played_games]
 
