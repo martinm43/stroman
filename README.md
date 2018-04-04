@@ -14,5 +14,6 @@ TBD:
 Update pitching data in table
 Report the 'analytics' along with conventional wins in a table
 Playoff stuff - odds, etc. (This is probably a Canada Day Weekend type project at the earliest).
+RQ INT: Parse the "unable to find data for..." statements and update the Games table to say "Game Postphoned"
 
 
