@@ -35,7 +35,6 @@ except ImportError:
     print('Burke solution method not available')
 
 srsdata=[]
-
 filename='MLB_data.sqlite'
 conn=sqlite3.connect(wkdir+filename)
 c=conn.cursor()
@@ -72,7 +71,7 @@ else:
 print('Printing Burke Ratings (ratings based on strength of schedule and any perceived home field advantage).')
 if burkelist!=None:
   for i, burke_value in enumerate(burkelist):
-      print('The Burke rating of the '+id_to_mlbgames_name(i+1)+' is '+str(burke_value[0]))
+      print('The Burke rating of the '+id_to_mlbgames_name(i+1)+' is '+'{:.1f}'.format(burke_value[0]))
 else:
   print('Burke calculations not performed, skipping')
 
