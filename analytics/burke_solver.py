@@ -16,7 +16,7 @@ def burke_calc(game,impmode='bballref',printing='off',max_MOV=9.0,home_team_adv=
 
   import csv 
   import numpy 
-  import scipy
+  import scipy.optimize
 
   if impmode=='bballref':
       game=[[g[2],g[0],g[3],g[1]] for g in game]
