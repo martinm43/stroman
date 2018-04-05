@@ -101,36 +101,21 @@ for i,x in enumerate(ratings_list):
     team_name_data=id_to_mlbgames_name(i+1,verbose=True)
     x_team_name=team_name_data[0]
     x_team_division=team_name_data[1]
-    x['team']=x_team_name
-    x['division']=x_team_division
+    x['Team']=x_team_name
+    x['Division']=x_team_division
     
 ratings_list.sort(key=lambda x:(x['division'],-x['Wins']))
 
-pprint(ratings_list)
 
-######################
-# PRINTING TO SCREEN #
-######################
-
-#print('Listing run differentials:')
-#for i,x in enumerate(diff_list):
-#    print('The '+id_to_mlbgames_name(i+1)+' have a run differential of '+'{0}'.format(x[8])+\
-#          ', scoring '+'{0}'.format(x[2])+' runs while allowing '+\
-#          '{0}'.format(x[3])+' runs.')
-#print('Listing pythagorean win expectancies: ')
-#for i,x in enumerate(diff_list):
-#    print(id_to_mlbgames_name(i+1)+': '+'{:.1f}'.format(x[9]*162))
-
-
-#print('Printing Burke Ratings (ratings based on strength of schedule and any perceived home field advantage).')
-#for i, burke_value in enumerate(burkelist):
-#  print('The Burke rating of the '+id_to_mlbgames_name(i+1)+' is '+'{:.1f}'.format(burke_value[0]))
+for rating in ratings_list:
+    rating['Wins']=int(rating['Wins'])
+    rating['Losses']=int(rating['Losses'])
+    rating['Games Played']=int(rating['Games Played'])
 
 ##################################
-# WRITING TO TEMPORARY CSV FILES #
+# Writing Out External CSV Files #
 ##################################
 
-#write out burke vector
 csvfile_out = open(wkdir+'burke_vector.csv','wb')
 csvwriter = csv.writer(csvfile_out)
 for row in burkelist:
@@ -140,3 +125,5 @@ csvfile_out.close()
 
 vector_of_means=[[x[8]] for x in diff_list]
 list_to_csv('run_diff_vector.csv',vector_of_means)
+
+pprint(ratings_list)
