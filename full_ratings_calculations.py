@@ -70,6 +70,8 @@ diff_matrix[:,8]=[b[0] for b in burkelist]
 
 diff_list=diff_matrix.tolist()
 
+print(diff_list)
+
 ######################
 # PRINTING TO SCREEN #
 ######################
