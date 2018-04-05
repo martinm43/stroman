@@ -52,6 +52,7 @@ games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 #8. "PYTHAGOREAN_WINS"
 #9. "ADJUSTED RATING"
 
+#then append the division names to the list for sorting
 diff_matrix=np.zeros((30,9))
 for g in games:
     #Away team.
