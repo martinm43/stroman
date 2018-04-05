@@ -17,10 +17,14 @@ Average home court advantage: 2
 
 import csv,os
 import time
-from supports import id_to_mlbgames_name
+import numpy as np
+from supports import id_to_mlbgames_name, list_to_csv
 from mlb_data_models import Team, Game
 import sqlite3
 from datetime import datetime, timedelta
+
+#Define constant for pythagorean wins (the pythagorean win exponent)
+pythag_factor=1.83
 
 wkdir = os.path.dirname(os.path.realpath(__file__))+'/'
 
@@ -34,46 +38,59 @@ try:
 except ImportError:
     print('Burke solution method not available')
 
-srsdata=[]
-filename='MLB_data.sqlite'
-conn=sqlite3.connect(wkdir+filename)
-c=conn.cursor()
+analysis_start_date=datetime.now()-timedelta(weeks=4) #N weeks*days*seconds
+analysis_end_date=datetime.now()
+max_MOV=100.0 #Maximum margin of victory set far above what is possible
+home_team_adv=0.0
 
+games=Game.select().where(Game.scheduled_date>=analysis_start_date,Game.scheduled_date<=analysis_end_date-timedelta(days=1))
+games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 
+#Basic run-based calculations
+# Create a 30x8 vector: rows are teams, columns are "RUNS SCORED", "RUNS ALLOWED", "GAMES PLAYED", 
+# "AVERAGE RUNS SCORED", "AVERAGE RUNS ALLOWED", "AVERAGE RUN DIFFERENTIAL", "RUN DIFFERENTIAL"
+# "PYTHAGOREAN_WINS"
+diff_matrix=np.zeros((30,8))
+for g in games:
+    #Away team.
+    diff_matrix[g[0]-1,0]+=g[1]
+    diff_matrix[g[0]-1,1]+=g[3]
+    diff_matrix[g[0]-1,2]+=1
+    #Home team.
+    diff_matrix[g[2]-1,0]+=g[3]
+    diff_matrix[g[2]-1,1]+=g[1]
+    diff_matrix[g[2]-1,2]+=1
 
-###END OF V2.0 EDITS ###################################################
+for i in range(0,len(diff_matrix)):
+    diff_matrix[i,3]=diff_matrix[i,0]/diff_matrix[i,2]
+    diff_matrix[i,4]=diff_matrix[i,1]/diff_matrix[i,2]
+    diff_matrix[i,5]=diff_matrix[i,3]-diff_matrix[i,4]
+    diff_matrix[i,6]=diff_matrix[i,5]*diff_matrix[i,2]
+    diff_matrix[i,7]=diff_matrix[i,0]**pythag_factor/(diff_matrix[i,0]**pythag_factor+diff_matrix[i,1]**pythag_factor)
 
-if burke_solve==1:
-    #Calculate Burke SRS
-    
-    #New automated code.
-    analysis_start_date=datetime.now()-timedelta(weeks=4) #N weeks*days*seconds
-    analysis_end_date=datetime.now()
-    max_MOV=100.0 #quick fix.
-    home_team_adv=0.0
+diff_list=diff_matrix.tolist()
 
-#    nba_api_srsdata_query_str='SELECT away_team_id, away_PTS, home_team_id, home_PTS\
-#                             from bballref_scores WHERE datetime >= '+str(analysis_start_date)+' AND datetime <= '+str(analysis_end_date)+' AND \
-#                             away_pts>0'
-#    nba_api_srsdata=c.execute(nba_api_srsdata_query_str).fetchall()
-#    srsdata=nba_api_srsdata
-#    burke_data=[[s[2],s[0],s[3],s[1]] for s in srsdata if s[1] is not None]
+#Print to screen.
 
-    games=Game.select().where(Game.scheduled_date>=analysis_start_date,Game.scheduled_date<=analysis_end_date-timedelta(days=1))
-    games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
-    burke_data=[[g[2],g[0],g[3],g[1]] for g in games]
+print('Listing run differentials:')
+for i,x in enumerate(diff_list):
+    print('The '+id_to_mlbgames_name(i+1)+' have a run differential of '+'{0}'.format(x[6])+\
+          ', scoring '+'{0}'.format(x[0])+' runs while allowing '+\
+          '{0}'.format(x[1])+' runs.')
+print('Listing pythagorean win expectancies: ')
+for i,x in enumerate(diff_list):
+    print(id_to_mlbgames_name(i+1)+': '+'{:.1f}'.format(x[7]*162))
 
-    burkelist=burke_calc(burke_data,impmode=None,max_MOV=max_MOV,home_team_adv=home_team_adv,win_floor=0.0)
-    burkelist=[[b] for b in burkelist]
-else:
-    burkelist=None
-#Debug
+#Adjusted Rating Calculations (Burke - after Brian Burke - ratings)
+burke_data=[[g[2],g[0],g[3],g[1]] for g in games]
+burkelist=burke_calc(burke_data,impmode=None,max_MOV=max_MOV,home_team_adv=home_team_adv,win_floor=0.0)
+burkelist=[[b] for b in burkelist]
+
 print('Printing Burke Ratings (ratings based on strength of schedule and any perceived home field advantage).')
-if burkelist!=None:
-  for i, burke_value in enumerate(burkelist):
-      print('The Burke rating of the '+id_to_mlbgames_name(i+1)+' is '+'{:.1f}'.format(burke_value[0]))
-else:
-  print('Burke calculations not performed, skipping')
+for i, burke_value in enumerate(burkelist):
+  print('The Burke rating of the '+id_to_mlbgames_name(i+1)+' is '+'{:.1f}'.format(burke_value[0]))
+
+#CSV writeouts.
 
 if burke_solve==1:
     #write out burke vector
@@ -84,6 +101,5 @@ if burke_solve==1:
         csvwriter.writerow(row)
     csvfile_out.close()
 
-
-#### Close connection ####
-conn.close()
+vector_of_means=[[x[6]] for x in diff_list]
+list_to_csv('run_diff_vector.csv',vector_of_means)
