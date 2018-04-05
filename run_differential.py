@@ -70,8 +70,6 @@ for i in range(0,len(diff_matrix)):
 
 diff_list=diff_matrix.tolist()
 
-pprint(diff_list)
-
 #Print to screen.
 
 print('Listing run differentials:')
