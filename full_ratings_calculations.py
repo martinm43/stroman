@@ -51,25 +51,27 @@ games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 #7. "RUN DIFFERENTIAL"
 #8. "PYTHAGOREAN_WINS"
 #9. "ADJUSTED RATING"
+# 0 through 11
 
-#then append the division names to the list for sorting
+#then prepend the team names and division names to the list for sorting
+
 diff_matrix=np.zeros((30,9))
 for g in games:
     #Away team.
-    diff_matrix[g[0]-1,0]+=g[1]
-    diff_matrix[g[0]-1,1]+=g[3]
-    diff_matrix[g[0]-1,2]+=1
+    diff_matrix[g[0]-1,2]+=g[1]
+    diff_matrix[g[0]-1,3]+=g[3]
+    diff_matrix[g[0]-1,4]+=1
     #Home team.
-    diff_matrix[g[2]-1,0]+=g[3]
-    diff_matrix[g[2]-1,1]+=g[1]
-    diff_matrix[g[2]-1,2]+=1
+    diff_matrix[g[2]-1,2]+=g[3]
+    diff_matrix[g[2]-1,3]+=g[1]
+    diff_matrix[g[2]-1,4]+=1
 
 for i in range(0,len(diff_matrix)):
-    diff_matrix[i,3]=diff_matrix[i,0]/diff_matrix[i,2]
-    diff_matrix[i,4]=diff_matrix[i,1]/diff_matrix[i,2]
-    diff_matrix[i,5]=diff_matrix[i,3]-diff_matrix[i,4]
-    diff_matrix[i,6]=diff_matrix[i,5]*diff_matrix[i,2]
-    diff_matrix[i,7]=diff_matrix[i,0]**pythag_factor/(diff_matrix[i,0]**pythag_factor+diff_matrix[i,1]**pythag_factor)
+    diff_matrix[i,5]=diff_matrix[i,0]/diff_matrix[i,2]
+    diff_matrix[i,6]=diff_matrix[i,1]/diff_matrix[i,2]
+    diff_matrix[i,7]=diff_matrix[i,3]-diff_matrix[i,4]
+    diff_matrix[i,8]=diff_matrix[i,5]*diff_matrix[i,2]
+    diff_matrix[i,9]=diff_matrix[i,0]**pythag_factor/(diff_matrix[i,0]**pythag_factor+diff_matrix[i,1]**pythag_factor)
 
 #Adjusted Rating Calculations (Burke - after Brian Burke - ratings)
 burke_data=[[g[2],g[0],g[3],g[1]] for g in games]
