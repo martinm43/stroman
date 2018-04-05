@@ -9,19 +9,17 @@ mlbgame, using the MLB license, located at https://github.com/panzarino/mlbgame/
 
 (c) of some kind - TBD - Martin Miller
 
-TBD soon, RQ INT means requires internet, a lot of 
-these are just raw ideas:
+TBD soon, RQ INT means requires internet, a lot of these are just raw ideas:
 
-RQ INT: Update pitching data (starting with pitcher names) in table
-Report the 'analytics' along with conventional wins in a table
 RQ INT: Parse the "unable to find data for..." statements and update the Games table to say "Game Postphoned"
-Create a daily summary in the style of the Basketball reports
+RQ INT: Update pitching data (starting with pitcher names) in table
+
+Report the 'analytics' along with conventional wins in a table
 Use tables instead of prose for the run differentials
 Sort run differentials
 add expt win to run differential table by creating a single table
 group teams by league, and then by divisions
-add in some sort of "random quote" to the log file as 
-a tail
+add in some sort of "random quote" to the log file as a tail
 
 TBD later:
 Playoff predictions and the like should start no earlier than 20%, no later than 25% into season
