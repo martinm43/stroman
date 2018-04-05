@@ -39,9 +39,19 @@ games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 #############
 
 #Basic run-based calculations
-# Create a 30x9 vector: rows are teams, columns are "RUNS SCORED", "RUNS ALLOWED", "GAMES PLAYED", 
-# "AVERAGE RUNS SCORED", "AVERAGE RUNS ALLOWED", "AVERAGE RUN DIFFERENTIAL", "RUN DIFFERENTIAL"
-# "PYTHAGOREAN_WINS" - final column is "ADJUSTED RATING"
+# Create a 30x9 vector: rows are teams, columns are:
+# . "WINS" - to be added
+# . "LOSSES" - to be added
+#1. "RUNS SCORED"
+#2. "RUNS ALLOWED"
+#3. "GAMES PLAYED"
+#4.  "AVERAGE RUNS SCORED"
+#5. "AVERAGE RUNS ALLOWED"
+#6. "AVERAGE RUN DIFFERENTIAL"
+#7. "RUN DIFFERENTIAL"
+#8. "PYTHAGOREAN_WINS"
+#9. "ADJUSTED RATING"
+
 diff_matrix=np.zeros((30,9))
 for g in games:
     #Away team.
@@ -60,13 +70,13 @@ for i in range(0,len(diff_matrix)):
     diff_matrix[i,6]=diff_matrix[i,5]*diff_matrix[i,2]
     diff_matrix[i,7]=diff_matrix[i,0]**pythag_factor/(diff_matrix[i,0]**pythag_factor+diff_matrix[i,1]**pythag_factor)
 
-
 #Adjusted Rating Calculations (Burke - after Brian Burke - ratings)
 burke_data=[[g[2],g[0],g[3],g[1]] for g in games]
 burkelist=burke_calc(burke_data,impmode=None,max_MOV=max_MOV,home_team_adv=home_team_adv,win_floor=0.0)
 burkelist=[[b] for b in burkelist]
-
 diff_matrix[:,8]=[b[0] for b in burkelist]
+
+
 
 diff_list=diff_matrix.tolist()
 
