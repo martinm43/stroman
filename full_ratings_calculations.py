@@ -11,11 +11,9 @@ from __future__ import print_function, division
 
 from pprint import pprint
 import csv,os
-import time
 import numpy as np
 from supports import id_to_mlbgames_name, list_to_csv
 from mlb_data_models import Team, Game
-import sqlite3
 from datetime import datetime, timedelta
 from analytics.burke_solver import burke_calc
 
@@ -41,7 +39,7 @@ games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 #############
 
 #Basic run-based calculations
-# Create a 30x9 vector: rows are teams, columns are:
+# Create a 30x11 vector: rows are teams, columns are:
 #1. "WINS" - to be added
 #2. "LOSSES" - to be added
 #3. "RUNS SCORED"
@@ -53,7 +51,11 @@ games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 #9. "RUN DIFFERENTIAL"
 #10. "PYTHAGOREAN_WINS"
 #11. "ADJUSTED RATING"
-# 0 through 11
+
+analytics_headers=["Wins","Losses","Runs Scored","Runs Allowed","Games Played",\
+                   "Avg. Runs Scored","Avg. Runs Allowed",\
+                   "Avg. Run Diff'l","Run Diff'l",\
+                   "Pythag. Wins","Adj. Rtg."]
 
 #then prepend the team names and division names to the list for sorting
 
@@ -91,26 +93,38 @@ diff_matrix[:,10]=[b[0] for b in burkelist]
 
 
 diff_list=diff_matrix.tolist()
+ratings_list=[]
+for i in diff_list:
+    ratings_list.append(dict(zip(analytics_headers,i)))
 
-pprint(diff_list)
+for i,x in enumerate(ratings_list):
+    team_name_data=id_to_mlbgames_name(i+1,verbose=True)
+    x_team_name=team_name_data[0]
+    x_team_division=team_name_data[1]
+    x['team']=x_team_name
+    x['division']=x_team_division
+    
+ratings_list.sort(key=lambda x:(x['division'],-x['Wins']))
+
+pprint(ratings_list)
 
 ######################
 # PRINTING TO SCREEN #
 ######################
 
-print('Listing run differentials:')
-for i,x in enumerate(diff_list):
-    print('The '+id_to_mlbgames_name(i+1)+' have a run differential of '+'{0}'.format(x[8])+\
-          ', scoring '+'{0}'.format(x[2])+' runs while allowing '+\
-          '{0}'.format(x[3])+' runs.')
-print('Listing pythagorean win expectancies: ')
-for i,x in enumerate(diff_list):
-    print(id_to_mlbgames_name(i+1)+': '+'{:.1f}'.format(x[9]*162))
+#print('Listing run differentials:')
+#for i,x in enumerate(diff_list):
+#    print('The '+id_to_mlbgames_name(i+1)+' have a run differential of '+'{0}'.format(x[8])+\
+#          ', scoring '+'{0}'.format(x[2])+' runs while allowing '+\
+#          '{0}'.format(x[3])+' runs.')
+#print('Listing pythagorean win expectancies: ')
+#for i,x in enumerate(diff_list):
+#    print(id_to_mlbgames_name(i+1)+': '+'{:.1f}'.format(x[9]*162))
 
 
-print('Printing Burke Ratings (ratings based on strength of schedule and any perceived home field advantage).')
-for i, burke_value in enumerate(burkelist):
-  print('The Burke rating of the '+id_to_mlbgames_name(i+1)+' is '+'{:.1f}'.format(burke_value[0]))
+#print('Printing Burke Ratings (ratings based on strength of schedule and any perceived home field advantage).')
+#for i, burke_value in enumerate(burkelist):
+#  print('The Burke rating of the '+id_to_mlbgames_name(i+1)+' is '+'{:.1f}'.format(burke_value[0]))
 
 ##################################
 # WRITING TO TEMPORARY CSV FILES #

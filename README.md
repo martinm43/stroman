@@ -16,7 +16,6 @@ RQ INT: Update pitching data (starting with pitcher names) in table
 
 Report the 'analytics' along with conventional wins in a table
 Use tables instead of prose for the run differentials
-Sort run differentials
 add expt win to run differential table by creating a single table
 group teams by league, and then by divisions
 add in some sort of "random quote" to the log file as a tail

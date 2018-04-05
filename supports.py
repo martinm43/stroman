@@ -37,7 +37,7 @@ def id_to_mlbgames_name(id,verbose=False):
     if verbose==False:
         t=[x.mlbgames_name for x in t][0]
     else:
-        t=[(x.mlbgames_name,x.league,x.division) for x in t]
+        t=[[x.mlbgames_name,x.division] for x in t][0]
     return t
 
 if __name__=="__main__":
