@@ -20,7 +20,7 @@ from analytics.burke_solver import burke_calc
 
 #Define constant for pythagorean wins (the pythagorean win exponent)
 pythag_factor=1.83
-wkdir = os.path.dirname(os.path.realpath(__file__))+'/'
+#wkdir = os.path.dirname(os.path.realpath(__file__))+'/'
 
 #Times and constants
 analysis_start_date=datetime.now()-timedelta(weeks=4) #N weeks*days*seconds
@@ -83,7 +83,7 @@ for i in range(0,len(diff_matrix)):
     diff_matrix[i,6]=diff_matrix[i,3]/diff_matrix[i,4]
     diff_matrix[i,7]=diff_matrix[i,5]-diff_matrix[i,6]
     diff_matrix[i,8]=diff_matrix[i,7]*diff_matrix[i,4]
-    diff_matrix[i,9]=diff_matrix[i,2]**pythag_factor/(diff_matrix[i,2]**pythag_factor+diff_matrix[i,3]**pythag_factor)
+    diff_matrix[i,9]=162*diff_matrix[i,2]**pythag_factor/(diff_matrix[i,2]**pythag_factor+diff_matrix[i,3]**pythag_factor)
 
 #Adjusted Rating Calculations (Burke - after Brian Burke - ratings)
 burke_data=[[g[2],g[0],g[3],g[1]] for g in games]
@@ -117,15 +117,15 @@ for rating in ratings_list:
 # Writing Out External CSV Files #
 ##################################
 
-csvfile_out = open(wkdir+'burke_vector.csv','wb')
-csvwriter = csv.writer(csvfile_out)
-for row in burkelist:
+#csvfile_out = open(wkdir+'burke_vector.csv','wb')
+#csvwriter = csv.writer(csvfile_out)
+#for row in burkelist:
     #Only need to print the visiting and home team scores and names.
-    csvwriter.writerow(row)
-csvfile_out.close()
+    #csvwriter.writerow(row)
+#csvfile_out.close()
 
-vector_of_means=[[x[8]] for x in diff_list]
-list_to_csv('run_diff_vector.csv',vector_of_means)
+#vector_of_means=[[x[8]] for x in diff_list]
+#list_to_csv('run_diff_vector.csv',vector_of_means)
 
 pprint(ratings_list)
 #ratings_table=tabulate(ratings_list,headers=ratings_list[0].keys())
