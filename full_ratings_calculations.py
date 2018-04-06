@@ -12,6 +12,7 @@ from __future__ import print_function, division
 from pprint import pprint
 import csv,os
 import numpy as np
+import tabulate
 from supports import id_to_mlbgames_name, list_to_csv
 from mlb_data_models import Team, Game
 from datetime import datetime, timedelta
@@ -104,7 +105,7 @@ for i,x in enumerate(ratings_list):
     x['Team']=x_team_name
     x['Division']=x_team_division
     
-ratings_list.sort(key=lambda x:(x['division'],-x['Wins']))
+ratings_list.sort(key=lambda x:(x['Division'],-x['Wins']))
 
 
 for rating in ratings_list:
@@ -127,3 +128,5 @@ vector_of_means=[[x[8]] for x in diff_list]
 list_to_csv('run_diff_vector.csv',vector_of_means)
 
 pprint(ratings_list)
+ratings_table=tabulate(ratings_list,headers=ratings_list[0].keys())
+print(ratings_table)
