@@ -128,5 +128,5 @@ vector_of_means=[[x[8]] for x in diff_list]
 list_to_csv('run_diff_vector.csv',vector_of_means)
 
 pprint(ratings_list)
-ratings_table=tabulate(ratings_list,headers=ratings_list[0].keys())
-print(ratings_table)
+#ratings_table=tabulate(ratings_list,headers=ratings_list[0].keys())
+#print(ratings_table)
