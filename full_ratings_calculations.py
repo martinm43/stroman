@@ -53,7 +53,7 @@ games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 #10. "PYTHAGOREAN_WINS"
 #11. "ADJUSTED RATING"
 
-analytics_headers=["Wins","Losses","Runs Scored","Runs Allowed","Games Played",\
+analytics_headers=["Wins","Losses","Runs Scored","Runs Allowed","Games Scheduled",\
                    "Avg. Runs Scored","Avg. Runs Allowed",\
                    "Avg. Run Diff'l","Run Diff'l",\
                    "Pythag. Wins","Adj. Rtg."]
@@ -111,7 +111,7 @@ ratings_list.sort(key=lambda x:(x['Division'],-x['Wins']))
 for rating in ratings_list:
     rating['Wins']=int(rating['Wins'])
     rating['Losses']=int(rating['Losses'])
-    rating['Games Played']=int(rating['Games Played'])
+    rating['Games Scheduled']=int(rating['Games Scheduled'])
 
 ##################################
 # Writing Out External CSV Files #
