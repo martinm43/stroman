@@ -56,7 +56,7 @@ games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 
 analytics_headers=["Wins","Losses","Runs Scored","Runs Allowed","Games Scheduled",\
                    "Avg. Runs Scored","Avg. Runs Allowed",\
-                   "Avg. Run Diff'l","Run Diff'l",\
+                   "Avg. Run Delta","Run Delta",\
                    "Pythag. Wins","Adj. Rtg."]
 
 #then prepend the team names and division names to the list for sorting
