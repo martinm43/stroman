@@ -17,6 +17,7 @@ from supports import id_to_mlbgames_name, list_to_csv
 from mlb_data_models import Team, Game
 from datetime import datetime, timedelta
 from analytics.burke_solver import burke_calc
+from tabulate import tabulate
 
 #Define constant for pythagorean wins (the pythagorean win exponent)
 pythag_factor=1.83
@@ -128,5 +129,5 @@ for rating in ratings_list:
 #list_to_csv('run_diff_vector.csv',vector_of_means)
 
 pprint(ratings_list)
-#ratings_table=tabulate(ratings_list,headers=ratings_list[0].keys())
-#print(ratings_table)
+ratings_table=tabulate(ratings_list,headers="keys")
+print(ratings_table)
