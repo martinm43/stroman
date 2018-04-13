@@ -71,4 +71,4 @@ if __name__=='__main__':
                     d['div_winner']=False
 
         #print('Iteration number '+str(i_ite)+':')
-        #pprint(league_teams)
+        pprint(league_teams)
