@@ -33,13 +33,17 @@ Updates the mlb database based on the
 previous day's games.
 
 long_dict_inserter.py
-
+A function created for the purpose of 
+inserting long lists of dicts into SQLite
+databases
 
 mcss.py
 
 
 mcss_averages.py
-
+Reads a dict of games to be played with their binomial 
+win probabilities and produces an average number of wins 
+for each team.
 
 mcss_basic.py
 
@@ -63,7 +67,8 @@ standings_projection.py
 
 
 supports.py
-
+A set of assistant scripts for other main scripts in this 
+library/repo/whatever.
 
 table_initializer.py
 
