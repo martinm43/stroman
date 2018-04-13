@@ -118,6 +118,8 @@ for rating in ratings_list:
     rating['Losses']=int(rating['Losses'])
     rating['Games Scheduled']=int(rating['Games Scheduled'])
 
+vector_of_means=[[x['Avg. Run Delta']] for x in ratings_list]
+
 #################################
 # Writing Out Ratings CSV Files #
 #################################
