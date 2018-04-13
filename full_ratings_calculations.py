@@ -18,7 +18,6 @@ from supports import id_to_mlbgames_name, list_to_csv
 from mlb_data_models import Team, Game
 from datetime import datetime, timedelta
 from analytics.burke_solver import burke_calc
-from collections import OrderedDict
 from tabulate import tabulate
 from datetime import datetime
 
@@ -132,8 +131,6 @@ list_to_csv('burke_vector.csv',burkelist)
 #Decide what we do want to publish:
 
 table_list=[(i['Team'],i['Division'],i['Wins'],i['Losses'],i['Run Delta'],i['Pythag. Wins'],i['Adj. Rtg.']) for i in ratings_list]
-
-pprint(table_list[0])
 
 ratings_table=tabulate(table_list,headers=['Team','Division','Wins','Losses','Run Delta','Pythag. Wins','Adj. Rtg.'])
 
