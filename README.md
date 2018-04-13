@@ -17,3 +17,58 @@ TBD soon, RQ INT means requires internet, a lot of these are just raw ideas:
 
 TBD later:
 Playoff predictions and the like should start no earlier than 20%, no later than 25% into season
+
+Filelist:
+
+full_ratings_calculations.py
+Calculates net ratings, Pythagorean win 
+expectation, and adjusted net rating.
+
+james.py
+Performes binomial regression based on run
+differential and adjusted net rating.
+
+last_day_update.py
+Updates the mlb database based on the 
+previous day's games.
+
+long_dict_inserter.py
+
+
+mcss.py
+
+
+mcss_averages.py
+
+
+mcss_basic.py
+
+
+mlb_api_test.py
+
+
+mlb_array.py
+
+
+mlb_data_models.py
+Contains ORM models for the MLB database.
+
+mlb_manual.py
+
+
+season_games_splitter.py
+
+
+standings_projection.py
+
+
+supports.py
+
+
+table_initializer.py
+
+
+tiebreaker.py
+Function containing tiebreaker logic based 
+on dicts (in progress)
+
