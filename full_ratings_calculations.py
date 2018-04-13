@@ -132,7 +132,8 @@ list_to_csv('burke_vector.csv',burkelist)
 
 table_list=[(i['Team'],i['Division'],i['Wins'],i['Losses'],i['Run Delta'],i['Pythag. Wins'],i['Adj. Rtg.']) for i in ratings_list]
 
-ratings_table=tabulate(table_list,headers=['Team','Division','Wins','Losses','Run Delta','Pythag. Wins','Adj. Rtg.'])
+ratings_table=tabulate(table_list,headers=['Team','Division','Wins','Losses','Run Delta','Pythag. Wins','Adj. Rtg.'],\
+              tablefmt='rst')
 
 print(ratings_table)
 
