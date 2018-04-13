@@ -20,10 +20,12 @@ from datetime import datetime, timedelta
 from analytics.burke_solver import burke_calc
 from collections import OrderedDict
 from tabulate import tabulate
+from datetime import datetime
 
 #Define constant for pythagorean wins (the pythagorean win exponent)
 pythag_factor=1.83
-#wkdir = os.path.dirname(os.path.realpath(__file__))+'/'
+#Change added in order to make file compatible with the Interactive Shell
+wkdir = os.path.join(os.path.dirname(__file__))
 
 #Times and constants
 analysis_start_date=datetime.now()-timedelta(weeks=4) #N weeks*days*seconds
@@ -116,19 +118,11 @@ for rating in ratings_list:
     rating['Losses']=int(rating['Losses'])
     rating['Games Scheduled']=int(rating['Games Scheduled'])
 
-##################################
-# Writing Out External CSV Files #
-##################################
-
-#csvfile_out = open(wkdir+'burke_vector.csv','wb')
-#csvwriter = csv.writer(csvfile_out)
-#for row in burkelist:
-    #Only need to print the visiting and home team scores and names.
-    #csvwriter.writerow(row)
-#csvfile_out.close()
-#vector_of_means=[[x[8]] for x in diff_list]
-#list_to_csv('run_diff_vector.csv',vector_of_means)
-
+#################################
+# Writing Out Ratings CSV Files #
+#################################
+list_to_csv('run_diff_vector.csv',vector_of_means)
+list_to_csv('burke_vector.csv',burkelist)
 ###############################
 # Writing the table to screen #
 ###############################
@@ -142,3 +136,20 @@ pprint(table_list[0])
 ratings_table=tabulate(table_list,headers=['Team','Division','Wins','Losses','Run Delta','Pythag. Wins','Adj. Rtg.'])
 
 print(ratings_table)
+
+#####################
+# Print to Log File #
+#####################
+
+#Repeat commands above but write the information to a file.
+
+file_out = open(wkdir+'Summary_'+analysis_end_date.strftime('%Y-%m-%d')+'.txt','wb')
+
+file_out.write('Summary of Results, '+analysis_end_date.strftime('%Y-%m-%d')+'\n\n')
+
+file_out.write(ratings_table)
+
+file_out.close()
+
+print("Writing to file completed successfully.")
+
