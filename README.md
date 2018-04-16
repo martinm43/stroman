@@ -48,9 +48,6 @@ Reads a dict of games to be played with their binomial
 win probabilities and produces an average number of wins 
 for each team.
 
-mlb_api_test.py
-
-
 mlb_array.py
 Parses the attached xls schedule in order to create a 
 season schedule and insert it into the database.
@@ -61,7 +58,6 @@ Contains ORM models for the MLB database.
 mlb_manual.py - TO BE DELETED
 Script for entering MLB data manually from an Excel 
 sheet.
-
 
 season_games_splitter.py
 Splits the season based on games played and games to be 
@@ -82,3 +78,7 @@ tiebreaker.py
 Function containing tiebreaker logic based 
 on dicts (in progress)
 
+To be done apr 16:
+
+check how/if burke ratngs are calculated properly or use run differential
+incorporate known wins into "mcss" files.

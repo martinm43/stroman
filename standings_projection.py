@@ -3,6 +3,7 @@ This script will implement the same strategy used in the "Naismith"  program,
 but only in one script.
 """
 
+import csv
 import json
 import numpy as np
 import datetime
@@ -51,9 +52,21 @@ ratings=[{'abbreviation':'Ana','rating':0.1},
 {'abbreviation':'Tor','rating':0.7}, #edited, because I am a shameless homer (and because the first half hell season isn't representative)
 {'abbreviation':'Was','rating':0.6}]
 
+file_ratings=[]
+filename='burke_vector.csv'
+with open(filename,'rb') as fin:
+    rankdata=csv.reader(fin)
+    for row in rankdata:
+        file_ratings.append(row)
+    fin.close
+
+pprint(file_ratings)
+
 for i,x in enumerate(ratings):
     x['team_id']=i+1
+    x['rating']=float(file_ratings[i][0])
 
+pprint(ratings)
 #End of manual ratings.
 
 #Build a function of a function (I think decorators do this) - research later.
