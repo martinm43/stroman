@@ -27,7 +27,7 @@ pythag_factor=1.83
 wkdir = os.path.join(os.path.dirname(__file__))
 
 #Times and constants
-analysis_start_date=datetime.now()-timedelta(weeks=4) #N weeks*days*seconds
+analysis_start_date=datetime.strptime('2018-03-29','%Y-%m-%d') #N weeks*days*seconds
 analysis_end_date=datetime.now()
 max_MOV=100.0 #Maximum margin of victory set far above what is possible
 home_team_adv=0.0
