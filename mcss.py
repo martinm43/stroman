@@ -29,6 +29,9 @@ if __name__=='__main__':
     import numpy as np
     from pprint import pprint
     from mlb_data_models import Team,database
+    import sys
+
+    sim_results=[]
 
     cursor=database.execute_sql('select distinct division from teams;')
     list_of_divisions=[row[0] for row in cursor]
@@ -39,8 +42,8 @@ if __name__=='__main__':
     with open('test_dicts','r') as fin:
         test_dict=json.load(fin)
 
-    #Iterative functionality (# of sims) to be added
-    ite=200
+    ite=int(sys.argv[1])
+
     for i_ite in range(0,ite):
         win_matrix=mcss(test_dict)
 
@@ -71,4 +74,4 @@ if __name__=='__main__':
                     d['div_winner']=False
 
         #print('Iteration number '+str(i_ite)+':')
-        pprint(league_teams)
+        sim_results.append(league_teams)

@@ -32,7 +32,7 @@ if __name__=='__main__':
     with open('test_dicts','r') as fin:
         test_dict=json.load(fin)
 
-    pprint(test_dict)
+    #pprint(test_dict)
     ite=int(sys.argv[1])
 
 #    mc_sim_matrix=np.zeros((30,ite))  
