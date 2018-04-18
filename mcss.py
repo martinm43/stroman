@@ -53,8 +53,6 @@ if __name__=='__main__':
         win_matrix=mcss(test_dict)
         known_wins=games_won_to_date(return_format='matrix')
         win_matrix+=known_wins
-        pprint(win_matrix)
-        pprint(known_wins)
         total_wins=np.sum(win_matrix,axis=0)
         #Raw win totals.
         for x in league_teams:
