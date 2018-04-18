@@ -119,7 +119,7 @@ for rating in ratings_list:
 
 vector_of_means=[[x['Avg. Run Delta']] for x in ratings_list]
 
-pprint(ratings_list)
+#pprint(ratings_list)
 
 
 #################################
@@ -133,12 +133,12 @@ list_to_csv('burke_vector.csv',burkelist)
 
 #Decide what we do want to publish:
 
-table_list=[(i['Team'],i['Division'],i['Wins'],i['Losses'],i['Run Delta'],i['Pythag. Wins'],i['Adj. Rtg.']) for i in ratings_list]
+table_list=[(i['Team'],i['Division'],i['Wins'],i['Losses'],i['Run Delta'],i['Pythag. Wins'],i['Avg. Run Delta'],i['Adj. Rtg.']) for i in ratings_list]
 
-ratings_table=tabulate(table_list,headers=['Team','Division','Wins','Losses','Run Delta','Pythag. Wins','Adj. Rtg.'],\
+ratings_table=tabulate(table_list,headers=['Team','Division','Wins','Losses','Run Delta','Pythag. Wins','Avg. Run Delta','Adj. Rtg.'],\
               tablefmt='rst')
 
-#print(ratings_table)
+print(ratings_table)
 
 #####################
 # Print to Log File #
@@ -154,5 +154,5 @@ file_out.write(ratings_table)
 
 file_out.close()
 
-#print("Writing to file completed successfully.")
+print("Writing to file completed successfully.")
 
