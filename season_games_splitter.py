@@ -32,11 +32,7 @@ def list_to_csv(csvfile,list_of_lists):
     return 1
 
 #Need to add 'and not postphoned'.
-winlist=games_won_to_date()
-
-winrows=[]
-for i in range(1,31):
-    winrows.append([winlist.count(i)])
+winrows=games_won_to_date(return_format='list_of_lists5')
 
 #Split data into games that have already occured and games that are to occur. Also grab a set of games
 #for the model

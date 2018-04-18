@@ -19,9 +19,11 @@ def mcss(game_dict_list):
 if __name__=='__main__':
     import sys
     import json
-    import numpy as np
     from pprint import pprint
     from mlb_data_models import Team,database
+    from supports import games_won_to_date
+    
+    games_won=games_won_to_date()
 
     cursor=database.execute_sql('select distinct division from teams;')
     list_of_divisions=[row[0] for row in cursor]
@@ -33,21 +35,17 @@ if __name__=='__main__':
         test_dict=json.load(fin)
 
     #pprint(test_dict)
-    ite=int(sys.argv[1])
-
-#    mc_sim_matrix=np.zeros((30,ite))  
-
-#    for i in range(0,ite):
-#        result=np.sum(mcss(test_dict),axis=0)
-#        mc_sim_matrix[:,i]=result
-
-#    sim_results=np.average(mc_sim_matrix,axis=1)
-
+    try:
+        ite=int(sys.argv[1])
+    except IndexError:
+        print('Running from Ipython or some other place - assuming debug length of 1000')
+        ite=1000
+         
     sim_results=np.zeros(30)
     for i in range(0,ite):
         sim_results+=np.sum(mcss(test_dict),axis=0)
 
-    sim_results=np.divide(sim_results,ite)
+    sim_results=np.divide(sim_results,ite)+np.asarray(games_won)
 
     for x in league_teams:
         x['total_wins']=sim_results[x['team_id']-1]
