@@ -11,6 +11,7 @@ mlbgame, using the MLB license, located at https://github.com/panzarino/mlbgame/
 
 TBD soon, RQ INT means requires internet, a lot of these are just raw ideas:
 
+* Incorporate known wins into supports file and then use it in all mcss files
 * Update pitching data (starting with pitcher names) in table
 * Add in a random quote at the end of the log file when complete
 * Playoff predictions and the like should start no earlier than 20%, no later than 25% into season
@@ -18,65 +19,63 @@ TBD soon, RQ INT means requires internet, a lot of these are just raw ideas:
 
 Filelist:
 
-full_ratings_calculations.py
+1. full_ratings_calculations.py
 Calculates net ratings, Pythagorean win 
 expectation, and adjusted net rating.
 
-james.py
+2. james.py
 Performes binomial regression based on run
 differential and adjusted net rating.
 
-last_day_update.py
+3. last_day_update.py
 Updates the mlb database based on the 
 previous day's games.
 
-long_dict_inserter.py
+4. long_dict_inserter.py
 A function created for the purpose of 
 inserting long lists of dicts into SQLite
 databases
 
-mcss.py
+5. mcss.py
 Performs Monte Carlo simulation and calculates:
 * head to head records
 * league wins
 * division wins
 
-mcss_averages.py
+6. mcss_averages.py
 Reads a dict of games to be played with their binomial 
 win probabilities and produces an average number of wins 
 for each team.
 
-mlb_array.py
+7. mlb_array.py
 Parses the attached xls schedule in order to create a 
 season schedule and insert it into the database.
 
-mlb_data_models.py
+8. mlb_data_models.py
 Contains ORM models for the MLB database.
 
-mlb_manual.py - TO BE DELETED
+9. mlb_manual.py - TO BE DELETED
 Script for entering MLB data manually from an Excel 
 sheet.
 
-season_games_splitter.py
+10. season_games_splitter.py
 Splits the season based on games played and games to be 
 played.
 
-standings_projection.py
+11. standings_projection.py
 Takes in a set of rankings (TBD) and writes out a set of 
 dicts to a json file containing future win probabilities
 
-supports.py
+12. supports.py
 A set of assistant scripts for other main scripts in this 
 library/repo/whatever.
 
-table_initializer.py
+13. table_initializer.py
 Brief script that creates the tables in the MLB database.
 
-tiebreaker.py
+14. tiebreaker.py
 Function containing tiebreaker logic based 
 on dicts (in progress)
 
 To be done apr 16:
 
-check how/if burke ratngs are calculated properly or use run differential
-incorporate known wins into "mcss" files.

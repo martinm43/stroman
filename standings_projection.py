@@ -9,7 +9,7 @@ import numpy as np
 import datetime
 from mlb_data_models import Game
 from pprint import pprint
-from james import SRS_regress
+from james import SRS_regress, runs_regress
 from supports import dict_search
 from mcss import mcss
 
@@ -53,7 +53,14 @@ ratings=[{'abbreviation':'Ana','rating':0.1},
 {'abbreviation':'Was','rating':0.6}]
 
 file_ratings=[]
+
+#Burke/neo SRS ratings
 filename='burke_vector.csv'
+regression_function=SRS_regress
+#Run differential ratings
+#filename='run_diff_vector.csv'
+#regression_function=runs_regress
+
 with open(filename,'rb') as fin:
     rankdata=csv.reader(fin)
     for row in rankdata:
@@ -76,7 +83,7 @@ def get_rating(_ratings,id):
 #monte_carlo_calculation component
 for x in game_dict_list:
     x['differential']=get_rating(ratings,x['home_team'])-get_rating(ratings,x['away_team'])
-    x['home_win_probability']=SRS_regress(x['differential'])
+    x['home_win_probability']=regression_function(x['differential'])
 
 win_matrix=mcss(game_dict_list)
 
