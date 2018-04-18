@@ -69,7 +69,7 @@ def games_won_to_date(return_format='list'):
                 win_matrix[x[0]-1,x[2]-1]+=1    
             elif x[3]>x[1]:
                 win_matrix[x[2]-1,x[0]-1]+=1
-            return win_matrix
+        return win_matrix
     else:
         print('invalid option')
         return 0
