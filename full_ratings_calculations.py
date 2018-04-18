@@ -119,6 +119,9 @@ for rating in ratings_list:
 
 vector_of_means=[[x['Avg. Run Delta']] for x in ratings_list]
 
+pprint(ratings_list)
+
+
 #################################
 # Writing Out Ratings CSV Files #
 #################################
@@ -135,7 +138,7 @@ table_list=[(i['Team'],i['Division'],i['Wins'],i['Losses'],i['Run Delta'],i['Pyt
 ratings_table=tabulate(table_list,headers=['Team','Division','Wins','Losses','Run Delta','Pythag. Wins','Adj. Rtg.'],\
               tablefmt='rst')
 
-print(ratings_table)
+#print(ratings_table)
 
 #####################
 # Print to Log File #
@@ -151,5 +154,5 @@ file_out.write(ratings_table)
 
 file_out.close()
 
-print("Writing to file completed successfully.")
+#print("Writing to file completed successfully.")
 
