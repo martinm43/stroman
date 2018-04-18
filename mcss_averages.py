@@ -2,7 +2,8 @@
 A bunch of functions that I use to do Monte Carlo simulations of issues
 This function returns "raw projected wins". A good teaser.
 """
-
+from __future__ import division, print_function
+from tabulate import tabulate
 import random
 import numpy as np
 
@@ -17,12 +18,15 @@ def mcss(game_dict_list):
     return win_matrix
     
 if __name__=='__main__':
+    from datetime import datetime
+    import os
     import sys
     import json
     from pprint import pprint
     from mlb_data_models import Team,database
     from supports import games_won_to_date
     
+    wkdir=os.path.join(os.path.dirname(__file__))
     games_won=games_won_to_date()
 
     cursor=database.execute_sql('select distinct division from teams;')
@@ -54,3 +58,45 @@ if __name__=='__main__':
 
     for i in league_teams:
         print(i['team_name'],i['total_wins'])
+
+###############################
+# Writing the table to screen #
+###############################
+
+#Sort
+
+league_teams.sort(key=lambda x:(x['division'],-x['total_wins']))
+
+#Format
+
+for x in league_teams:
+    x['total_wins']=round(x['total_wins'],1)
+
+#Preview
+pprint(league_teams)
+
+#division, team name, total wins as list of tuples then pass headers
+league_teams=[(x['division'],x['team_name'],x['total_wins']) for x in league_teams]
+averages_table=tabulate(league_teams,headers=['Division','Team','Projected Wins'],\
+              tablefmt='rst')
+
+print(averages_table)
+
+#####################
+# Print to Log File #
+#####################
+
+#Repeat commands above but write the information to a file.
+
+file_out = open(wkdir+'Monte_Carlo_Average_Wins_'+datetime.now().strftime('%Y-%m-%d')+'_'+str(ite)+'_iter.txt','wb')
+
+file_out.write('Summary of Results, '+datetime.now().strftime('%Y-%m-%d')+' '+\
+               str(ite)+' iterations \n\n')
+
+file_out.write(averages_table)
+
+file_out.close()
+
+print("Writing to file completed successfully.")
+
+
