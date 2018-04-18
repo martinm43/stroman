@@ -3,7 +3,8 @@ These scripts are "helper scripts" largely for the purpose
 of converting between various forms of team identifications
 using the "Team" table in the database.
 """
-from mlb_data_models import Team
+from mlb_data_models import Team, Game
+from datetime import datetime, timedelta
 
 def teams_index_matcher(teams_index,namestr):
     team_ind=[t['team_id'] for t in teams_index if t['mlbgames_name']==namestr][0]
@@ -39,6 +40,12 @@ def id_to_mlbgames_name(id,verbose=False):
     else:
         t=[[x.mlbgames_name,x.division] for x in t][0]
     return t
+
+def games_won_to_date():
+    played_games=Game.select().where(Game.scheduled_date<datetime.today()-timedelta(days=1)).order_by(Game.scheduled_date) 
+    played_games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in played_games]
+    winlist=[x[0] if x[1]>x[3] else x[2] for x in played_games]
+    return winlist
 
 if __name__=="__main__":
     #test abbrev to id
