@@ -30,6 +30,7 @@ if __name__=='__main__':
     from pprint import pprint
     from mlb_data_models import Team,database
     import sys
+    from supports import games_won_to_date
 
     sim_results=[]
 
@@ -42,11 +43,16 @@ if __name__=='__main__':
     with open('test_dicts','r') as fin:
         test_dict=json.load(fin)
 
-    ite=int(sys.argv[1])
+    try:
+        ite=int(sys.argv[1])
+    except IndexError:
+        ite=100
+        print('Debug run, using 100 iterations')
 
     for i_ite in range(0,ite):
         win_matrix=mcss(test_dict)
-
+        known_wins=games_won_to_date(return_format='matrix')
+        win_matrix+=known_wins
         total_wins=np.sum(win_matrix,axis=0)
         #Raw win totals.
         for x in league_teams:
@@ -75,3 +81,4 @@ if __name__=='__main__':
 
         #print('Iteration number '+str(i_ite)+':')
         sim_results.append(league_teams)
+    pprint(sim_results[0])

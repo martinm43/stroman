@@ -2,9 +2,13 @@
 These scripts are "helper scripts" largely for the purpose
 of converting between various forms of team identifications
 using the "Team" table in the database.
+
+New script added for determining known wins.
 """
+from __future__ import division, print_function
 from mlb_data_models import Team, Game
 from datetime import datetime, timedelta
+import numpy as np
 
 def teams_index_matcher(teams_index,namestr):
     team_ind=[t['team_id'] for t in teams_index if t['mlbgames_name']==namestr][0]
@@ -47,12 +51,28 @@ def games_won_to_date(return_format='list'):
     winlist=[x[0] if x[1]>x[3] else x[2] for x in played_games]
     winrows=[]
     if return_format=='list_of_lists':
+        winlist=[x[0] if x[1]>x[3] else x[2] for x in played_games]
+        winrows=[]
         for i in range(1,31):
             winrows.append([winlist.count(i)])
+        return winrows
     elif return_format=='list':
-         for i in range(1,31):
+        winlist=[x[0] if x[1]>x[3] else x[2] for x in played_games]
+        winrows=[]
+        for i in range(1,31):
             winrows.append(winlist.count(i))       
-    return winrows
+        return winrows
+    elif return_format=='matrix':
+        win_matrix=np.zeros((30,30))
+        for x in played_games:
+            if x[1]>x[3]:
+                win_matrix[x[0]-1,x[2]-1]+=1    
+            elif x[3]>x[1]:
+                win_matrix[x[2]-1,x[0]-1]+=1
+            return win_matrix
+    else:
+        print('invalid option')
+        return 0
 
 if __name__=="__main__":
     #test abbrev to id
