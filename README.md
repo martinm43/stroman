@@ -11,7 +11,6 @@ mlbgame, using the MLB license, located at https://github.com/panzarino/mlbgame/
 
 TBD soon, RQ INT means requires internet, a lot of these are just raw ideas:
 
-* Process known wins into the "mcss matrix"
 * Update pitching data (starting with pitcher names) in table
 * Add in a random quote at the end of the log file when complete
 * Playoff predictions and the like should start no earlier than 20%, no later than 25% into season
