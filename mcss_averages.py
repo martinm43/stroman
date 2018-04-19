@@ -56,8 +56,8 @@ if __name__=='__main__':
 
     league_teams = sorted(league_teams, key=lambda k: -k['total_wins'])
 
-    for i in league_teams:
-        print(i['team_name'],i['total_wins'])
+    #for i in league_teams:
+        #print(i['team_name'],i['total_wins'])
 
 ###############################
 # Writing the table to screen #
@@ -73,7 +73,7 @@ for x in league_teams:
     x['total_wins']=round(x['total_wins'],1)
 
 #Preview
-pprint(league_teams)
+#pprint(league_teams)
 
 #division, team name, total wins as list of tuples then pass headers
 league_teams=[(x['division'],x['team_name'],x['total_wins']) for x in league_teams]
