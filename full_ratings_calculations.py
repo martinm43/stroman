@@ -156,3 +156,7 @@ file_out.close()
 
 print("Writing to file completed successfully.")
 
+###############################
+# Writing Ratings to Database #
+###############################
+

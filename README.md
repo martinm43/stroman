@@ -7,8 +7,6 @@ for NBA data analysis.
 The main creative work this builds upon as stated above is Carl Panzarino's
 mlbgame, using the MLB license, located at https://github.com/panzarino/mlbgame/blob/master/LICENSE
 
-(c) of some kind - TBD - Martin Miller
-
 TBD soon, RQ INT means requires internet, a lot of these are just raw ideas:
 
 * Instead of using temp csvs, use the database. This might allow use to use C++ or other faster languages.
