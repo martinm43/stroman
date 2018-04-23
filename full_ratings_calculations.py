@@ -10,12 +10,12 @@ scripts.
 from __future__ import print_function, division
 
 from pprint import pprint
-import csv,os
+import os
 import numpy as np
 import tabulate
 import json
-from supports import id_to_mlbgames_name, list_to_csv
-from mlb_data_models import Team, Game
+from supports import id_to_mlbgames_name, list_to_csv, mlbgames_name_to_id
+from mlb_data_models import Team, Game, SRSRating, database
 from datetime import datetime, timedelta
 from analytics.burke_solver import burke_calc
 from tabulate import tabulate
@@ -159,4 +159,12 @@ print("Writing to file completed successfully.")
 ###############################
 # Writing Ratings to Database #
 ###############################
+database_ratings=[{'rating_date':datetime.now().replace(hour=0,minute=0,second=0,microsecond=0),'rating':i['Adj. Rtg.'],\
+                   'team_id':mlbgames_name_to_id(i['Team'])} for i in ratings_list]
 
+SRSRating.insert_many(database_ratings).upsert().execute()
+
+#Deletes duplicate entries in table. Theoretically should be able to use some
+#sort of SQL in order to avoid this issue. But this works well too.
+database.execute_sql('delete from SRS_ratings where rowid\
+                     not in (select max(rowid) from SRS_ratings group by rating)')

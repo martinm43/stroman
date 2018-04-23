@@ -18,6 +18,11 @@ def abbrev_to_id(abbrev):
     x=Team.select().where(Team.abbreviation==abbrev)
     return [i.id for i in x][0]
 
+def mlbgames_name_to_id(mlbgames_name):
+    x=Team.select().where(Team.mlbgames_name==mlbgames_name)
+   # print(x)
+    return [i.id for i in x][0]
+
 def dict_search(list_of_dicts,key1,key_value1,key2):
     x=[i for i in list_of_dicts if i[key1]==key_value1]
     if x==[]:

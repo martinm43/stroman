@@ -1,6 +1,6 @@
-"""
-This script will implement the same strategy used in the "Naismith"  program,
-but only in one script.
+e"""
+This script writes out a list of games to be played in the mlb season along with their
+binomial win probabilities.
 """
 
 import csv
@@ -11,8 +11,6 @@ from pprint import pprint
 from james import SRS_regress, runs_regress
 from supports import dict_search
 from mcss import mcss
-
-#Known wins - to be implemented, not yet required for obvious reasons.
 
 #Future games.
 x=Game.select().where(Game.scheduled_date>=datetime.datetime.now())
