@@ -159,8 +159,10 @@ print("Writing to file completed successfully.")
 ###############################
 # Writing Ratings to Database #
 ###############################
-database_ratings=[{'rating_date':datetime.now().replace(hour=0,minute=0,second=0,microsecond=0),'rating':i['Adj. Rtg.'],\
+database_ratings=[{'rating_date':analysis_end_date.replace(hour=0,minute=0,second=0,microsecond=0),'rating':i['Adj. Rtg.'],\
                    'team_id':mlbgames_name_to_id(i['Team'])} for i in ratings_list]
+
+print(datetime.now().replace(hour=0,minute=0,second=0,microsecond=0).strftime('%Y-%m-%d'))
 
 SRSRating.insert_many(database_ratings).upsert().execute()
 
