@@ -1,4 +1,4 @@
-e"""
+"""
 This script writes out a list of games to be played in the mlb season along with their
 binomial win probabilities.
 """
