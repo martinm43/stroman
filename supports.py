@@ -6,6 +6,7 @@ from mlb_data_models import Team, Game, SRSRating
 from datetime import datetime, timedelta
 from james import SRS_regress
 import numpy as np
+from pprint import pprint
 
 def teams_index_matcher(teams_index,namestr):
     team_ind=[t['team_id'] for t in teams_index if t['mlbgames_name']==namestr][0]
@@ -82,7 +83,7 @@ def future_games_dicts():
     """
     #dummy variable to represent the query (retrieve ratings for current day)
     x=SRSRating.select().where(SRSRating.rating_date==datetime.now().\
-                   replace(hour=0,minute=0,second=0,microsecond=0))
+                   replace(hour=0,minute=0,second=0,microsecond=0)).order_by(SRSRating.team_id)
     
     #retrieve ratings for current day
     ratings=[i.rating for i in x]
@@ -126,6 +127,8 @@ def future_games_dicts():
     for i,x in enumerate(ratings_dict_list):
         x['team_id']=i+1
         x['rating']=float(ratings[i])
+
+    pprint(ratings_dict_list)
     
     #Get the list of games.
     query=Game.select().where(Game.scheduled_date>=datetime.now())
