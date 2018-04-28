@@ -1,13 +1,10 @@
 """
-These scripts are "helper scripts" largely for the purpose
-of converting between various forms of team identifications
-using the "Team" table in the database.
-
-New script added for determining known wins.
+These scripts are functions commonly reused in other files.
 """
 from __future__ import division, print_function
-from mlb_data_models import Team, Game
+from mlb_data_models import Team, Game, SRSRating
 from datetime import datetime, timedelta
+from james import SRS_regress
 import numpy as np
 
 def teams_index_matcher(teams_index,namestr):
@@ -78,6 +75,76 @@ def games_won_to_date(return_format='list'):
     else:
         print('invalid option')
         return 0
+
+def future_games_dicts():
+    """
+    Returns a list of dicts of future games (used in all the mcss files)
+    """
+    #dummy variable to represent the query (retrieve ratings for current day)
+    x=SRSRating.select().where(SRSRating.rating_date==datetime.now().\
+                   replace(hour=0,minute=0,second=0,microsecond=0))
+    
+    #retrieve ratings for current day
+    ratings=[i.rating for i in x]
+    
+    if ratings==[]:
+        print('Current ratings do not exist yet. Please run full ratings calculations')
+        return
+    
+    #Ported from old "standings_calculations" file
+    ratings_dict_list=[{'abbreviation':'Ana'},
+    {'abbreviation':'Ari'},
+    {'abbreviation':'Atl'},
+    {'abbreviation':'Bal'},
+    {'abbreviation':'Bos'},
+    {'abbreviation':'ChC'},
+    {'abbreviation':'ChW'},
+    {'abbreviation':'Cin'},
+    {'abbreviation':'Cle'},
+    {'abbreviation':'Col'},
+    {'abbreviation':'Det'},
+    {'abbreviation':'Fla'},
+    {'abbreviation':'Hou'},
+    {'abbreviation':'Kan'},
+    {'abbreviation':'Los'},
+    {'abbreviation':'Mil'},
+    {'abbreviation':'Min'},
+    {'abbreviation':'NYM'},
+    {'abbreviation':'NYY'},
+    {'abbreviation':'Oak'},
+    {'abbreviation':'Phi'},
+    {'abbreviation':'Pit'},
+    {'abbreviation':'Sdg'},
+    {'abbreviation':'Sea'},
+    {'abbreviation':'Sfo'},
+    {'abbreviation':'StL'},
+    {'abbreviation':'Tam'},
+    {'abbreviation':'Tex'},
+    {'abbreviation':'Tor'},
+    {'abbreviation':'Was'}]
+    
+    for i,x in enumerate(ratings_dict_list):
+        x['team_id']=i+1
+        x['rating']=float(ratings[i])
+    
+    #Get the list of games.
+    query=Game.select().where(Game.scheduled_date>=datetime.now())
+    game_dict_list=[dict(zip(['id','scheduled_date','away_team','home_team'],\
+              [i.id,i.scheduled_date,i.away_team,i.home_team])) for i in query]
+        
+    #Build a function of a function (I think decorators do this) - research later.
+    def get_rating(_ratings,id):
+        return dict_search(_ratings,'team_id',id,'rating')
+
+    regression_function=SRS_regress
+
+    #monte_carlo_calculation component
+    for x in game_dict_list:
+        x['differential']=get_rating(ratings_dict_list,x['home_team'])\
+                          -get_rating(ratings_dict_list,x['away_team'])
+        x['home_win_probability']=regression_function(x['differential'])
+
+    return game_dict_list
 
 if __name__=="__main__":
     #test abbrev to id

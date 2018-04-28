@@ -30,7 +30,7 @@ if __name__=='__main__':
     from pprint import pprint
     from mlb_data_models import Team,database
     import sys
-    from supports import games_won_to_date
+    from supports import games_won_to_date, future_games_dicts
 
     sim_results=[]
 
@@ -40,9 +40,6 @@ if __name__=='__main__':
     league_teams=Team.select(Team.team_name,Team.id,Team.division,Team.league)
     league_teams=[dict(zip(['team_name','team_id','division','league'],[x.team_name,x.id,x.division,x.league])) for x in league_teams]
 
-    with open('test_dicts','r') as fin:
-        test_dict=json.load(fin)
-
     try:
         ite=int(sys.argv[1])
     except IndexError:
@@ -50,7 +47,7 @@ if __name__=='__main__':
         print('Debug run, using 100 iterations')
 
     for i_ite in range(0,ite):
-        win_matrix=mcss(test_dict)
+        win_matrix=mcss(future_games_dicts())
         known_wins=games_won_to_date(return_format='matrix')
         win_matrix+=known_wins
         total_wins=np.sum(win_matrix,axis=0)

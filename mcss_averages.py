@@ -24,7 +24,7 @@ if __name__=='__main__':
     import json
     from pprint import pprint
     from mlb_data_models import Team,database
-    from supports import games_won_to_date
+    from supports import games_won_to_date, future_games_dicts
     
     wkdir=os.path.join(os.path.dirname(__file__))
     games_won=games_won_to_date()
@@ -35,9 +35,6 @@ if __name__=='__main__':
     league_teams=Team.select(Team.team_name,Team.id,Team.division,Team.league)
     league_teams=[dict(zip(['team_name','team_id','division','league'],[x.team_name,x.id,x.division,x.league])) for x in league_teams]
 
-    with open('test_dicts','r') as fin:
-        test_dict=json.load(fin)
-
     #pprint(test_dict)
     try:
         ite=int(sys.argv[1])
@@ -47,7 +44,7 @@ if __name__=='__main__':
          
     sim_results=np.zeros(30)
     for i in range(0,ite):
-        sim_results+=np.sum(mcss(test_dict),axis=0)
+        sim_results+=np.sum(mcss(future_games_dicts()),axis=0)
 
     sim_results=np.divide(sim_results,ite)+np.asarray(games_won)
 
