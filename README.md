@@ -7,17 +7,17 @@ for NBA data analysis.
 The main creative work this builds upon as stated above is Carl Panzarino's
 mlbgame, using the MLB license, located at https://github.com/panzarino/mlbgame/blob/master/LICENSE
 
-TBD soon, RQ INT means requires internet, a lot of these are just raw ideas:
+Using an MIT license
 
-* Instead of using temp csvs, use the database. This might allow use to use C++ or other faster languages.
+* Create a "future games" worksheet something like that for the NBA
 * Consider why the big simulation is so slow.
-* Create a table and output file for the big simulation.
+* Create a table and output file for the big simulation (mcss)
 * Update pitching data (starting with pitcher names) in table.
 * Add in a random quote at the end of the log file when complete.
 * Playoff predictions and the like should start no earlier than 20%, no later than 25% into season.
 * GUI for updating missed/postphoned games, could be as easy as an Excel sheet/python script combination.
 
-Filelist:
+Filelist (to be updated):
 
 1. full_ratings_calculations.py
 Calculates net ratings, Pythagorean win 
@@ -62,19 +62,27 @@ sheet.
 Splits the season based on games played and games to be 
 played.
 
-11. standings_projection.py
-Takes in a set of rankings (TBD) and writes out a set of 
-dicts to a json file containing future win probabilities
-
-12. supports.py
+11. supports.py
 A set of assistant scripts for other main scripts in this 
-library/repo/whatever.
+library/repo/whatever. Contains scripts for calculating
+current ratings and the binomial win probabilities in future
+games. Also contains a function that converts the list of
+binomial win probabilities into a "head to head matrix"
 
-13. table_initializer.py
+12. table_initializer.py
 Brief script that creates the tables in the MLB database.
 
-14. tiebreaker.py
+13. tiebreaker.py
 Function containing tiebreaker logic based 
 on dicts (in progress)
+
+14. missing_read.py
+Reads missing games (games that have not yet been played) from database.
+
+15. missing_write.py
+Writes missing games to database (in progress).
+
+16. global_update.py
+Updates multiple games (N days in the past via command line update)
 
 

@@ -7,24 +7,13 @@ from tabulate import tabulate
 import random
 import numpy as np
 
-def mcss(game_dict_list):
-    """Function takes in a list of dicts of games with the home team's win probability"""        
-    win_matrix=np.zeros((30,30))
-    for x in game_dict_list:
-        if x['home_win_probability']<=random.uniform(0,1):
-            win_matrix[x['home_team']-1,x['away_team']-1]+=1    
-        else:
-            win_matrix[x['away_team']-1,x['home_team']-1]+=1
-    return win_matrix
-    
 if __name__=='__main__':
     from datetime import datetime
     import os
     import sys
-    import json
     from pprint import pprint
     from mlb_data_models import Team,database
-    from supports import games_won_to_date, future_games_dicts
+    from supports import games_won_to_date, future_games_dicts, mcss
     
     wkdir=os.path.join(os.path.dirname(__file__))
     games_won=games_won_to_date()
@@ -41,8 +30,12 @@ if __name__=='__main__':
     except IndexError:
         print('Running from Ipython or some other place - assuming debug length of 1000')
         ite=1000
-         
+    
     binomial_win_probabilities=future_games_dicts()
+    if binomial_win_probabilities==1:
+        print('Error occurred while calculating \
+              future binomial win probabilities')
+        sys.exit(1)
 
     sim_results=np.zeros(30)
     for i in range(0,ite):
@@ -54,9 +47,6 @@ if __name__=='__main__':
         x['total_wins']=sim_results[x['team_id']-1]
 
     league_teams = sorted(league_teams, key=lambda k: -k['total_wins'])
-
-    #for i in league_teams:
-        #print(i['team_name'],i['total_wins'])
 
 ###############################
 # Writing the table to screen #

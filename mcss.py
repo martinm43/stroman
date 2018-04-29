@@ -14,23 +14,13 @@ MAM
 import random
 import numpy as np
 
-def mcss(game_dict_list):
-    """Function takes in a list of dicts of games with the home team's win probability"""        
-    win_matrix=np.zeros((30,30))
-    for x in game_dict_list:
-        if x['home_win_probability']<=random.uniform(0,1):
-            win_matrix[x['home_team']-1,x['away_team']-1]+=1    
-        else:
-            win_matrix[x['away_team']-1,x['home_team']-1]+=1
-    return win_matrix
-
 if __name__=='__main__':
     import json
     import numpy as np
     from pprint import pprint
     from mlb_data_models import Team,database
     import sys
-    from supports import games_won_to_date, future_games_dicts
+    from supports import games_won_to_date, future_games_dicts, mcss
 
     sim_results=[]
 
@@ -47,7 +37,11 @@ if __name__=='__main__':
         print('Debug run, using 100 iterations')
 
     binomial_win_probabilities=future_games_dicts()
-
+    if binomial_win_probabilities==1:
+        print('Error occurred while calculating ' \
+              'future binomial win probabilities')
+        sys.exit(1)
+        
     for i_ite in range(0,ite):
         win_matrix=mcss(binomial_win_probabilities)
         known_wins=games_won_to_date(return_format='matrix')

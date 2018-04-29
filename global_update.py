@@ -16,7 +16,7 @@ import sys
 
 max_days_back=int(sys.argv[1])
 
-for i in range(1,max_days_back):
+for i in range(1,max_days_back+1):
     game_d=datetime.today()-timedelta(days=i)
 
     print("Getting games from "+game_d.strftime("%Y-%m-%d"))

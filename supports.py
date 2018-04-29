@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from james import SRS_regress
 import numpy as np
 from pprint import pprint
+import random
 
 def teams_index_matcher(teams_index,namestr):
     team_ind=[t['team_id'] for t in teams_index if t['mlbgames_name']==namestr][0]
@@ -90,7 +91,7 @@ def future_games_dicts():
     
     if ratings==[]:
         print('Current ratings do not exist yet. Please run full ratings calculations')
-        return
+        return 1
     
     #Ported from old "standings_calculations" file
     ratings_dict_list=[{'abbreviation':'Ana'},
@@ -149,6 +150,18 @@ def future_games_dicts():
 
     return game_dict_list
 
+def mcss(game_dict_list):
+    """Function takes in a list of dicts of games with the home team's win probability"""        
+    win_matrix=np.zeros((30,30))
+    for x in game_dict_list:
+        if x['home_win_probability']<=random.uniform(0,1):
+            win_matrix[x['home_team']-1,x['away_team']-1]+=1    
+        else:
+            win_matrix[x['away_team']-1,x['home_team']-1]+=1
+    return win_matrix
+
 if __name__=="__main__":
     #test abbrev to id
     pprint(future_games_dicts())
+    
+    
