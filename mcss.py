@@ -46,8 +46,10 @@ if __name__=='__main__':
         ite=100
         print('Debug run, using 100 iterations')
 
+    binomial_win_probabilities=future_games_dicts()
+
     for i_ite in range(0,ite):
-        win_matrix=mcss(future_games_dicts())
+        win_matrix=mcss(binomial_win_probabilities)
         known_wins=games_won_to_date(return_format='matrix')
         win_matrix+=known_wins
         total_wins=np.sum(win_matrix,axis=0)

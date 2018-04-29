@@ -169,4 +169,4 @@ SRSRating.insert_many(database_ratings).upsert().execute()
 #Deletes duplicate entries in table. Theoretically should be able to use some
 #sort of SQL in order to avoid this issue. But this works well too.
 database.execute_sql('delete from SRS_ratings where rowid\
-                     not in (select max(rowid) from SRS_ratings group by rating)')
+                     not in (select max(rowid) from SRS_ratings group by team_id)')

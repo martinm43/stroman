@@ -42,9 +42,11 @@ if __name__=='__main__':
         print('Running from Ipython or some other place - assuming debug length of 1000')
         ite=1000
          
+    binomial_win_probabilities=future_games_dicts()
+
     sim_results=np.zeros(30)
     for i in range(0,ite):
-        sim_results+=np.sum(mcss(future_games_dicts()),axis=0)
+        sim_results+=np.sum(mcss(binomial_win_probabilities),axis=0)
 
     sim_results=np.divide(sim_results,ite)+np.asarray(games_won)
 

@@ -128,7 +128,7 @@ def future_games_dicts():
         x['team_id']=i+1
         x['rating']=float(ratings[i])
 
-    pprint(ratings_dict_list)
+    #pprint(ratings_dict_list)
     
     #Get the list of games.
     query=Game.select().where(Game.scheduled_date>=datetime.now())
@@ -151,4 +151,4 @@ def future_games_dicts():
 
 if __name__=="__main__":
     #test abbrev to id
-    print(abbrev_to_id('Ana'))
+    pprint(future_games_dicts())
