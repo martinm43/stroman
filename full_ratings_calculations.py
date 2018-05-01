@@ -164,7 +164,7 @@ database_ratings=[{'rating_date':analysis_end_date.replace(hour=0,minute=0,secon
 
 print(datetime.now().replace(hour=0,minute=0,second=0,microsecond=0).strftime('%Y-%m-%d'))
 
-SRSRating.insert_many(database_ratings).upsert().execute()
+SRSRating.insert_many(database_ratings).execute()
 
 #Deletes duplicate entries in table. Theoretically should be able to use some
 #sort of SQL in order to avoid this issue. But this works well too.
