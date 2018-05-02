@@ -56,15 +56,16 @@ games=[[g.away_team,g.away_runs,g.home_team,g.home_runs] for g in games]
 #9. "RUN DIFFERENTIAL"
 #10. "PYTHAGOREAN_WINS"
 #11. "ADJUSTED RATING"
+#12. "WIN PERCENTAGE"
 
 analytics_headers=["Wins","Losses","Runs Scored","Runs Allowed","Games Scheduled",\
                    "Avg. Runs Scored","Avg. Runs Allowed",\
                    "Avg. Run Delta","Run Delta",\
-                   "Pythag. Wins","Adj. Rtg."]
+                   "Pythag. Wins","Adj. Rtg.","Win Pct."]
 
 #then prepend the team names and division names to the list for sorting
 
-diff_matrix=np.zeros((30,11))
+diff_matrix=np.zeros((30,12))
 for g in games:
     #two operations required, to increase the net wins and losses for both teams in 
     #each pass. Like if "away runs" greater than home runs then away team won. Advanced logic.
@@ -89,11 +90,15 @@ for i in range(0,len(diff_matrix)):
     diff_matrix[i,8]=diff_matrix[i,7]*diff_matrix[i,4]
     diff_matrix[i,9]=162*diff_matrix[i,2]**pythag_factor/(diff_matrix[i,2]**pythag_factor+diff_matrix[i,3]**pythag_factor)
 
+    #Adding in win percentage, as this should probably be displayed/calculated
+    diff_matrix[i,11]=diff_matrix[i,0]/(diff_matrix[i,0]+diff_matrix[i,1])
+
 #Adjusted Rating Calculations (Burke - after Brian Burke - ratings)
 burke_data=[[g[2],g[0],g[3],g[1]] for g in games]
 burkelist=burke_calc(burke_data,impmode=None,max_MOV=max_MOV,home_team_adv=home_team_adv,win_floor=0.0)
 burkelist=[[b] for b in burkelist]
 diff_matrix[:,10]=[b[0] for b in burkelist]
+
 
 
 
@@ -109,13 +114,13 @@ for i,x in enumerate(ratings_list):
     x['Team']=x_team_name
     x['Division']=x_team_division
     
-ratings_list.sort(key=lambda x:(x['Division'],-x['Wins']))
-
+ratings_list.sort(key=lambda x:(x['Division'],-x['Win Pct.']))
 
 for rating in ratings_list:
     rating['Wins']=int(rating['Wins'])
     rating['Losses']=int(rating['Losses'])
     rating['Games Scheduled']=int(rating['Games Scheduled'])
+    rating['Win Pct.']=round(rating['Win Pct.'],3)
 
 vector_of_means=[[x['Avg. Run Delta']] for x in ratings_list]
 
@@ -133,9 +138,12 @@ list_to_csv('burke_vector.csv',burkelist)
 
 #Decide what we do want to publish:
 
-table_list=[(i['Team'],i['Division'],i['Wins'],i['Losses'],i['Run Delta'],i['Pythag. Wins'],i['Avg. Run Delta'],i['Adj. Rtg.']) for i in ratings_list]
+table_list=[(i['Team'],i['Division'],i['Wins'],i['Losses'],\
+        i['Win Pct.'],i['Run Delta'],i['Pythag. Wins'],i['Avg. Run Delta'],\
+        i['Adj. Rtg.']) for i in ratings_list]
 
-ratings_table=tabulate(table_list,headers=['Team','Division','Wins','Losses','Run Delta','Pythag. Wins','Avg. Run Delta','Adj. Rtg.'],\
+ratings_table=tabulate(table_list,headers=['Team','Division','Wins','Losses','Win Pct.',\
+                        'Run Delta','Pythag. Wins','Avg. Run Delta','Adj. Rtg.'],\
               tablefmt='rst')
 
 print(ratings_table)
