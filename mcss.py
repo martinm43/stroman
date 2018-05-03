@@ -33,8 +33,8 @@ if __name__=='__main__':
     try:
         ite=int(sys.argv[1])
     except IndexError:
-        ite=100
-        print('Debug run, using 100 iterations')
+        ite=1
+        print('Debug run, using 1 iterations')
 
     binomial_win_probabilities=future_games_dicts()
     if binomial_win_probabilities==1:
@@ -75,3 +75,8 @@ if __name__=='__main__':
         #print('Iteration number '+str(i_ite)+':')
         sim_results.append(league_teams)
     pprint(sim_results[0])
+    al_wc=[x for x in sim_results[0] if (x['div_winner']==False and x['league']=='AL')]
+    al_wc.sort(key=lambda x:-x['total_wins'])
+    nl_wc=[x for x in sim_results[0] if (x['div_winner']==False and x['league']=='NL')]
+    nl_wc.sort(key=lambda x:-x['total_wins'])
+    pprint(nl_wc)
