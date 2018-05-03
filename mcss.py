@@ -74,9 +74,10 @@ if __name__=='__main__':
 
         #print('Iteration number '+str(i_ite)+':')
         sim_results.append(league_teams)
-    pprint(sim_results[0])
+    #pprint(sim_results[0])
     al_wc=[x for x in sim_results[0] if (x['div_winner']==False and x['league']=='AL')]
     al_wc.sort(key=lambda x:-x['total_wins'])
     nl_wc=[x for x in sim_results[0] if (x['div_winner']==False and x['league']=='NL')]
     nl_wc.sort(key=lambda x:-x['total_wins'])
-    pprint(nl_wc)
+    pprint(al_wc[0:2])
+    pprint(nl_wc[0:2])
