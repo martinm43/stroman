@@ -68,13 +68,19 @@ Brief script that creates the tables in the MLB database.
 
 12. tiebreaker.py
 Function containing tiebreaker logic based 
-on dicts (in progress)
+on dicts containing team records and head to heads. Current time of development (may)
+is a bit too early to start thinking about tiebreaker logic for playoffs.
 
 13. missing_read.py
-Reads missing games (games that have not yet been played) from database.
+Reads missing games (games that have not yet been played) from an excel worksheet.
+Worksheet is a work in progress, development paused.
 
 14. missing_write.py
-Writes missing games to database (in progress).
+Writes missing games to excel worksheet (in progress). 
+Note that there is the possibility that our update dates 
+might be the reason for the win discrepancy.
+The goal here is not to track specific wins and losses at this point, but to
+assess team performance using raw stats.
 
 
 

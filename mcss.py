@@ -72,12 +72,19 @@ if __name__=='__main__':
                 else:
                     d['div_winner']=False
 
-        #print('Iteration number '+str(i_ite)+':')
         sim_results.append(league_teams)
-    #pprint(sim_results[0])
+
+    #Determine wild card winners
     al_wc=[x for x in sim_results[0] if (x['div_winner']==False and x['league']=='AL')]
     al_wc.sort(key=lambda x:-x['total_wins'])
     nl_wc=[x for x in sim_results[0] if (x['div_winner']==False and x['league']=='NL')]
     nl_wc.sort(key=lambda x:-x['total_wins'])
-    pprint(al_wc[0:2])
-    pprint(nl_wc[0:2])
+    al_wc_winners=[x['team_id'] for x in al_wc[0:2]]
+    nl_wc_winners=[x['team_id'] for x in nl_wc[0:2]]
+    for t in league_teams:
+        if (t['team_id'] in al_wc_winners) or (t['team_id'] in nl_wc_winners):
+            t['wild_card']=True
+        else:
+            t['wild_card']=False
+    
+    
