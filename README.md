@@ -10,7 +10,6 @@ mlbgame, using the MLB license, located at https://github.com/panzarino/mlbgame/
 Using an MIT license
 
 * Create a "future games" worksheet something like that for the NBA
-* Consider why the big simulation is so slow.
 * Create a table and output file for the big simulation (mcss)
 * Update pitching data (starting with pitcher names) in table.
 * Add in a random quote at the end of the log file when complete.
@@ -27,9 +26,8 @@ expectation, and adjusted net rating.
 Performes binomial regression based on run
 differential and adjusted net rating.
 
-3. last_day_update.py
-Updates the mlb database based on the 
-previous day's games.
+3. global_update.py
+Updates multiple games (N days in the past via command line update)
 
 4. long_dict_inserter.py
 A function created for the purpose of 
@@ -54,35 +52,29 @@ season schedule and insert it into the database.
 8. mlb_data_models.py
 Contains ORM models for the MLB database.
 
-9. mlb_manual.py - TO BE DELETED
-Script for entering MLB data manually from an Excel 
-sheet.
-
-10. season_games_splitter.py
+9. season_games_splitter.py
 Splits the season based on games played and games to be 
 played.
 
-11. supports.py
+10. supports.py
 A set of assistant scripts for other main scripts in this 
 library/repo/whatever. Contains scripts for calculating
 current ratings and the binomial win probabilities in future
 games. Also contains a function that converts the list of
 binomial win probabilities into a "head to head matrix"
 
-12. table_initializer.py
+11. table_initializer.py
 Brief script that creates the tables in the MLB database.
 
-13. tiebreaker.py
+12. tiebreaker.py
 Function containing tiebreaker logic based 
 on dicts (in progress)
 
-14. missing_read.py
+13. missing_read.py
 Reads missing games (games that have not yet been played) from database.
 
-15. missing_write.py
+14. missing_write.py
 Writes missing games to database (in progress).
 
-16. global_update.py
-Updates multiple games (N days in the past via command line update)
 
 

@@ -5,7 +5,8 @@ from mlb_data_models import database
 #database.execute_sql('select scheduled_date, home_team, away_team from'+\
 #4                      'postphoned_games_local;')
 result=database.execute_sql('select * from postphoned_games_local;')
-x=[[i[9],i[1],i[2]] for i in result]
+x=[[i[9],i[1],i[2]] for i in result] #has to be crossreferenced with the view in sqlite3
+x.sort(key=lambda i:i[0]) #sort by date
 
 #datestring.
 now=datetime.now()
