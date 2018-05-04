@@ -29,11 +29,19 @@ if __name__=='__main__':
     league_teams=Team.select(Team.team_name,Team.id,Team.division,Team.league)
     league_teams=[dict(zip(['team_name','team_id','division','league'],[x.team_name,x.id,x.division,x.league])) for x in league_teams]
 
+    #Assign this once to hold it for later use
+    header_league_teams=league_teams 
+
+    #Holding matrix for major outcomes
+    #Rows = team ids
+    #Columns = (Division wins, Wildcard places)
+    playoff_matrix=np.zeros((30,2))
+
     try:
         ite=int(sys.argv[1])
     except IndexError:
-        ite=3
-        print('Debug run, using 1 iterations')
+        ite=10
+        print('Debug run, using '+str(ite)+' iterations')
 
     binomial_win_probabilities=future_games_dicts()
     if binomial_win_probabilities==1:
@@ -85,6 +93,26 @@ if __name__=='__main__':
                 t['wild_card']=True
             else:
                 t['wild_card']=False
-        
+                
+            #enter into the playoff matrix as per above
+            if t['wild_card']==True:
+                playoff_matrix[int(t['team_id'])-1,1]+=1
+            elif t['div_winner']==True:
+                playoff_matrix[int(t['team_id'])-1,0]+=1
+                
+    #Summarizing results.
+    header_league_teams=Team.select(Team.team_name,Team.id,Team.division,Team.league)
+    header_league_teams=[dict(zip(['team_name','team_id','division','league'],\
+        [x.team_name,x.id,x.division,x.league])) for x in header_league_teams]
+
+    for t in header_league_teams:
+        t['Wild Card Odds']=np.sum(playoff_matrix[int(t['team_id'])-1,1])/ite
+        t['Division Win Odds']=np.sum(playoff_matrix[int(t['team_id'])-1,0])/ite  
+        t['Playoff Odds']=t['Wild Card Odds']+t['Division Win Odds']
+
+    pprint(header_league_teams)          
+                
+                
+                
         
     
