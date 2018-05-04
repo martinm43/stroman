@@ -15,7 +15,6 @@ import random
 import numpy as np
 
 if __name__=='__main__':
-    import json
     import numpy as np
     from pprint import pprint
     from mlb_data_models import Team,database
@@ -33,7 +32,7 @@ if __name__=='__main__':
     try:
         ite=int(sys.argv[1])
     except IndexError:
-        ite=1
+        ite=3
         print('Debug run, using 1 iterations')
 
     binomial_win_probabilities=future_games_dicts()
@@ -74,17 +73,18 @@ if __name__=='__main__':
 
         sim_results.append(league_teams)
 
-    #Determine wild card winners
-    al_wc=[x for x in sim_results[0] if (x['div_winner']==False and x['league']=='AL')]
-    al_wc.sort(key=lambda x:-x['total_wins'])
-    nl_wc=[x for x in sim_results[0] if (x['div_winner']==False and x['league']=='NL')]
-    nl_wc.sort(key=lambda x:-x['total_wins'])
-    al_wc_winners=[x['team_id'] for x in al_wc[0:2]]
-    nl_wc_winners=[x['team_id'] for x in nl_wc[0:2]]
-    for t in league_teams:
-        if (t['team_id'] in al_wc_winners) or (t['team_id'] in nl_wc_winners):
-            t['wild_card']=True
-        else:
-            t['wild_card']=False
-    
+        #Determine wild card winners
+        al_wc=[x for x in sim_results[0] if (x['div_winner']==False and x['league']=='AL')]
+        al_wc.sort(key=lambda x:-x['total_wins'])
+        nl_wc=[x for x in sim_results[0] if (x['div_winner']==False and x['league']=='NL')]
+        nl_wc.sort(key=lambda x:-x['total_wins'])
+        al_wc_winners=[x['team_id'] for x in al_wc[0:2]]
+        nl_wc_winners=[x['team_id'] for x in nl_wc[0:2]]
+        for t in league_teams:
+            if (t['team_id'] in al_wc_winners) or (t['team_id'] in nl_wc_winners):
+                t['wild_card']=True
+            else:
+                t['wild_card']=False
+        
+        
     
