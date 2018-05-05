@@ -20,6 +20,7 @@ if __name__=='__main__':
     from mlb_data_models import Team,database
     import sys
     from supports import games_won_to_date, future_games_dicts, mcss
+    from tabulate import tabulate
 
     sim_results=[]
 
@@ -34,8 +35,8 @@ if __name__=='__main__':
 
     #Holding matrix for major outcomes
     #Rows = team ids
-    #Columns = (Division wins, Wildcard places)
-    playoff_matrix=np.zeros((30,2))
+    #Columns = (Division wins, Wildcard places,Total wins)
+    playoff_matrix=np.zeros((30,3))
 
     try:
         ite=int(sys.argv[1])
@@ -99,6 +100,7 @@ if __name__=='__main__':
                 playoff_matrix[int(t['team_id'])-1,1]+=1
             elif t['div_winner']==True:
                 playoff_matrix[int(t['team_id'])-1,0]+=1
+            playoff_matrix[int(t['team_id']-1),2]+=t['total_wins']
                 
     #Summarizing results.
     header_league_teams=Team.select(Team.team_name,Team.id,Team.division,Team.league)
@@ -109,8 +111,15 @@ if __name__=='__main__':
         t['Wild Card Odds']=np.sum(playoff_matrix[int(t['team_id'])-1,1])/ite
         t['Division Win Odds']=np.sum(playoff_matrix[int(t['team_id'])-1,0])/ite  
         t['Playoff Odds']=t['Wild Card Odds']+t['Division Win Odds']
+        t['Total Wins']=np.sum(playoff_matrix[int(t['team_id'])-1,2])/ite
 
-    pprint(header_league_teams)          
+    #Print out the headers and a table.
+    header_league_teams.sort(key=lambda x:(x['division'],-x['Playoff Odds'],-x['Total Wins']))
+    header_league_teams=[(x['division'],x['team_name'],x['Total Wins'],x['Wild Card Odds'],\
+                        x['Division Win Odds'],x['Playoff Odds']) for x in header_league_teams]
+    summary_table=tabulate(header_league_teams,headers=['Division','Team','Projected Wins', 'Wild Card Odds','Playoff Odds'],\
+              tablefmt='rst')
+    print(summary_table)          
                 
                 
                 
