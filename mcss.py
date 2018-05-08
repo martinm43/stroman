@@ -117,7 +117,8 @@ if __name__=='__main__':
     header_league_teams.sort(key=lambda x:(x['division'],-x['Playoff Odds'],-x['Total Wins']))
     header_league_teams=[(x['division'],x['team_name'],x['Total Wins'],x['Wild Card Odds'],\
                         x['Division Win Odds'],x['Playoff Odds']) for x in header_league_teams]
-    summary_table=tabulate(header_league_teams,headers=['Division','Team','Projected Wins', 'Wild Card Odds','Playoff Odds'],\
+    summary_table=tabulate(header_league_teams,headers=['Division','Team','Projected Wins', \
+                   'Wild Card Odds','Division Odds','Playoff Odds'],\
               tablefmt='rst')
     print(summary_table)          
                 
