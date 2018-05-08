@@ -18,9 +18,11 @@ if __name__=='__main__':
     import numpy as np
     from pprint import pprint
     from mlb_data_models import Team,database
+    import os
     import sys
     from supports import games_won_to_date, future_games_dicts, mcss
     from tabulate import tabulate
+    from datetime import datetime
 
     sim_results=[]
 
@@ -50,9 +52,11 @@ if __name__=='__main__':
               'future binomial win probabilities')
         sys.exit(1)
         
+    known_wins=games_won_to_date(return_format='matrix')
+    wkdir=os.path.join(os.path.dirname(__file__))
+
     for i_ite in range(0,ite):
         win_matrix=mcss(binomial_win_probabilities)
-        known_wins=games_won_to_date(return_format='matrix')
         win_matrix+=known_wins
         total_wins=np.sum(win_matrix,axis=0)
         #Raw win totals.
@@ -122,7 +126,22 @@ if __name__=='__main__':
               tablefmt='rst')
     print(summary_table)          
                 
-                
+    #####################
+    # Print to Log File #
+    #####################
+
+    #Repeat commands above but write the information to a file.
+
+    file_out = open(wkdir+'MCSS_'+datetime.now().strftime('%Y-%m-%d')+'_'+str(ite)+'_iter.txt','wb')
+
+    file_out.write('Summary of Results, '+datetime.now().strftime('%Y-%m-%d')+' '+\
+               str(ite)+' iterations \n\n')
+
+    file_out.write(summary_table)
+
+    file_out.close()
+
+    print("Writing to file completed successfully.")
                 
         
     
