@@ -6,17 +6,18 @@ Need to doublecheck/tune algo
 """
 
 from __future__ import print_function
-import mlbgame
+
+import sys
 from datetime import datetime, timedelta
+
+import mlbgame
 from supports import teams_index_matcher
 from mlb_data_models import Game, Team
-from pprint import pprint
-import sqlite3
-import sys
 
-max_days_back = int(sys.argv[1])
 
-for i in range(1, max_days_back + 1):
+MAX_DAYS_BACK = int(sys.argv[1])
+
+for i in range(1, MAX_DAYS_BACK + 1):
     game_d = datetime.today() - timedelta(days=i)
 
     print("Getting games from " + game_d.strftime("%Y-%m-%d"))
@@ -38,12 +39,12 @@ for i in range(1, max_days_back + 1):
             home_team = game.home_team
             away_team = game.away_team
             print('Processing {0} ({1}) at {2} ({3})'.
-                  format(away_team, stats.away_batting.r,
-                         home_team, stats.home_batting.r))
+                  format(away_team, stats.away_batting.r, #pylint:disable=no-member
+                         home_team, stats.home_batting.r)) #pylint:disable=no-member
             game_dict = {'mlbgame_away_team_name': away_team,
-                         'away_runs': stats.away_batting.r,
+                         'away_runs': stats.away_batting.r, #pylint:disable=no-member
                          'mlbgame_home_team_name': home_team,
-                         'home_runs': stats.home_batting.r,
+                         'home_runs': stats.home_batting.r, #pylint:disable=no-member
                          'mlbgame_id_str': game.game_id,
                          'scheduled_date': game_d.strftime('%Y-%m-%d')}
             game_list.append(game_dict)
@@ -51,7 +52,7 @@ for i in range(1, max_days_back + 1):
             print('Unable to find data for game_id: {0}'.format(game.game_id))
 
     # adhoc team processing
-    teams_index = Team.select(Team.id, Team.mlbgames_name).execute()
+    teams_index = Team.select(Team.id, Team.mlbgames_name).execute() #pylint:disable=no-value-for-parameter
     teams_index = [{'team_id': t.id, 'mlbgames_name': t.mlbgames_name}
                    for t in teams_index]
 
@@ -69,7 +70,7 @@ for i in range(1, max_days_back + 1):
         Game.update(
             away_runs=g['away_runs'],
             home_runs=g['home_runs']). where(
-            Game.scheduled_date == game_scheduled_date,
-            Game.is_postphoned == 0,
-            Game.away_team == g['away_team'],
-            Game.home_team == g['home_team']).execute()
+                Game.scheduled_date == game_scheduled_date,
+                Game.is_postphoned == 0,
+                Game.away_team == g['away_team'],
+                Game.home_team == g['home_team']).execute()

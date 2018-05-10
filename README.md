@@ -26,7 +26,7 @@ expectation, and adjusted net rating.
 Performes binomial regression based on run
 differential and adjusted net rating.
 
-3. global_update.py
+3. global_update.py - pylinting complete
 Updates multiple games (N days in the past via command line update)
 
 4. long_dict_inserter.py

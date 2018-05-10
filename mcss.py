@@ -11,12 +11,9 @@ MAM
 
 """
 
-import random
-import numpy as np
+from __future__ import print_function, division
 
 if __name__ == '__main__':
-    import numpy as np
-    from pprint import pprint
     from mlb_data_models import Team, database
     import os
     import sys
@@ -35,7 +32,7 @@ if __name__ == '__main__':
         Team.division,
         Team.league)
     league_teams = [dict(zip(['team_name', 'team_id', 'division', 'league'], [
-                         x.team_name, x.id, x.division, x.league])) for x in league_teams]
+            x.team_name, x.id, x.division, x.league])) for x in league_teams]
 
     # Assign this once to hold it for later use
     header_league_teams = league_teams
