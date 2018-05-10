@@ -1,5 +1,5 @@
 """
-This script creates the sqlite database containing the tables defined in 
+This script creates the sqlite database containing the tables defined in
 nba_data_models
 """
 

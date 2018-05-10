@@ -2,16 +2,19 @@ from peewee import *
 
 database = SqliteDatabase('mlb_data.sqlite', **{})
 
+
 class UnknownField(object):
     def __init__(self, *_, **__): pass
+
 
 class BaseModel(Model):
     class Meta:
         database = database
 
+
 class Team(BaseModel):
     abbreviation = TextField(null=True)
-    city = TextField(null=True) #for weather matching purposes
+    city = TextField(null=True)  # for weather matching purposes
     league = TextField(null=True)
     division = TextField(null=True)
     team = IntegerField(db_column='team_id', null=True)
@@ -22,7 +25,8 @@ class Team(BaseModel):
     class Meta:
         db_table = 'teams'
 
-class Game(BaseModel): #initialize with default values
+
+class Game(BaseModel):  # initialize with default values
     away_team_name = TextField(null=True)
     home_team_name = TextField(null=True)
     away_team = IntegerField(null=True)
@@ -40,11 +44,11 @@ class Game(BaseModel): #initialize with default values
     class Meta:
         db_table = 'games'
 
-class SRSRating(BaseModel): #initialize with default values
+
+class SRSRating(BaseModel):  # initialize with default values
     rating_date = DateTimeField(null=True)
     team_id = IntegerField(null=True)
     rating = FloatField(null=True)
 
     class Meta:
         db_table = 'SRS_ratings'
-

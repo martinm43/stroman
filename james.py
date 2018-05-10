@@ -5,16 +5,19 @@ binomial win percentages
 Named after the pioneer Bill James.
 
 """
+from __future__ import print_function
+# Selection of mathematical models for MLB win predictions
 
-#Selection of mathematical models for MLB win predictions
 
 def runs_regress(dpts):
-  import math
-  return 1/(1+math.exp(-1*(0.15+dpts*0.2)))
+    import math
+    return 1 / (1 + math.exp(-1 * (0.15 + dpts * 0.2)))
 
-def SRS_regress(dSRS,dSRS_coeff=0.3):
-  import math
-  return 1/(1+math.exp(-1*(0.15+dSRS*dSRS_coeff)))
 
-if __name__=='__main__':
-  print(SRS_regress(2))
+def SRS_regress(dSRS, dSRS_coeff=0.3):
+    import math
+    return 1 / (1 + math.exp(-1 * (0.15 + dSRS * dSRS_coeff)))
+
+
+if __name__ == '__main__':
+    print(SRS_regress(2))
