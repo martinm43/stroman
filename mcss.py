@@ -14,12 +14,15 @@ MAM
 from __future__ import print_function, division
 
 if __name__ == '__main__':
-    from mlb_data_models import Team, database
+
     import os
     import sys
-    from supports import games_won_to_date, future_games_dicts, mcss
+    import numpy as np
     from tabulate import tabulate
     from datetime import datetime
+
+    from mlb_data_models import Team, database
+    from supports import games_won_to_date, future_games_dicts, mcss
 
     sim_results = []
 
@@ -32,7 +35,7 @@ if __name__ == '__main__':
         Team.division,
         Team.league)
     league_teams = [dict(zip(['team_name', 'team_id', 'division', 'league'], [
-            x.team_name, x.id, x.division, x.league])) for x in league_teams]
+        x.team_name, x.id, x.division, x.league])) for x in league_teams]
 
     # Assign this once to hold it for later use
     header_league_teams = league_teams
@@ -84,23 +87,24 @@ if __name__ == '__main__':
             # sort list of dicts
             new_dt = sorted(
                 dt, key=lambda k: (-k['total_wins'], -k['division_wins'], -k['league_wins']))
-            for i, d in enumerate(new_dt):
-                d['div_rank'] = i + 1
-                if d['div_rank'] == 1:
-                    d['div_winner'] = True
-                else:
-                    d['div_winner'] = False
+            for i, dt_dict in enumerate(new_dt):
+                dt_dict['div_rank'] = i + 1
+                dt_dict['div_winner'] = bool(dt_dict['div_rank'])
+                #if dt_dict['div_rank'] == 1:
+                #    dt_dict['div_winner'] = True
+                #else:
+                #    dt_dict['div_winner'] = False
 
         sim_results.append(league_teams)
 
         # Determine wild card winners
         al_wc = [
             x for x in sim_results[0] if (
-                x['div_winner'] == False and x['league'] == 'AL')]
+                x['div_winner'] is False and x['league'] == 'AL')]
         al_wc.sort(key=lambda x: -x['total_wins'])
         nl_wc = [
             x for x in sim_results[0] if (
-                x['div_winner'] == False and x['league'] == 'NL')]
+                x['div_winner'] is False and x['league'] == 'NL')]
         nl_wc.sort(key=lambda x: -x['total_wins'])
         al_wc_winners = [x['team_id'] for x in al_wc[0:2]]
         nl_wc_winners = [x['team_id'] for x in nl_wc[0:2]]
@@ -121,8 +125,9 @@ if __name__ == '__main__':
     # Summarizing results.
     header_league_teams = Team.select(
         Team.team_name, Team.id, Team.division, Team.league)
-    header_league_teams = [dict(zip(['team_name', 'team_id', 'division', 'league'], [
-                                x.team_name, x.id, x.division, x.league])) for x in header_league_teams]
+    header_league_teams = [dict(zip(['team_name', 'team_id',\
+        'division', 'league'], [x.team_name, x.id, x.division, x.league]))\
+        for x in header_league_teams]
 
     for t in header_league_teams:
         t['Wild Card Odds'] = np.sum(
@@ -140,10 +145,10 @@ if __name__ == '__main__':
     header_league_teams = [
         (x['division'],
          x['team_name'],
-            x['Total Wins'],
-            x['Wild Card Odds'],
-            x['Division Win Odds'],
-            x['Playoff Odds']) for x in header_league_teams]
+         x['Total Wins'],
+         x['Wild Card Odds'],
+         x['Division Win Odds'],
+         x['Playoff Odds']) for x in header_league_teams]
     summary_table = tabulate(
         header_league_teams,
         headers=[
