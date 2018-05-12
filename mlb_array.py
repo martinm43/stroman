@@ -20,11 +20,11 @@ id(alphabetical),teamabbrev,league,division
 
 """
 
+from __future__ import print_function, division
+
 import pandas as pd
-from pprint import pprint
 from mlb_data_models import Team, Game, database
-from long_dict_inserter import big_inserter
-from supports import abbrev_to_id
+from supports import abbrev_to_id, big_inserter
 
 max_variable_size = 500
 
@@ -59,7 +59,8 @@ for i in range(1, mlb_array.shape[0]):
                                        'home_team': abbrev_to_id(mlb_array[0, j]),
                                        'away_team': abbrev_to_id(mlb_array[i, j])})
 
-# One last thing. Because of the way that the MLB array is set up, note that each game shows up twice (ChS @KC, then KC ChS). So:
+# One last thing. Because of the way that the MLB array is set up,
+# note that each game shows up twice (ChS @KC, then KC ChS). So:
 # Convert dicts to lists of tuples
 
 print('Pre correction')

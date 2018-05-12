@@ -14,8 +14,11 @@ import mlbgame
 from supports import teams_index_matcher
 from mlb_data_models import Game, Team
 
-
-MAX_DAYS_BACK = int(sys.argv[1])
+try:
+    MAX_DAYS_BACK = int(sys.argv[1])
+except IndexError:
+    print('Insufficient variables provided, assuming number of days is 1')
+    MAX_DAYS_BACK = 1
 
 for i in range(1, MAX_DAYS_BACK + 1):
     game_d = datetime.today() - timedelta(days=i)

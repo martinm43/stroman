@@ -2,41 +2,75 @@
 These scripts are functions commonly reused in other files.
 """
 from __future__ import division, print_function
-from mlb_data_models import Team, Game, SRSRating
+
 from datetime import datetime, timedelta
-from james import SRS_regress
-import numpy as np
-from pprint import pprint
 import random
 
+import numpy as np
+
+from james import SRS_regress
+from mlb_data_models import Team, Game, SRSRating
+
+def big_inserter(
+        db,
+        SQLITE_MAX_VARIABLE_NUMBER,
+        PeeweeClassObject,
+        list_of_dicts):
+    """
+    Inserts a long list of dicts into the main matrix
+    """
+    with db.atomic() as txn: #pylint:disable=W0612
+        size = (SQLITE_MAX_VARIABLE_NUMBER // len(list_of_dicts[0])) - 1
+        # remove one to avoid issue if peewee adds some variable
+        for i in range(0, len(list_of_dicts), size):
+            PeeweeClassObject.insert_many(
+                list_of_dicts[i:i + size]).upsert().execute()
+        return
 
 def teams_index_matcher(teams_index, namestr):
+    """
+    Returns the mlbgames name from a dict into a numerical id
+    """
     team_ind = [t['team_id']
                 for t in teams_index if t['mlbgames_name'] == namestr][0]
     return team_ind
 
 
 def abbrev_to_id(abbrev):
+    """
+    Converts team abbreviations into numerical ids
+    """
     x = Team.select().where(Team.abbreviation == abbrev)
     return [i.id for i in x][0]
 
 
 def mlbgames_name_to_id(mlbgames_name):
+    """
+    Converts the mlbgames name into a numerical id (starts at 1)
+    """
     x = Team.select().where(Team.mlbgames_name == mlbgames_name)
    # print(x)
     return [i.id for i in x][0]
 
 
 def dict_search(list_of_dicts, key1, key_value1, key2):
+    """
+    Searches for a value in a dict and returns the other value
+    e.g. search for team_id=1 and return team_name=Angels
+    """
     x = [i for i in list_of_dicts if i[key1] == key_value1]
     if x == []:
         print('Value not found, check input')
-        return x
+        return_value = x
     else:
-        return x[0][key2]
+        return_value = x[0][key2]
+    return return_value
 
 
 def list_to_csv(csvfile, list_of_lists):
+    """
+    Converts a list into a csv file.
+    """
     import csv
     csvfile_out = open(csvfile, 'wb')
     csvwriter = csv.writer(csvfile_out)
@@ -47,9 +81,11 @@ def list_to_csv(csvfile, list_of_lists):
     return 1
 
 
-def id_to_mlbgames_name(id, verbose=False):
-    from mlb_data_models import Team
-    t = Team.select().where(Team.id == id)
+def id_to_mlbgames_name(team_id, verbose=False):
+    """
+    Converts numerical id to the name used by mlbgames API
+    """
+    t = Team.select().where(Team.id == team_id)
     if not verbose:
         t = [x.mlbgames_name for x in t][0]
     else:
@@ -58,11 +94,15 @@ def id_to_mlbgames_name(id, verbose=False):
 
 
 def games_won_to_date(return_format='list'):
+    """
+    Returns the number of games won to date in either a straight
+    numerical list, a list of dicts, or a head to head matrix
+    """
     played_games = Game.select().where(
         Game.scheduled_date < datetime.today() -
         timedelta(
             days=1)).order_by(
-        Game.scheduled_date)
+                Game.scheduled_date)
     played_games = [[g.away_team, g.away_runs, g.home_team, g.home_runs]
                     for g in played_games]
     winlist = [x[0] if x[1] > x[3] else x[2] for x in played_games]
@@ -72,13 +112,13 @@ def games_won_to_date(return_format='list'):
         winrows = []
         for i in range(1, 31):
             winrows.append([winlist.count(i)])
-        return winrows
+        return_value = winrows
     elif return_format == 'list':
         winlist = [x[0] if x[1] > x[3] else x[2] for x in played_games]
         winrows = []
         for i in range(1, 31):
             winrows.append(winlist.count(i))
-        return winrows
+        return_value = winrows
     elif return_format == 'matrix':
         win_matrix = np.zeros((30, 30))
         for x in played_games:
@@ -89,8 +129,8 @@ def games_won_to_date(return_format='list'):
         return win_matrix
     else:
         print('invalid option')
-        return 0
-
+        return_value = 0
+    return return_value
 
 def future_games_dicts():
     """
@@ -100,7 +140,7 @@ def future_games_dicts():
     x = SRSRating.select().where(
         SRSRating.rating_date == datetime.now(). replace(
             hour=0, minute=0, second=0, microsecond=0)).order_by(
-        SRSRating.team_id)
+                SRSRating.team_id)
 
     # retrieve ratings for current day
     ratings = [i.rating for i in x]
@@ -150,12 +190,16 @@ def future_games_dicts():
     # Get the list of games.
     query = Game.select().where(Game.scheduled_date >= datetime.now())
     game_dict_list = [dict(zip(['id', 'scheduled_date', 'away_team', 'home_team'], [
-                           i.id, i.scheduled_date, i.away_team, i.home_team])) for i in query]
+        i.id, i.scheduled_date, i.away_team, i.home_team])) for i in query]
 
     # Build a function of a function (I think decorators do this) - research
     # later.
-    def get_rating(_ratings, id):
-        return dict_search(_ratings, 'team_id', id, 'rating')
+    def get_rating(_ratings, team_id):
+        """
+        Specific search of a list of dictionaries for their
+        team rating from the team id
+        """
+        return dict_search(_ratings, 'team_id', team_id, 'rating')
 
     regression_function = SRS_regress
 
@@ -178,7 +222,6 @@ def mcss(game_dict_list):
             win_matrix[x['away_team'] - 1, x['home_team'] - 1] += 1
     return win_matrix
 
-
-if __name__ == "__main__":
-    # test abbrev to id
-    pprint(future_games_dicts())
+if __name__ == '__main__':
+    print('1')
+    

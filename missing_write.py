@@ -1,9 +1,18 @@
 # coding: utf-8
-import xlsxwriter
+"""
+Prints out a worksheet containing the missing games so that it can be
+read.
+"""
+
+from __future__ import print_function, division
+
 from datetime import datetime
+
+import xlsxwriter
+
 from mlb_data_models import database
-# database.execute_sql('select scheduled_date, home_team, away_team from'+\
-# 4                      'postphoned_games_local;')
+
+
 result = database.execute_sql('select * from postphoned_games_local;')
 # has to be crossreferenced with the view in sqlite3
 x = [[i[9], i[1], i[2]] for i in result]
@@ -55,7 +64,7 @@ row = 1
 col = 0
 
 # Write the data
-for date, ht, at in (x):
+for date, ht, at in x:
     col = 0
     worksheet.write(row, col, date)
     worksheet.write(row, col + 1, ht, centformat)

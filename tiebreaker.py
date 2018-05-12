@@ -12,29 +12,34 @@ Simulating that logic poses an intense challenge, and at the time of writing
 """
 
 
-def tiebreaker(team_1_dict, team_2_dict, win_matrix):
+def tiebreaker(team_1_dict, team_2_dict, known_win_matrix): #pylint:disable=W0621
+    """
+    Performs tiebreaker logic for two teams in order to determine
+    who gets the playoff game
+    """
     pprint(team_1_dict)
     pprint(team_2_dict)
-    pprint(win_matrix)
+    pprint(known_win_matrix)
     team_1_id = team_1_dict['team_id']
     team_2_id = team_2_dict['team_id']
     # 1: head to head
-    if win_matrix[team_1_id - 1][team_2_id -
-                                 1] > win_matrix[team_2_id - 1][team_1_id - 1]:
-        return 1
-    elif win_matrix[team_2_id - 1][team_1_id - 1] > win_matrix[team_1_id - 1][team_2_id - 1]:
-        return 2
+    if known_win_matrix[team_1_id - 1][team_2_id -
+                                       1] > known_win_matrix[team_2_id - 1][team_1_id - 1]:
+        return_value = 1
+    elif known_win_matrix[team_2_id - 1][team_1_id -
+                                         1] > known_win_matrix[team_1_id - 1][team_2_id - 1]:
+        return_value = 2
     # 2: division
     elif team_1_dict['division_wins'] > team_2_dict['division_wins']:
-        return 1
+        return_value = 1
     elif team_2_dict['division_wins'] > team_1_dict['division_wins']:
-        return 2
+        return_value = 2
     # 3: league
     elif team_1_dict['league_wins'] > team_2_dict['league_wins']:
-        return 1
+        return_value = 1
     elif team_2_dict['league_wins'] > team_1_dict['league_wins']:
-        return 2
-    return 0
+        return_value = 2
+    return return_value
 
 
 if __name__ == '__main__':

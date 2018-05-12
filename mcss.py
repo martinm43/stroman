@@ -92,7 +92,7 @@ if __name__ == '__main__':
             for i, dt_dict in enumerate(new_dt):
                 dt_dict['div_rank'] = i + 1
                 #dt_dict['div_winner'] = bool(dt_dict['div_rank'])
-                if dt_dict['div_rank'] == 1:
+                if dt_dict['div_rank'] == 1: #pylint:disable=simplifiable-if-statement
                     dt_dict['div_winner'] = True
                 else:
                     dt_dict['div_winner'] = False
@@ -111,7 +111,7 @@ if __name__ == '__main__':
         al_wc_winners = [x['team_id'] for x in al_wc[0:2]]
         nl_wc_winners = [x['team_id'] for x in nl_wc[0:2]]
         for t in league_teams:
-            if (t['team_id'] in al_wc_winners) or (
+            if (t['team_id'] in al_wc_winners) or ( #pylint:disable=simplifiable-if-statement
                     t['team_id'] in nl_wc_winners):
                 t['wild_card'] = True
             else:

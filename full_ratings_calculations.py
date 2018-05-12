@@ -6,20 +6,21 @@ and Burke ratings for MLB teams over a given time period with a given
 maximum/minimum margin of victory and average home team advantage for use in the projections
 scripts.
 
+LINTED minus variable names.
+
 """
 from __future__ import print_function, division
 
-from pprint import pprint
-import os
-import numpy as np
-import tabulate
-import json
-from supports import id_to_mlbgames_name, list_to_csv, mlbgames_name_to_id
-from mlb_data_models import Team, Game, SRSRating, database
 from datetime import datetime, timedelta
-from analytics.burke_solver import burke_calc
+import os
+
+import numpy as np
 from tabulate import tabulate
-from datetime import datetime
+
+from supports import id_to_mlbgames_name, list_to_csv, mlbgames_name_to_id
+from mlb_data_models import Game, SRSRating, database
+from analytics.burke_solver import burke_calc
+
 
 # Define constant for pythagorean wins (the pythagorean win exponent)
 pythag_factor = 1.83
@@ -109,14 +110,14 @@ for i in range(0, len(diff_matrix)):
 
 # Adjusted Rating Calculations (Burke - after Brian Burke - ratings)
 burke_data = [[g[2], g[0], g[3], g[1]] for g in games]
-burkelist = burke_calc(
+BurkeList = burke_calc(
     burke_data,
     impmode=None,
     max_MOV=max_MOV,
     home_team_adv=home_team_adv,
     win_floor=0.0)
-burkelist = [[b] for b in burkelist]
-diff_matrix[:, 10] = [b[0] for b in burkelist]
+BurkeList = [[b] for b in BurkeList]
+diff_matrix[:, 10] = [b[0] for b in BurkeList]
 
 
 diff_list = diff_matrix.tolist()
@@ -148,7 +149,7 @@ vector_of_means = [[x['Avg. Run Delta']] for x in ratings_list]
 # Writing Out Ratings CSV Files #
 #################################
 list_to_csv('run_diff_vector.csv', vector_of_means)
-list_to_csv('burke_vector.csv', burkelist)
+list_to_csv('burke_vector.csv', BurkeList)
 ###############################
 # Writing the table to screen #
 ###############################

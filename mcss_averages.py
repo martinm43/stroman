@@ -4,14 +4,12 @@ This function returns "raw projected wins". A good teaser.
 """
 from __future__ import division, print_function
 from tabulate import tabulate
-import random
 import numpy as np
 
 if __name__ == '__main__':
     from datetime import datetime
     import os
     import sys
-    from pprint import pprint
     from mlb_data_models import Team, database
     from supports import games_won_to_date, future_games_dicts, mcss
 
@@ -27,7 +25,7 @@ if __name__ == '__main__':
         Team.division,
         Team.league)
     league_teams = [dict(zip(['team_name', 'team_id', 'division', 'league'], [
-                         x.team_name, x.id, x.division, x.league])) for x in league_teams]
+        x.team_name, x.id, x.division, x.league])) for x in league_teams]
 
     # pprint(test_dict)
     try:
