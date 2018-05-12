@@ -20,6 +20,8 @@ if __name__ == '__main__':
     import numpy as np
     from tabulate import tabulate
     from datetime import datetime
+    #from pprint import pprint
+
 
     from mlb_data_models import Team, database
     from supports import games_won_to_date, future_games_dicts, mcss
@@ -89,11 +91,11 @@ if __name__ == '__main__':
                 dt, key=lambda k: (-k['total_wins'], -k['division_wins'], -k['league_wins']))
             for i, dt_dict in enumerate(new_dt):
                 dt_dict['div_rank'] = i + 1
-                dt_dict['div_winner'] = bool(dt_dict['div_rank'])
-                #if dt_dict['div_rank'] == 1:
-                #    dt_dict['div_winner'] = True
-                #else:
-                #    dt_dict['div_winner'] = False
+                #dt_dict['div_winner'] = bool(dt_dict['div_rank'])
+                if dt_dict['div_rank'] == 1:
+                    dt_dict['div_winner'] = True
+                else:
+                    dt_dict['div_winner'] = False
 
         sim_results.append(league_teams)
 
@@ -137,6 +139,8 @@ if __name__ == '__main__':
         t['Playoff Odds'] = t['Wild Card Odds'] + t['Division Win Odds']
         t['Total Wins'] = np.sum(
             playoff_matrix[int(t['team_id']) - 1, 2]) / ite
+
+    #pprint(t)
 
     # Print out the headers and a table.
     header_league_teams.sort(
