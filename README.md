@@ -72,5 +72,7 @@ might be the reason for the win discrepancy.
 The goal here is not to track specific wins and losses at this point, but to
 assess team performance using raw stats.
 
+C/C++ Files
 
-
+missing_games - attempting to use the C/C++ API to access some of the information
+contained within the database (and learn some C++)
