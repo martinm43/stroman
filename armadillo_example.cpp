@@ -8,9 +8,9 @@ int main()
 
   // arma::endr represents the end of a row in a matrix
   arma::mat A;
-  A << 1.0 << 2.0 << arma::endr
-    << 2.0 << 3.0 << arma::endr
-    << 1.0 << 3.0 << arma::endr;
+  A << 1.0 << 1.0 << 2.0 << arma::endr
+    << 1.0 << 2.0 << 3.0 << arma::endr
+    << 1.0 << 1.0 << 3.0 << arma::endr;
 
   std::cout << "Least squares solution:\n";
   std::cout << solve(A,b) << '\n';
