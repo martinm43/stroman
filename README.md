@@ -74,5 +74,8 @@ assess team performance using raw stats.
 
 C/C++ Files
 
-missing_games - attempting to use the C/C++ API to access some of the information
-contained within the database (and learn some C++)
+Intention is to try and write some of the files (mcss, mcss_averages, and full
+ratings calculations) in C++
+
+1. missing_games 
+Uses the C API of sqlite3 to run a query and print the results to screen.

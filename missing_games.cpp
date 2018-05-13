@@ -8,7 +8,8 @@
  static int callback(void *NotUsed, int argc, char **argv, char **azColName){
    int i;
    for(i=0; i<argc; i++){
-     printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+     printf("%s = %s \n", azColName[i], argv[i] ? argv[i] : "NULL");
+   
    }
    printf("\n");
    return 0;
@@ -23,13 +24,6 @@
    string DatabaseName("mlb_data.sqlite");
    //replacing argv[2]
    string SQLStatement("SELECT * FROM POSTPHONED_GAMES_LOCAL"); 
-
-   /* No longer necessary as we're using arguments in code
-   if( argc!=3 ){
-     fprintf(stderr, "Usage: %s DATABASE SQL-STATEMENT\n", argv[0]);
-     return(1);
-   }
-   */
 
    rc = sqlite3_open(DatabaseName.c_str(), &db);
    if( rc ){
