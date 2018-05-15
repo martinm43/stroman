@@ -7,6 +7,18 @@
 
 using namespace std;
 
+int mod_int(int& a){
+  a=3*a+1;
+  return 0;
+}
+
+
+/* - pointers.
+int point_guard(int *a){
+  return a*a;
+}
+*/
+
 double uniformRandom()
 {
   return ( (double)(rand()) + 1. )/( (double)(RAND_MAX) + 1. );
@@ -26,6 +38,8 @@ int main()
     {0.6,2,3},
   };
 
+  int i_iter=0;
+
   for(int i_iter=0;i_iter<ITER;i_iter++){
     for(int i=0;i<5;i++){
         if (gameslist[i][0] > uniformRandom()){
@@ -38,10 +52,21 @@ int main()
   }
 
   for(int i=0;i<3;i++){
-     cout << "Team " << i+1 << "has an average winning percentage of " << 
+     cout << "Team " << i+1 << " has an average winning percentage of " << 
             (double) wins[i]/(ITER*3) << endl;
   }
 
-  cout << i_iter << " iterations were completed!" << endl;
+  int x=3;
+  cout << x << " is the initial value x." << endl;
+  mod_int(x);
+  cout << x << " is the new value of x." << endl;
+
+  /* - trying to figure out how pointers work
+  int d=6;
+  cout << d << " is the initial value of x before the pointer function." << endl;
+  point_guard(&d);
+  cout << d << " is the final value of x after the pointer function." << endl;
+  */
+
   return 0;
 }
