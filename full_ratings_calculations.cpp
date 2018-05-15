@@ -1,11 +1,12 @@
- #include <string>
- #include <iostream>
- #include <stdio.h>
- #include <sqlite3.h>
+#include <iostream>
+#include <armadillo>
+#include <string>
+#include <stdio.h>
+#include <sqlite3.h>
 
- using namespace std;
- 
- static int callback(void *NotUsed, int argc, char **argv, char **azColName){
+using namespace std;
+
+static int callback(void *NotUsed, int argc, char **argv, char **azColName){
    int i;
    for(i=0; i<argc; i++){
      printf("%s = %s \n", azColName[i], argv[i] ? argv[i] : "NULL");
@@ -13,9 +14,10 @@
    }
    printf("\n");
    return 0;
- }
- 
- int main(int argc, char **argv){
+}
+
+
+int main(int argc, char **argv){
    sqlite3 *db;
    char *zErrMsg = 0;
    int rc;
@@ -37,6 +39,24 @@
      sqlite3_free(zErrMsg);
    }
    sqlite3_close(db);
+
+
+   cout << "Testing armadillo matrix algebra package" << endl;
+
+   //armadillo part
+   arma::vec b;
+   b << 2.0 << 5.0 << 2.0;
+
+   // arma::endr represents the end of a row in a matrix
+   arma::mat A;
+   A << 1.0 << 1.0 << 2.0 << arma::endr
+     << 1.0 << 2.0 << 3.0 << arma::endr
+     << 1.0 << 1.0 << 3.0 << arma::endr;
+
+   cout << "Least squares solution:\n";
+   cout << solve(A,b) << '\n';
+
+
    return 0;
  }
 
