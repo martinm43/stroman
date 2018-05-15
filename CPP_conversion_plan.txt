@@ -1,0 +1,18 @@
+#Plan for converting the "backend files" (full ratings, mcss average, and mcss) 
+#into cpp
+
+1. mcss average
+Computes projected final standings using pure average wins and divisions,
+using no averages.
+
+tasks performed in program:
+* select a list of divisions
+* select teams with all of their information
+* calculate 
+
+
+3. full ratings
+
+Libraries Used:
+
+
