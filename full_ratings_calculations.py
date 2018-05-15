@@ -145,11 +145,6 @@ vector_of_means = [[x['Avg. Run Delta']] for x in ratings_list]
 # pprint(ratings_list)
 
 
-#################################
-# Writing Out Ratings CSV Files #
-#################################
-list_to_csv('run_diff_vector.csv', vector_of_means)
-list_to_csv('burke_vector.csv', BurkeList)
 ###############################
 # Writing the table to screen #
 ###############################
