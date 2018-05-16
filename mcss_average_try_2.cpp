@@ -87,7 +87,7 @@ int main()
         return 1;
     }
 
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
+    while ((rc=sqlite3_step(stmt)) == SQLITE_ROW) {
         //Writing out the games to the screen (temporary for now, just for error checking)
         cout << "Away team id: " << sqlite3_column_int(stmt,1) << endl;
         cout << "Away team runs scored: " << sqlite3_column_int(stmt,2) << endl;
@@ -106,7 +106,6 @@ int main()
         sqlite3_finalize(stmt);
         return 1;   
     }
-    sqlite3_finalize(stmt);
  
     /* 
     Statement number two, initializing the list of teams 
@@ -124,7 +123,7 @@ int main()
 
     int nrows = 1;    
 
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 
 
          cout << sqlite3_column_int(stmt,1)+1 << endl;
