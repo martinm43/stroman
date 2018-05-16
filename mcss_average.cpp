@@ -135,6 +135,11 @@ int main()
          cout << sqlite3_column_text(stmt,6) << endl;
 
         /* - compiles but causes a CORE DUMP. DUMP THE CORE CLIP.
+
+        terminate called after throwing an instance of 'std::logic_error'
+        what():  basic_string::_M_construct null not valid
+        Aborted (core dumped)
+
         int team_id = sqlite3_column_int(stmt,1);
         string team_name = string(reinterpret_cast<const char*>(sqlite3_column_text(stmt,2)));
         string mlbgames_name = string(reinterpret_cast<const char*>(sqlite3_column_text(stmt,3)));
