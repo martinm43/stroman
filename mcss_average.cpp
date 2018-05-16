@@ -66,7 +66,7 @@ int main()
     //SQLite connection stuff
     string DatabaseName("mlb_data.sqlite");
 
-    string SQLStatement("SELECT away_team, away_runs, home_team, home_runs "
+    string SQLStatement("SELECT away_team, away_runs, home_team_name, home_runs "
                        "FROM games WHERE (scheduled_date < datetime('now')) "
                        "AND NOT (away_runs=0 and home_runs=0);");
 
@@ -89,9 +89,9 @@ int main()
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         //Writing out the games to the screen (temporary for now, just for error checking)
-        cout << "Away team id: " << sqlite3_column_int(stmt,1) << endl;
-        cout << "Away team runs scored: " << sqlite3_column_int(stmt,2) << endl;
-        cout << "Home team id: "<< sqlite3_column_int(stmt,3) << endl;
+        cout << "Away team id: " << sqlite3_column_int(stmt,0) << endl;
+        cout << "Away team runs scored: " << sqlite3_column_int(stmt,1) << endl;
+        cout << "Oh god please print the fucking team name: "<< sqlite3_column_text(stmt,2) << endl;
         cout << "Home team runs scored: " << sqlite3_column_int(stmt,4) << endl;
 
         //Store in our vector
