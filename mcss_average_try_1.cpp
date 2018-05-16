@@ -87,8 +87,11 @@ int main()
         return 1;
     }
 
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
         //Writing out the games to the screen (temporary for now, just for error checking)
+        cout << rc << endl;
+        cout << sqlite3_step(stmt);
+
         cout << "Away team id: " << sqlite3_column_int(stmt,1) << endl;
         cout << "Away team runs scored: " << sqlite3_column_int(stmt,2) << endl;
         cout << "Home team id: "<< sqlite3_column_int(stmt,3) << endl;
@@ -108,11 +111,14 @@ int main()
     }
     sqlite3_finalize(stmt);
  
+    cout<<games[0].get_away_team_id()<<endl;
+
     /* 
     Statement number two, initializing the list of teams 
     */
 
-    SQLStatement = "SELECT team_id, team_name, mlbgames_name, abbreviation, division, league from teams;";
+    SQLStatement = "SELECT id, team_name, mlbgames_name, abbreviation, division, league from teams;";
+
 
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
                             -1, &stmt, NULL);
@@ -122,42 +128,42 @@ int main()
         return 1;
     }
 
-    int nrows = 1;    
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        //Store in our vector
 
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-
-
-         cout << sqlite3_column_int(stmt,1)+1 << endl;
+         cout << sqlite3_column_int(stmt,1) << endl;
          cout << sqlite3_column_text(stmt,2) << endl;
          cout << sqlite3_column_text(stmt,3) << endl;
          cout << sqlite3_column_text(stmt,4) << endl;
          cout << sqlite3_column_text(stmt,5) << endl;
          cout << sqlite3_column_text(stmt,6) << endl;
 
+        /* - compiles but causes a CORE DUMP. DUMP THE CORE CLIP.
 
-        /* code that does not work, and associated runtime error.
         terminate called after throwing an instance of 'std::logic_error'
         what():  basic_string::_M_construct null not valid
         Aborted (core dumped)
 
+        now trying a direct string -> string convert.
+
         int team_id = sqlite3_column_int(stmt,1);
-        string team_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
-        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
-        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4)));
-        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,5)));
-        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,6)));
+        string team_name = string(sqlite3_column_text(stmt,2));
+        string mlbgames_name = string(sqlite3_column_text(stmt,3));
+        string abbreviation = string(sqlite3_column_text(stmt,4));
+        string division = string(sqlite3_column_text(stmt,5));
+        string league = string(sqlite3_column_text(stmt,6));
         teams.push_back(Team(team_id,team_name,mlbgames_name,abbreviation,division,league));
         */
 
     }
-
     if (rc != SQLITE_DONE) {
         cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
         sqlite3_finalize(stmt);
         return 1;   
     }
-
     sqlite3_finalize(stmt);
+
+
 
 return 0;
 }
