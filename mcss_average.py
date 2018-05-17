@@ -16,9 +16,6 @@ if __name__ == '__main__':
     wkdir = os.path.join(os.path.dirname(__file__))
     games_won = games_won_to_date()
 
-    cursor = database.execute_sql('select distinct division from teams;')
-    list_of_divisions = [row[0] for row in cursor]
-
     league_teams = Team.select(
         Team.team_name,
         Team.id,
