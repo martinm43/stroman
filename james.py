@@ -23,7 +23,7 @@ def SRS_regress(dSRS, dSRS_coeff=0.3):
     Performs regression based on team 'SRS' incorporating strength of schedule
     """
     import math
-    return 1 / (1 + math.exp(-1 * (0.15 + dSRS * dSRS_coeff)))
+    return 1 / (1 + math.exp(-1 * (-0.15 + dSRS * dSRS_coeff)))
 
 
 if __name__ == '__main__':
