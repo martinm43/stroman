@@ -32,26 +32,27 @@ class Team{
 private:
 
     int _team_id;
-    string _team_name;
     string _mlbgames_name;
     string _abbreviation;
     string _division;
     string _league;
+    float _rating;
 
 public:
 
-    Team(int team_id, string team_name, string mlbgames_name, 
-            string abbreviation, string division, string league):
-        _team_id(team_id), _team_name(team_name), _mlbgames_name(mlbgames_name), 
-            _abbreviation(abbreviation), _division(division), _league(league) {}
+    Team(int team_id, string mlbgames_name, 
+            string abbreviation, string division, string league, 
+            float rating):
+        _team_id(team_id), _mlbgames_name(mlbgames_name), 
+            _abbreviation(abbreviation), _division(division), 
+            _league(league), _rating(rating) {}
 
     int get_team_id() const {return _team_id;}
-    string get_team_name() const {return _team_name;}
     string get_mlbgames_name() const {return _mlbgames_name;}
     string get_abbreviation() const {return _abbreviation;}
     string get_division() const {return _division;}
     string get_league() const {return _league;}
-
+    float get_rating() const {return _rating;}
 };
 
 int main()
@@ -118,11 +119,19 @@ int main()
     Statement number two, initializing the list of teams 
     */
 
-    SQLStatement = "SELECT team_id, team_name, mlbgames_name, abbreviation, division, league from teams;";
+    //SQLStatement = "SELECT team_id, team_name, mlbgames_name, abbreviation, division, league from teams;";
+
+    SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.league,t.division,s.rating "
+                    "from teams as t "
+                    "inner join SRS_Ratings as s "
+                    "on s.team_id=t.id "
+                    "where s.rating <> 0 "
+                    "and s.rating_date = (select rating_date from SRS_ratings "
+                    "order by rating_date desc limit 1)";
+
 
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
                             -1, &stmt, NULL);
-    cout << rc << endl;    
 
     if (rc != SQLITE_OK) {
         cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
@@ -140,8 +149,7 @@ int main()
          cout << sqlite3_column_text(stmt,2) << endl;
          cout << sqlite3_column_text(stmt,3) << endl;
          cout << sqlite3_column_text(stmt,4) << endl;
-         cout << sqlite3_column_text(stmt,5) << endl;
-
+         cout << sqlite3_column_double(stmt,5) << endl;
 
         /* code that does not work, and associated runtime error.
         terminate called after throwing an instance of 'std::logic_error'
@@ -153,13 +161,12 @@ int main()
         */
 
         int team_id = sqlite3_column_int(stmt,0);
-        string team_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
-        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
-        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
+        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
+        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
+        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
         string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4)));
-        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,5)));
-        teams.push_back(Team(team_id,team_name,mlbgames_name,abbreviation,division,league));
-
+        float rating = sqlite3_column_double(stmt,6);
+        teams.push_back(Team(team_id,mlbgames_name,abbreviation,league,division,rating));
     }
 
 
@@ -169,6 +176,7 @@ int main()
         cerr << "Selections are complete." << endl;
     }
 
+    cout << teams[2].get_mlbgames_name() << endl;
 
 return 0;
 }
