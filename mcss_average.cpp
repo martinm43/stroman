@@ -60,24 +60,25 @@ int main()
     char *zErrMsg = 0;
     int rc;
 
+    //Two vectors for holding key information to be used later
     vector<Game> games;
     vector<Team> teams;
 
-    //SQLite connection stuff
+    //Name of the database
     string DatabaseName("mlb_data.sqlite");
 
-    string SQLStatement("SELECT away_team, away_runs, home_team_name, home_runs "
+    string SQLStatement("SELECT away_team, away_runs, home_team, home_runs "
                        "FROM games WHERE (scheduled_date < datetime('now')) "
                        "AND NOT (away_runs=0 and home_runs=0);");
 
     sqlite3_stmt *stmt;
 
-   rc = sqlite3_open(DatabaseName.c_str(), &db);
-   if( rc ){
+    rc = sqlite3_open(DatabaseName.c_str(), &db);
+    if( rc ){
      fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
      sqlite3_close(db);
      return(1);
-   }
+    }
     
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
                             -1, &stmt, NULL);
@@ -91,21 +92,26 @@ int main()
         //Writing out the games to the screen (temporary for now, just for error checking)
         cout << "Away team id: " << sqlite3_column_int(stmt,0) << endl;
         cout << "Away team runs scored: " << sqlite3_column_int(stmt,1) << endl;
-        cout << "Oh god please print the fucking team name: "<< sqlite3_column_text(stmt,2) << endl;
-        cout << "Home team runs scored: " << sqlite3_column_int(stmt,4) << endl;
+        cout << "Home team id: "<< sqlite3_column_int(stmt,2) << endl;
+        cout << "Home team runs scored: " << sqlite3_column_int(stmt,3) << endl;
 
         //Store in our vector
-        int away_team_id = sqlite3_column_int(stmt,1);
-        int away_runs = sqlite3_column_int(stmt,2);
-        int home_team_id = sqlite3_column_int(stmt,3);
-        int home_runs = sqlite3_column_int(stmt,4);
+        int away_team_id = sqlite3_column_int(stmt,0);
+        int away_runs = sqlite3_column_int(stmt,1);
+        int home_team_id = sqlite3_column_int(stmt,2);
+        int home_runs = sqlite3_column_int(stmt,3);
         games.push_back(Game(away_team_id,away_runs,home_team_id,home_runs));
     }
+
+    cout << "Games successfully entered" << endl;
+
+    /* - Not sure why this is not usable here.
     if (rc != SQLITE_DONE) {
         cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
         sqlite3_finalize(stmt);
         return 1;   
     }
+
     sqlite3_finalize(stmt);
  
     /* 
@@ -116,6 +122,8 @@ int main()
 
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
                             -1, &stmt, NULL);
+    cout << rc << endl;    
+
     if (rc != SQLITE_OK) {
         cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
         sqlite3_finalize(stmt);
@@ -127,12 +135,12 @@ int main()
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
 
-         cout << sqlite3_column_int(stmt,1)+1 << endl;
+         cout << sqlite3_column_int(stmt,0)+1 << endl;
+         cout << sqlite3_column_text(stmt,1) << endl;
          cout << sqlite3_column_text(stmt,2) << endl;
          cout << sqlite3_column_text(stmt,3) << endl;
          cout << sqlite3_column_text(stmt,4) << endl;
          cout << sqlite3_column_text(stmt,5) << endl;
-         cout << sqlite3_column_text(stmt,6) << endl;
 
 
         /* code that does not work, and associated runtime error.
@@ -140,24 +148,27 @@ int main()
         what():  basic_string::_M_construct null not valid
         Aborted (core dumped)
 
-        int team_id = sqlite3_column_int(stmt,1);
-        string team_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
-        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
-        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4)));
-        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,5)));
-        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,6)));
-        teams.push_back(Team(team_id,team_name,mlbgames_name,abbreviation,division,league));
+        Trying this using, uh, the fact that C arrays start at 0.
+
         */
 
+        int team_id = sqlite3_column_int(stmt,0);
+        string team_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
+        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
+        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
+        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4)));
+        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,5)));
+        teams.push_back(Team(team_id,team_name,mlbgames_name,abbreviation,division,league));
+
     }
 
-    if (rc != SQLITE_DONE) {
-        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
-        sqlite3_finalize(stmt);
-        return 1;   
-    }
 
     sqlite3_finalize(stmt);
+
+    if (rc == SQLITE_OK) {
+        cerr << "Selections are complete." << endl;
+    }
+
 
 return 0;
 }
