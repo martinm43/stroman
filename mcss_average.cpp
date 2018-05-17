@@ -6,6 +6,7 @@
 #include <vector>
 #include <sqlite3.h>
 #include <string>
+#include <math.h>
 
 using namespace std;
 
@@ -54,6 +55,14 @@ public:
     string get_league() const {return _league;}
     float get_rating() const {return _rating;}
 };
+
+double SRS_regress(double rating_away, double rating_home)
+{
+    float m=0.15;
+    float b=0.3; 
+    return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
+}
+
 
 int main()
 {
@@ -177,6 +186,7 @@ int main()
     }
 
     cout << teams[2].get_mlbgames_name() << endl;
+    cout << SRS_regress(teams[1].get_rating(),teams[3].get_rating()) << endl;
 
 return 0;
 }
