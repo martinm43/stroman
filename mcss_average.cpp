@@ -7,7 +7,7 @@
 #include <sqlite3.h>
 #include <string>
 #include <math.h>
-#include <armadillo>>
+#include <armadillo>
 
 using namespace std;
 using namespace arma;
@@ -76,6 +76,9 @@ int main()
     vector<Game> games;
     vector<Team> teams;
 
+    // Matrix examples.
+    mat Head_To_Head = zeros<mat>(30,30);
+
     //Name of the database
     string DatabaseName("mlb_data.sqlite");
 
@@ -113,6 +116,11 @@ int main()
         int home_team_id = sqlite3_column_int(stmt,2);
         int home_runs = sqlite3_column_int(stmt,3);
         games.push_back(Game(away_team_id,away_runs,home_team_id,home_runs));
+
+        if (home_runs > away_runs)
+            Head_To_Head[home_team_id][away_team_id]++;
+        else
+            Head_To_Head[away_team_id][home_team_id]++;
     }
 
     cout << "Games successfully entered" << endl;
@@ -166,14 +174,9 @@ int main()
         cerr << "Selections are complete." << endl;
     }
 
-    cout << teams[2].get_mlbgames_name() << endl;
-    cout << SRS_regress(teams[1].get_rating(),teams[3].get_rating()) << endl;
+    //cout << teams[2].get_mlbgames_name() << endl;
+    //cout << SRS_regress(teams[1].get_rating(),teams[3].get_rating()) << endl;
 
-    // Matrix examples.
-    mat A = randu<mat>(30,30);
-    mat B = randu<mat>(30,30);
-
-    cout << A*B.t() << endl;
 
 return 0;
 }
