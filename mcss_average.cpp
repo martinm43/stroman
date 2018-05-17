@@ -60,8 +60,8 @@ public:
 
 double SRS_regress(double rating_away, double rating_home)
 {
-    float m=0.15;
-    float b=0.3; 
+    float m=0.35;
+    float b=-0.2; 
     return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
 }
 
