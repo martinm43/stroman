@@ -7,8 +7,10 @@
 #include <sqlite3.h>
 #include <string>
 #include <math.h>
+#include <armadillo>>
 
 using namespace std;
+using namespace arma;
 
 class Game{
 private:
@@ -100,10 +102,10 @@ int main()
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         //Writing out the games to the screen (temporary for now, just for error checking)
-        cout << "Away team id: " << sqlite3_column_int(stmt,0) << endl;
-        cout << "Away team runs scored: " << sqlite3_column_int(stmt,1) << endl;
-        cout << "Home team id: "<< sqlite3_column_int(stmt,2) << endl;
-        cout << "Home team runs scored: " << sqlite3_column_int(stmt,3) << endl;
+        //cout << "Away team id: " << sqlite3_column_int(stmt,0) << endl;
+        //cout << "Away team runs scored: " << sqlite3_column_int(stmt,1) << endl;
+        //cout << "Home team id: "<< sqlite3_column_int(stmt,2) << endl;
+        //cout << "Home team runs scored: " << sqlite3_column_int(stmt,3) << endl;
 
         //Store in our vector
         int away_team_id = sqlite3_column_int(stmt,0);
@@ -115,20 +117,7 @@ int main()
 
     cout << "Games successfully entered" << endl;
 
-    /* - Not sure why this is not usable here.
-    if (rc != SQLITE_DONE) {
-        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
-        sqlite3_finalize(stmt);
-        return 1;   
-    }
-
-    sqlite3_finalize(stmt);
- 
-    /* 
-    Statement number two, initializing the list of teams 
-    */
-
-    //SQLStatement = "SELECT team_id, team_name, mlbgames_name, abbreviation, division, league from teams;";
+    /* New SQL statement to obtain games and ratings */
 
     SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.league,t.division,s.rating "
                     "from teams as t "
@@ -152,23 +141,15 @@ int main()
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
+         //Debug print to screen
+         //cout << sqlite3_column_int(stmt,0)+1 << endl;
+         //cout << sqlite3_column_text(stmt,1) << endl;
+         //cout << sqlite3_column_text(stmt,2) << endl;
+         //cout << sqlite3_column_text(stmt,3) << endl;
+         //cout << sqlite3_column_text(stmt,4) << endl;
+         //cout << sqlite3_column_double(stmt,5) << endl;
 
-         cout << sqlite3_column_int(stmt,0)+1 << endl;
-         cout << sqlite3_column_text(stmt,1) << endl;
-         cout << sqlite3_column_text(stmt,2) << endl;
-         cout << sqlite3_column_text(stmt,3) << endl;
-         cout << sqlite3_column_text(stmt,4) << endl;
-         cout << sqlite3_column_double(stmt,5) << endl;
-
-        /* code that does not work, and associated runtime error.
-        terminate called after throwing an instance of 'std::logic_error'
-        what():  basic_string::_M_construct null not valid
-        Aborted (core dumped)
-
-        Trying this using, uh, the fact that C arrays start at 0.
-
-        */
-
+        //Write information into the vectors.
         int team_id = sqlite3_column_int(stmt,0);
         string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
         string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
@@ -187,6 +168,12 @@ int main()
 
     cout << teams[2].get_mlbgames_name() << endl;
     cout << SRS_regress(teams[1].get_rating(),teams[3].get_rating()) << endl;
+
+    // Matrix examples.
+    mat A = randu<mat>(30,30);
+    mat B = randu<mat>(30,30);
+
+    cout << A*B.t() << endl;
 
 return 0;
 }
