@@ -176,7 +176,7 @@ int main()
 
     /*
 
-    SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.league,t.division,s.rating ";
+    SQLStatement =  "select away_team, home_team from games where scheduled_date >= datetime('now')";
 
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
                             -1, &stmt, NULL);
