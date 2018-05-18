@@ -200,17 +200,21 @@ int main()
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
          //Debug print to screen - example
-         int away_team_id = sqlite3_column_int(stmt,0)+1;
+         int away_team_id = sqlite3_column_int(stmt,0);
          float away_team_rating = sqlite3_column_double(stmt,1);
-         int home_team_id = sqlite3_column_int(stmt,2)+1;
+         int home_team_id = sqlite3_column_int(stmt,2);
          float home_team_rating = sqlite3_column_double(stmt,3);
 
-         /*
+         cout << "Away team id: " << home_team_id << endl;
+         cout << "Away team rating: " << away_team_rating << endl;
+         cout << "Home team id: " << home_team_id << endl;
+         cout << "Home team rating: "<< home_team_rating << endl;
+
         if (SRS_regress(away_team_rating,home_team_rating) < uniformRandom())
              Head_To_Head.row(home_team_id-1)[away_team_id-1]++;
         else
              Head_To_Head.row(away_team_id-1)[home_team_id-1]++;
-        */
+        
 
         //Write information into the vectors.
         //int team_id = sqlite3_column_int(stmt,0);
