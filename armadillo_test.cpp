@@ -12,7 +12,8 @@ int main()
   //cout << A*B.t() << endl;
 
 
-  cout << A.row(0) << endl;
+  A.row(0)[0] = 420.00;
+  cout << A.row(0)[0] << endl;
   
   return 0;
   }

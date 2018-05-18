@@ -118,12 +118,14 @@ int main()
         games.push_back(Game(away_team_id,away_runs,home_team_id,home_runs));
 
         if (home_runs > away_runs)
-            Head_To_Head[home_team_id][away_team_id]++;
+            Head_To_Head.(home_team_id-1)[away_team_id-1]++;
         else
-            Head_To_Head[away_team_id][home_team_id]++;
+            Head_To_Head.(away_team_id-1)[home_team_id-1]++;
     }
 
     cout << "Games successfully entered" << endl;
+    cout << "Head to Head Matrix:" << endl;
+    cout << Head_To_Head << endl;
 
     /* New SQL statement to obtain games and ratings */
 
