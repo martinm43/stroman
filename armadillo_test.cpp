@@ -9,11 +9,10 @@ int main()
   mat A = randu<mat>(4,5);
   mat B = randu<mat>(4,5);
   
-  cout << A*B.t() << endl;
+  //cout << A*B.t() << endl;
 
-  A[1][3]=0;
 
-  cout << A << endl;
+  cout << A.row(0) << endl;
   
   return 0;
   }
