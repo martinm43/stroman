@@ -107,8 +107,6 @@ int main()
         //Writing out the games to the screen (temporary for now, just for error checking)
         //cout << "Away team id: " << sqlite3_column_int(stmt,0) << endl;
         //cout << "Away team runs scored: " << sqlite3_column_int(stmt,1) << endl;
-        //cout << "Home team id: "<< sqlite3_column_int(stmt,2) << endl;
-        //cout << "Home team runs scored: " << sqlite3_column_int(stmt,3) << endl;
 
         //Store in our vector
         int away_team_id = sqlite3_column_int(stmt,0);
@@ -153,13 +151,9 @@ int main()
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
-         //Debug print to screen
+         //Debug print to screen - example
          //cout << sqlite3_column_int(stmt,0)+1 << endl;
          //cout << sqlite3_column_text(stmt,1) << endl;
-         //cout << sqlite3_column_text(stmt,2) << endl;
-         //cout << sqlite3_column_text(stmt,3) << endl;
-         //cout << sqlite3_column_text(stmt,4) << endl;
-         //cout << sqlite3_column_double(stmt,5) << endl;
 
         //Write information into the vectors.
         int team_id = sqlite3_column_int(stmt,0);
@@ -177,10 +171,44 @@ int main()
     if (rc == SQLITE_OK) {
         cerr << "Selections are complete." << endl;
     }
+    
+    /* Get and process list of future games */
 
-    //cout << teams[2].get_mlbgames_name() << endl;
-    //cout << SRS_regress(teams[1].get_rating(),teams[3].get_rating()) << endl;
+    /*
 
+    SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.league,t.division,s.rating ";
+
+    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
+                            -1, &stmt, NULL);
+
+    if (rc != SQLITE_OK) {
+        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
+        sqlite3_finalize(stmt);
+        return 1;
+    }
+
+    int nrows = 1;    
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+
+         //Debug print to screen - example
+         //cout << sqlite3_column_int(stmt,0)+1 << endl;
+         //cout << sqlite3_column_text(stmt,1) << endl;
+
+        //Write information into the vectors.
+        int team_id = sqlite3_column_int(stmt,0);
+        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
+        teams.push_back(Team(team_id,mlbgames_name,abbreviation,league,division,rating));
+    }
+
+
+    sqlite3_finalize(stmt);
+
+    if (rc == SQLITE_OK) {
+        cerr << "Selections are complete." << endl;
+    }
+    
+    */
 
 return 0;
 }
