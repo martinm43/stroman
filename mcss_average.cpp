@@ -12,6 +12,10 @@
 using namespace std;
 using namespace arma;
 
+double uniformRandom() {
+  return ( (double)(rand()) + 1. )/( (double)(RAND_MAX) + 1. );
+}
+
 class Game{
 private:
 
@@ -71,6 +75,9 @@ int main()
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
+
+    //Random info
+    srand(time(NULL));
 
     //Two vectors for holding key information to be used later
     vector<Game> games;
@@ -174,9 +181,12 @@ int main()
     
     /* Get and process list of future games */
 
-    /*
-
-    SQLStatement =  "select away_team, home_team from games where scheduled_date >= datetime('now')";
+    SQLStatement =  "select g.away_team, ra.rating, g.home_team, rh.rating from "
+                    "games as g inner join srs_ratings as ra on "
+                    "ra.team_id=g.away_team inner join srs_ratings as rh on "
+                    "rh.team_id=g.home_team where g.scheduled_date >= datetime('now') "
+                    "and ra.rating_date = (select max(rating_date) from srs_ratings) "
+                    "and rh.rating_date = (select max(rating_date) from srs_ratings);";
 
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
                             -1, &stmt, NULL);
@@ -187,28 +197,33 @@ int main()
         return 1;
     }
 
-    int nrows = 1;    
-
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
          //Debug print to screen - example
-         //cout << sqlite3_column_int(stmt,0)+1 << endl;
-         //cout << sqlite3_column_text(stmt,1) << endl;
+         int away_team_id = sqlite3_column_int(stmt,0)+1;
+         float away_team_rating = sqlite3_column_double(stmt,1);
+         int home_team_id = sqlite3_column_int(stmt,2)+1;
+         float home_team_rating = sqlite3_column_double(stmt,3);
+
+         /*
+        if (SRS_regress(away_team_rating,home_team_rating) < uniformRandom())
+             Head_To_Head.row(home_team_id-1)[away_team_id-1]++;
+        else
+             Head_To_Head.row(away_team_id-1)[home_team_id-1]++;
+        */
 
         //Write information into the vectors.
-        int team_id = sqlite3_column_int(stmt,0);
-        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
-        teams.push_back(Team(team_id,mlbgames_name,abbreviation,league,division,rating));
+        //int team_id = sqlite3_column_int(stmt,0);
+        //string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
+        //teams.push_back(Team(team_id,mlbgames_name,abbreviation,league,division,rating));
     }
 
 
     sqlite3_finalize(stmt);
 
     if (rc == SQLITE_OK) {
-        cerr << "Selections are complete." << endl;
+        cerr << "Game processing is complete." << endl;
     }
     
-    */
-
 return 0;
 }
