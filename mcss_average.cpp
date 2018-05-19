@@ -85,10 +85,12 @@ int main()
 
     // Matrix examples.
     mat Head_To_Head = zeros<mat>(30,30);
+    mat MCSS_Head_To_Head = zeros<mat>(30,30);
 
     //Name of the database
     string DatabaseName("mlb_data.sqlite");
 
+    /* S1 - GETTING LIST OF KNOWN WINS */
     string SQLStatement("SELECT away_team, away_runs, home_team, home_runs "
                        "FROM games WHERE (scheduled_date < datetime('now')) "
                        "AND NOT (away_runs=0 and home_runs=0);");
@@ -132,9 +134,10 @@ int main()
     cout << "Head to Head Matrix:" << endl;
     cout << Head_To_Head << endl;
 
+    //Calculating the total number of wins for each teams.
     cout << sum(Head_To_Head.t()) << endl;
 
-    /* New SQL statement to obtain games and ratings */
+    /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
 
     SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.league,t.division,s.rating "
                     "from teams as t "
@@ -154,8 +157,6 @@ int main()
         return 1;
     }
 
-    int nrows = 1;    
-
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
          //Debug print to screen - example
@@ -172,14 +173,41 @@ int main()
         teams.push_back(Team(team_id,mlbgames_name,abbreviation,league,division,rating));
     }
 
+    /* S3 - GETTING THE NUMBER OF FUTURE GAMES FOR S4 */
+
+    SQLStatement =  "select count(*) from "
+                    "games as g inner join srs_ratings as ra on "
+                    "ra.team_id=g.away_team inner join srs_ratings as rh on "
+                    "rh.team_id=g.home_team where g.scheduled_date >= datetime('now') "
+                    "and ra.rating_date = (select max(rating_date) from srs_ratings) "
+                    "and rh.rating_date = (select max(rating_date) from srs_ratings);";
+
+    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
+                            -1, &stmt, NULL);
+
+    if (rc != SQLITE_OK) {
+        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
+        sqlite3_finalize(stmt);
+        return 1;
+    }
+
+    int num_future_games;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+
+        num_future_games = sqlite3_column_int(stmt,0);
+    }
+
+    cout << num_future_games << endl;
+
+    mat future_games = zeros<mat>(num_future_games,4);
 
     sqlite3_finalize(stmt);
 
     if (rc == SQLITE_OK) {
-        cerr << "Selections are complete." << endl;
+        cerr << "Game processing is complete." << endl;
     }
-    
-    /* Get and process list of future games */
+    /* S3 - GETTING FUTURE GAMES AND THEIR ASSOCIATED RATINGS */
 
     SQLStatement =  "select g.away_team, ra.rating, g.home_team, rh.rating from "
                     "games as g inner join srs_ratings as ra on "
@@ -197,37 +225,48 @@ int main()
         return 1;
     }
 
+    int future_games_row = 0;
+
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
-         //Debug print to screen - example
-         int away_team_id = sqlite3_column_int(stmt,0);
-         float away_team_rating = sqlite3_column_double(stmt,1);
-         int home_team_id = sqlite3_column_int(stmt,2);
-         float home_team_rating = sqlite3_column_double(stmt,3);
-
-         cout << "Away team id: " << home_team_id << endl;
-         cout << "Away team rating: " << away_team_rating << endl;
-         cout << "Home team id: " << home_team_id << endl;
-         cout << "Home team rating: "<< home_team_rating << endl;
-
-        if (SRS_regress(away_team_rating,home_team_rating) < uniformRandom())
-             Head_To_Head.row(home_team_id-1)[away_team_id-1]++;
-        else
-             Head_To_Head.row(away_team_id-1)[home_team_id-1]++;
-        
-
-        //Write information into the vectors.
-        //int team_id = sqlite3_column_int(stmt,0);
-        //string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
-        //teams.push_back(Team(team_id,mlbgames_name,abbreviation,league,division,rating));
+         //Debug print to screen - example (away team, away rtg, home team, home rtg)
+         future_games.row(future_games_row)[0] = sqlite3_column_int(stmt,0);
+         future_games.row(future_games_row)[1] = sqlite3_column_double(stmt,1);
+         future_games.row(future_games_row)[2] = sqlite3_column_int(stmt,2);
+         future_games.row(future_games_row)[3] = sqlite3_column_double(stmt,3);
+         future_games_row++;
+         cout << future_games_row << endl;
     }
-
 
     sqlite3_finalize(stmt);
 
     if (rc == SQLITE_OK) {
-        cerr << "Game processing is complete." << endl;
+        cerr << "Processing of future games' binomial win probabilities is complete." << endl;
     }
     
+
+    /* S5 - Monte Carlo Simulation */
+    for(int i=0;i<num_future_games;i++)
+    {
+        int away_team_id = future_games.row(i)[0]-1;
+        float away_team_rtg = future_games.row(i)[1];
+        int home_team_id = future_games.row(i)[2]-1;
+        float home_team_rtg = future_games.row(i)[3];
+
+        cout << away_team_id << endl;
+        cout << away_team_rtg << endl;
+        cout << home_team_id << endl;
+        cout << home_team_rtg << endl;
+
+        if (uniformRandom()<SRS_regress(away_team_id,home_team_id))
+            MCSS_Head_To_Head.row(home_team_id)[away_team_id]++;
+        else
+            MCSS_Head_To_Head.row(away_team_id)[home_team_id]++;
+    }
+
+    mat debug_total=MCSS_Head_To_Head+Head_To_Head;
+    //Total does not match other models, what gives?
+    cout << sum(debug_total.t()) << endl;
+
 return 0;
 }
