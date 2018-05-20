@@ -11,6 +11,8 @@
 #include <math.h>
 #include <armadillo>
 
+#define MAX_ITER 100000
+
 using namespace std;
 using namespace arma;
 
@@ -88,6 +90,8 @@ int main()
     // Matrix examples.
     mat Head_To_Head = zeros<mat>(30,30);
     mat MCSS_Head_To_Head = zeros<mat>(30,30);
+    mat Sim_Total = zeros<mat>(30,30);
+    mat debug_total = zeros<mat>(30,30);
 
     //Name of the database
     string DatabaseName("mlb_data.sqlite");
@@ -244,28 +248,33 @@ int main()
     }
     
 
+    for(int x_iter=0;x_iter<MAX_ITER;x_iter++){
     /* S5 - Monte Carlo Simulation */
-    for(int i=0;i<num_future_games;i++)
-    {
-        int away_team_id = future_games.row(i)[0]-1;
-        float away_team_rtg = future_games.row(i)[1];
-        int home_team_id = future_games.row(i)[2]-1;
-        float home_team_rtg = future_games.row(i)[3];
+        //set mcss head to head matrix to zero
+        MCSS_Head_To_Head.zeros();
+        for(int i=0;i<num_future_games;i++)
+        {
+            int away_team_id = future_games.row(i)[0]-1;
+            float away_team_rtg = future_games.row(i)[1];
+            int home_team_id = future_games.row(i)[2]-1;
+            float home_team_rtg = future_games.row(i)[3];
 
-        //cout << away_team_id << endl;
-        //cout << away_team_rtg << endl;
-        //cout << home_team_id << endl;
-        //cout << home_team_rtg << endl;
+            //cout << away_team_id << endl;
+            //cout << away_team_rtg << endl;
+            //cout << home_team_id << endl;
+            //cout << home_team_rtg << endl;
 
-        if (uniformRandom()<SRS_regress(away_team_rtg,home_team_rtg))
-            MCSS_Head_To_Head.row(home_team_id)[away_team_id]++;
-        else
-            MCSS_Head_To_Head.row(away_team_id)[home_team_id]++;
+            if (uniformRandom()<SRS_regress(away_team_rtg,home_team_rtg))
+                MCSS_Head_To_Head.row(home_team_id)[away_team_id]++;
+            else
+                MCSS_Head_To_Head.row(away_team_id)[home_team_id]++;
+        }
+
+        debug_total.zeros();
+        debug_total = MCSS_Head_To_Head+Head_To_Head;
+        Sim_Total += debug_total;
     }
-
-    mat debug_total=MCSS_Head_To_Head+Head_To_Head;
-    //Total does not match other models, what gives?
-    cout << sum(debug_total.t()) << endl;
+        cout << sum(Sim_Total.t()/MAX_ITER) << endl;
 
 return 0;
 }
