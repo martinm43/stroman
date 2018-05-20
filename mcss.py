@@ -68,7 +68,6 @@ if __name__ == '__main__':
         win_matrix = mcss(binomial_win_probabilities)
         win_matrix += known_wins
         total_wins = np.sum(win_matrix, axis=0)
-        pprint(win_matrix)
         # Raw win totals.
         for x in league_teams:
             x['total_wins'] = total_wins[x['team_id'] - 1]
