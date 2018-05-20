@@ -1,6 +1,8 @@
+
 /* Testing out SO code for CPP */
 /* Reading values from the sqlite api into an array*/
 
+#include <iomanip>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
@@ -92,8 +94,7 @@ int main()
 
     /* S1 - GETTING LIST OF KNOWN WINS */
     string SQLStatement("SELECT away_team, away_runs, home_team, home_runs "
-                       "FROM games WHERE (scheduled_date < datetime('now')) "
-                       "AND NOT (away_runs=0 and home_runs=0);");
+                       "FROM games WHERE scheduled_date <= datetime('now','-1 day');");
 
     sqlite3_stmt *stmt;
 
@@ -131,11 +132,8 @@ int main()
     }
 
     cout << "Games successfully entered" << endl;
-    cout << "Head to Head Matrix:" << endl;
-    cout << Head_To_Head << endl;
-
-    //Calculating the total number of wins for each teams.
-    cout << sum(Head_To_Head.t()) << endl;
+    //cout << "Head to Head Matrix:" << endl;
+    //cout << Head_To_Head << endl;
 
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
 
@@ -198,7 +196,7 @@ int main()
         num_future_games = sqlite3_column_int(stmt,0);
     }
 
-    cout << num_future_games << endl;
+    cout << "Number of games to predict: " << num_future_games << endl;
 
     mat future_games = zeros<mat>(num_future_games,4);
 
@@ -214,7 +212,8 @@ int main()
                     "ra.team_id=g.away_team inner join srs_ratings as rh on "
                     "rh.team_id=g.home_team where g.scheduled_date >= datetime('now') "
                     "and ra.rating_date = (select max(rating_date) from srs_ratings) "
-                    "and rh.rating_date = (select max(rating_date) from srs_ratings);";
+                    "and rh.rating_date = (select max(rating_date) from srs_ratings) "
+                    "order by g.id asc";
 
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
                             -1, &stmt, NULL);
@@ -235,7 +234,7 @@ int main()
          future_games.row(future_games_row)[2] = sqlite3_column_int(stmt,2);
          future_games.row(future_games_row)[3] = sqlite3_column_double(stmt,3);
          future_games_row++;
-         cout << future_games_row << endl;
+         //cout << future_games_row << endl;
     }
 
     sqlite3_finalize(stmt);
@@ -253,12 +252,12 @@ int main()
         int home_team_id = future_games.row(i)[2]-1;
         float home_team_rtg = future_games.row(i)[3];
 
-        cout << away_team_id << endl;
-        cout << away_team_rtg << endl;
-        cout << home_team_id << endl;
-        cout << home_team_rtg << endl;
+        //cout << away_team_id << endl;
+        //cout << away_team_rtg << endl;
+        //cout << home_team_id << endl;
+        //cout << home_team_rtg << endl;
 
-        if (uniformRandom()<SRS_regress(away_team_id,home_team_id))
+        if (uniformRandom()<SRS_regress(away_team_rtg,home_team_rtg))
             MCSS_Head_To_Head.row(home_team_id)[away_team_id]++;
         else
             MCSS_Head_To_Head.row(away_team_id)[home_team_id]++;

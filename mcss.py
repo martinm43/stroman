@@ -1,6 +1,6 @@
 """
 A bunch of functions that I use to do Monte Carlo simulations of issues
-Performs Monte Carlo simulation using MLB
+_Performs Monte Carlo simulation using MLB
 schedule and then determines playoff teams.
 
 Tiebreaker logic to be developed.
@@ -15,6 +15,7 @@ from __future__ import print_function, division
 
 if __name__ == '__main__':
 
+    from pprint import pprint
     import os
     import sys
     import numpy as np
@@ -50,10 +51,11 @@ if __name__ == '__main__':
     try:
         ite = int(sys.argv[1])
     except IndexError:
-        ite = 10
-        print('Debug run, using ' + str(ite) + ' iterations')
+        ite = 1
+        print('Debug run, using ' + str(ite) + ' iteration(s)')
 
     binomial_win_probabilities = future_games_dicts()
+    print(len(binomial_win_probabilities))
     if binomial_win_probabilities == 1:
         print('Error occurred while calculating '
               'future binomial win probabilities')
@@ -66,6 +68,7 @@ if __name__ == '__main__':
         win_matrix = mcss(binomial_win_probabilities)
         win_matrix += known_wins
         total_wins = np.sum(win_matrix, axis=0)
+        pprint(win_matrix)
         # Raw win totals.
         for x in league_teams:
             x['total_wins'] = total_wins[x['team_id'] - 1]
