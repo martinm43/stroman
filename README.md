@@ -9,11 +9,17 @@ mlbgame, using the MLB license, located at https://github.com/panzarino/mlbgame/
 
 Using an MIT license
 
-* Create a "future games" worksheet something like that for the NBA
+Future Tasks:
+* Create mcss.cpp from mcss_average.cpp
 * Update pitching data (starting with pitcher names) in table.
-* Add in a random quote at the end of the log file when complete.
-* Playoff predictions and the like should start no earlier than 20%, no later than 25% into season.
+* Add a depository/list of "favourite baseball quotes" for program use.
 * GUI for updating missed/postphoned games, could be as easy as an Excel sheet/python script combination.
+
+Ratings Calculation File (common to previous NBA work and current MLB work):
+R1. analytics/burke_solver.py
+Takes in a list of games (away team, away runs, home team, home runs) and calculates a 
+functional equivalent of Simple Rating SYstem (point differential adjusted for Strength of Schedule).
+Unlike the NBA equivalent there is no "cutoff".
 
 Filelist (to be updated) (linted save for C0103, variable names):
 1. full_ratings_calculations.py - linted save for naming styles
@@ -77,5 +83,12 @@ C/C++ Files
 Intention is to try and write some of the files (mcss, mcss_averages, and full
 ratings calculations) in C++
 
-1. missing_games 
-Uses the C API of sqlite3 to run a query and print the results to screen.
+1. mcss_average 
+Obtains known wins, then simulates the rest of the season 100,000 times and determines the
+average number of wins for the rest of the season. Teams are then sorted by division and 
+total wins.
+-This file will be slowly modified in order to create the final simulation. 
+
+Compared to its similar file:
+"time python mcss_average.py 10000" - 1m 18.743s
+"time bash -c "./mcss_average"" - 7.267s, 11x faster.

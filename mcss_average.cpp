@@ -11,7 +11,7 @@
 #include <math.h>
 #include <armadillo>
 
-#define MAX_ITER 3
+#define MAX_ITER 10000
 
 using namespace std;
 using namespace arma;
@@ -298,7 +298,7 @@ int main()
 
     for(int i=0;i<30;i++){
         cout << teams[i].get_abbreviation() << " : " << total_wins[i] << " wins" << endl;
-        teams[i].set_total_wins(total_wins[i]);
+        teams[i].set_total_wins(round(total_wins[i]));
         cout << teams[i].get_total_wins() << endl;
     }
 
