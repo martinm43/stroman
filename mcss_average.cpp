@@ -11,7 +11,7 @@
 #include <math.h>
 #include <armadillo>
 
-#define MAX_ITER 100000
+#define MAX_ITER 3
 
 using namespace std;
 using namespace arma;
@@ -36,7 +36,6 @@ public:
    int get_away_runs() const {return _away_runs;}
    int get_home_team_id() const {return _home_team_id;}
    int get_home_runs() const {return _home_runs;}
-
 };
 
 class Team{
@@ -48,6 +47,7 @@ private:
     string _division;
     string _league;
     float _rating;
+    int _total_wins;
 
 public:
 
@@ -64,6 +64,9 @@ public:
     string get_division() const {return _division;}
     string get_league() const {return _league;}
     float get_rating() const {return _rating;}
+
+    void set_total_wins(int val) {_total_wins = val;}
+    int get_total_wins() const {return _total_wins;}
 };
 
 double SRS_regress(double rating_away, double rating_home)
@@ -73,6 +76,17 @@ double SRS_regress(double rating_away, double rating_home)
     return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
 }
 
+struct teams_sort
+{
+    inline bool operator()(const Team& Team1, const Team& Team2)
+    {
+        if (Team1.get_division() > Team2.get_division())
+            return true;
+        if (Team1.get_total_wins() > Team2.get_total_wins())
+            return true;
+        return false;
+    } 
+};
 
 int main()
 {
@@ -141,13 +155,14 @@ int main()
 
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
 
-    SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.league,t.division,s.rating "
+    SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating "
                     "from teams as t "
                     "inner join SRS_Ratings as s "
                     "on s.team_id=t.id "
                     "where s.rating <> 0 "
                     "and s.rating_date = (select rating_date from SRS_ratings "
-                    "order by rating_date desc limit 1)";
+                    "order by rating_date desc limit 1) "
+                    "order by t.id asc ";
 
 
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
@@ -169,10 +184,10 @@ int main()
         int team_id = sqlite3_column_int(stmt,0);
         string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
         string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
-        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
-        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4)));
-        float rating = sqlite3_column_double(stmt,6);
-        teams.push_back(Team(team_id,mlbgames_name,abbreviation,league,division,rating));
+        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
+        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4))); //does not capture whole division!!
+        float rating = sqlite3_column_double(stmt,5);
+        teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
     }
 
     /* S3 - GETTING THE NUMBER OF FUTURE GAMES FOR S4 */
@@ -274,7 +289,26 @@ int main()
         debug_total = MCSS_Head_To_Head+Head_To_Head;
         Sim_Total += debug_total;
     }
-        cout << sum(Sim_Total.t()/MAX_ITER) << endl;
+        mat total_wins = sum(Sim_Total.t()/MAX_ITER);
+        //cout << total_wins << endl;
+
+    for(int i=0;i<30;i++){
+        cout << teams[i].get_abbreviation() << " : " << total_wins[i] << " wins" << endl;
+        teams[i].set_total_wins(total_wins[i]);
+        cout << teams[i].get_total_wins() << endl;
+    }
+
+    /* S6 - Sorting */
+    sort(teams.begin(),teams.end(),teams_sort());
+    
+    cout << "Printing a sorted list of teams." << endl;
+    for(int i=0;i<30;i++){
+        string team_name = teams[i].get_mlbgames_name();
+        //cout << teams[i].get_division() << endl;
+        string team_division = teams[i].get_division();
+        int team_wins = teams[i].get_total_wins();
+        cout << team_division << " : "<< team_name << " : " << team_wins << endl;
+    }
 
 return 0;
 }
