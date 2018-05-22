@@ -14,7 +14,8 @@ Future Tasks:
 * Update pitching data (starting with pitcher names) in table.
 * Add a depository/list of "favourite baseball quotes" for program use.
 * GUI for updating missed/postphoned games, could be as easy as an Excel sheet/python script combination.
-* Can potentially update using GUI sqlitebrowser
+* Can potentially update using GUI sqlitebrowser - this 
+will help with error checking
 
 Ratings Calculation File (common to previous NBA work and current MLB work):
 R1. analytics/burke_solver.py
