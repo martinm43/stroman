@@ -311,7 +311,9 @@ int main()
         //cout << teams[i].get_division() << endl;
         string team_division = teams[i].get_division();
         int team_wins = teams[i].get_total_wins();
-        cout << team_division << " : "<< team_name << " : " << team_wins << endl;
+        cout << setw(13) << team_division << " : " 
+             << setw(10) << team_name << " : " 
+             << setw(3) << team_wins << endl;
     }
 
 return 0;
