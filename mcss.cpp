@@ -1,4 +1,3 @@
-
 /* Testing out SO code for CPP */
 /* Reading values from the sqlite api into an array*/
 
@@ -11,7 +10,7 @@
 #include <math.h>
 #include <armadillo>
 
-#define MAX_ITER 10000
+#define MAX_ITER 10
 
 using namespace std;
 using namespace arma;
@@ -92,6 +91,7 @@ struct teams_sort
     } 
 };
 
+
 int main()
 {
     sqlite3 *db;
@@ -110,6 +110,7 @@ int main()
     mat MCSS_Head_To_Head = zeros<mat>(30,30);
     mat Sim_Total = zeros<mat>(30,30);
     mat debug_total = zeros<mat>(30,30);
+    mat sim_playoff_total = zeros<mat>(30,3);
 
     //Name of the database
     string DatabaseName("mlb_data.sqlite");
@@ -283,38 +284,50 @@ int main()
                 MCSS_Head_To_Head.row(home_team_id)[away_team_id]++;
             else
                 MCSS_Head_To_Head.row(away_team_id)[home_team_id]++;
+
+
         }
 
         debug_total.zeros();
         debug_total = MCSS_Head_To_Head+Head_To_Head;
-        Sim_Total += debug_total;
-    }
-        mat total_wins = sum(Sim_Total.t()/MAX_ITER);
+
+        mat total_wins = sum(debug_total.t()/MAX_ITER);
+
         //cout << total_wins << endl;
+        vector<Team> sim_teams = teams;
 
-    for(int i=0;i<30;i++){
-        teams[i].set_total_wins(round(total_wins[i]));
+        for(int i=0;i<30;i++){
+            //cout << round(total_wins[i]) << endl;
+            sim_teams[i].set_total_wins(round(total_wins[i]));
+        }
+
+        sort(sim_teams.begin(),sim_teams.end(),teams_sort());
+
+        //cout << "Printing a sorted list of teams." << endl;
+
+        for(int i=0;i<30;i++){
+            string team_name = sim_teams[i].get_mlbgames_name();
+                //cout << teams[i].get_division() << endl;
+            string team_division = sim_teams[i].get_division();
+            int team_wins = sim_teams[i].get_total_wins();
+            int team_id = sim_teams[i].get_team_id();
+
+            /* - debug printing the teams
+            cout << setw(13) << team_division << " | " 
+                 << setw(10) << team_name << " | " 
+                 << setw(3) << team_wins << " | " 
+                 << setw(3) << team_id << endl;
+            */
+
+            if(i==0 || i==5 || i == 10 || i== 15 | i==20 | i==25){
+                sim_playoff_total.row(team_id-1)[0]++;
+            }
+        }
+
+
     }
-
-    /* S6 - Sorting */
-    sort(teams.begin(),teams.end(),teams_sort());
-    
-    cout << "Printing a sorted list of teams." << endl;
-
-    //Heading printing
-    cout << setw(13) << "Division" << "|" 
-         << setw(10) << "Team" << "|" 
-         << setw(3) << "Wins" << endl;
-
-    for(int i=0;i<30;i++){
-        string team_name = teams[i].get_mlbgames_name();
-        //cout << teams[i].get_division() << endl;
-        string team_division = teams[i].get_division();
-        int team_wins = teams[i].get_total_wins();
-        cout << setw(13) << team_division << " | " 
-             << setw(10) << team_name << " | " 
-             << setw(3) << team_wins << endl;
-    }
+    cout << "Debug printing a preliminary table w. division wins and wildcard wins." << endl;
+    cout << sim_playoff_total << endl;
 
 return 0;
 }
