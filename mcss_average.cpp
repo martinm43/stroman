@@ -180,10 +180,6 @@ int main()
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
-         //Debug print to screen - example
-         //cout << sqlite3_column_int(stmt,0)+1 << endl;
-         //cout << sqlite3_column_text(stmt,1) << endl;
-
         //Write information into the vectors.
         int team_id = sqlite3_column_int(stmt,0);
         string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
@@ -297,9 +293,7 @@ int main()
         //cout << total_wins << endl;
 
     for(int i=0;i<30;i++){
-        cout << teams[i].get_abbreviation() << " : " << total_wins[i] << " wins" << endl;
         teams[i].set_total_wins(round(total_wins[i]));
-        cout << teams[i].get_total_wins() << endl;
     }
 
     /* S6 - Sorting */
@@ -311,8 +305,8 @@ int main()
         //cout << teams[i].get_division() << endl;
         string team_division = teams[i].get_division();
         int team_wins = teams[i].get_total_wins();
-        cout << setw(13) << team_division << " : " 
-             << setw(10) << team_name << " : " 
+        cout << setw(13) << team_division << " | " 
+             << setw(10) << team_name << " | " 
              << setw(3) << team_wins << endl;
     }
 
