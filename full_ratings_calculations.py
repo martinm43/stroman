@@ -9,7 +9,7 @@ scripts.
 LINTED minus variable names.
 
 """
-from __future__ import print_function, division
+
 
 from datetime import datetime, timedelta
 import os
@@ -123,7 +123,7 @@ diff_matrix[:, 10] = [b[0] for b in BurkeList]
 diff_list = diff_matrix.tolist()
 ratings_list = []
 for i in diff_list:
-    ratings_list.append(dict(zip(analytics_headers, i)))
+    ratings_list.append(dict(list(zip(analytics_headers, i))))
 
 for i, x in enumerate(ratings_list):
     team_name_data = id_to_mlbgames_name(i + 1, verbose=True)
@@ -189,7 +189,7 @@ file_out = open(
     'Summary_' +
     analysis_end_date.strftime('%Y-%m-%d') +
     '.txt',
-    'wb')
+    'w')
 
 file_out.write(
     'Summary of Results, ' +

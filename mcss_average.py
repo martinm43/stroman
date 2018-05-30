@@ -90,7 +90,7 @@ file_out = open(
     '_' +
     str(ite) +
     '_iter.txt',
-    'wb')
+    'w')
 
 file_out.write(
     'Summary of Results, ' +
