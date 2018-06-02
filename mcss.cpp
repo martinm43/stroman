@@ -1,3 +1,4 @@
+
 /* Testing out SO code for CPP */
 /* Reading values from the sqlite api into an array*/
 
@@ -9,88 +10,12 @@
 #include <string>
 #include <math.h>
 #include <armadillo>
+#include <mcss.h>
 
-#define MAX_ITER 10
+#define MAX_ITER 10000
 
 using namespace std;
 using namespace arma;
-
-double uniformRandom() {
-  return ( (double)(rand()) + 1. )/( (double)(RAND_MAX) + 1. );
-}
-
-class Game{
-private:
-
-   int _away_team_id;
-   int _away_runs;
-   int _home_team_id;
-   int _home_runs;
-
-public:
-   Game(int away_team_id, int away_runs, int home_team_id, int home_runs): 
-     _away_team_id(away_team_id), _away_runs(away_runs), _home_team_id(home_team_id), _home_runs(home_runs) {}
-
-   int get_away_team_id() const {return _away_team_id;}
-   int get_away_runs() const {return _away_runs;}
-   int get_home_team_id() const {return _home_team_id;}
-   int get_home_runs() const {return _home_runs;}
-};
-
-class Team{
-private:
-
-    int _team_id;
-    string _mlbgames_name;
-    string _abbreviation;
-    string _division;
-    string _league;
-    float _rating;
-    int _total_wins;
-
-public:
-
-    Team(int team_id, string mlbgames_name, 
-            string abbreviation, string division, string league, 
-            float rating):
-        _team_id(team_id), _mlbgames_name(mlbgames_name), 
-            _abbreviation(abbreviation), _division(division), 
-            _league(league), _rating(rating) {}
-
-    int get_team_id() const {return _team_id;}
-    string get_mlbgames_name() const {return _mlbgames_name;}
-    string get_abbreviation() const {return _abbreviation;}
-    string get_division() const {return _division;}
-    string get_league() const {return _league;}
-    float get_rating() const {return _rating;}
-
-    void set_total_wins(int val) {_total_wins = val;}
-    int get_total_wins() const {return _total_wins;}
-};
-
-double SRS_regress(double rating_away, double rating_home)
-{
-    float m=0.35;
-    float b=-0.2; 
-    return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
-}
-
-struct teams_sort
-{
-    inline bool operator()(const Team& Team1, const Team& Team2)
-    {
-        if (Team1.get_division() == Team2.get_division())
-            if (Team1.get_total_wins() > Team2.get_total_wins())
-                return true;
-            else
-                return false;
-        else if (Team1.get_division() > Team2.get_division())
-            return true;
-        else
-            return false;
-    } 
-};
-
 
 int main()
 {
@@ -291,10 +216,11 @@ int main()
         debug_total.zeros();
         debug_total = MCSS_Head_To_Head+Head_To_Head;
 
-        mat total_wins = sum(debug_total.t()/MAX_ITER);
+        mat total_wins = sum(debug_total.t());
 
         //cout << total_wins << endl;
         vector<Team> sim_teams = teams;
+
 
         for(int i=0;i<30;i++){
             //cout << round(total_wins[i]) << endl;
@@ -327,7 +253,7 @@ int main()
 
     }
     cout << "Debug printing a preliminary table w. division wins and wildcard wins." << endl;
-    cout << sim_playoff_total << endl;
+    cout << fixed << sim_playoff_total << endl;
 
 return 0;
 }
