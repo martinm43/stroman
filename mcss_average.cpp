@@ -3,7 +3,6 @@
 /* Reading values from the sqlite api into an array*/
 
 #include <iomanip>
-#include <stdio.h>
 #include <fstream>
 #include <iostream>
 #include <vector>
