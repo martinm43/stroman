@@ -299,21 +299,24 @@ int main()
     /* S6 - Sorting */
     sort(teams.begin(),teams.end(),teams_sort());
     
-    cout << "Printing a sorted list of teams." << endl;
+    cout << "Printing a sorted list of teams, by average wins over " 
+            << MAX_ITER << " simulations." << endl;
 
     //Heading printing
-    cout << setw(13) << "Division" << "|" 
-         << setw(10) << "Team" << "|" 
-         << setw(3) << "Wins" << endl;
+    cout << left << setw(14) << "Division" << "|" 
+         << left << setw(12) << " Team" << "|" 
+         << left << setw(3) << " Wins" << endl;
+
+    cout<<"********************************"<<endl;
 
     for(int i=0;i<30;i++){
         string team_name = teams[i].get_mlbgames_name();
         //cout << teams[i].get_division() << endl;
         string team_division = teams[i].get_division();
         int team_wins = teams[i].get_total_wins();
-        cout << setw(13) << team_division << " | " 
-             << setw(10) << team_name << " | " 
-             << setw(3) << team_wins << endl;
+        cout << left << setw(13) << team_division << " | " 
+             << left << setw(10) << team_name << " | " 
+             << left << setw(3) << team_wins << endl;
     }
 
 return 0;
