@@ -11,7 +11,7 @@ MAM
 
 """
 
-from __future__ import print_function, division
+
 
 if __name__ == '__main__':
 
@@ -37,8 +37,8 @@ if __name__ == '__main__':
         Team.id,
         Team.division,
         Team.league)
-    league_teams = [dict(zip(['team_name', 'team_id', 'division', 'league'], [
-        x.team_name, x.id, x.division, x.league])) for x in league_teams]
+    league_teams = [dict(list(zip(['team_name', 'team_id', 'division', 'league'], [
+        x.team_name, x.id, x.division, x.league]))) for x in league_teams]
 
     # Assign this once to hold it for later use
     header_league_teams = league_teams
@@ -129,8 +129,8 @@ if __name__ == '__main__':
     # Summarizing results.
     header_league_teams = Team.select(
         Team.team_name, Team.id, Team.division, Team.league)
-    header_league_teams = [dict(zip(['team_name', 'team_id',\
-        'division', 'league'], [x.team_name, x.id, x.division, x.league]))\
+    header_league_teams = [dict(list(zip(['team_name', 'team_id',\
+        'division', 'league'], [x.team_name, x.id, x.division, x.league])))\
         for x in header_league_teams]
 
     for t in header_league_teams:
@@ -180,7 +180,7 @@ if __name__ == '__main__':
         '_' +
         str(ite) +
         '_iter.txt',
-        'wb')
+        'w')
 
     file_out.write(
         'Summary of Results, ' +
