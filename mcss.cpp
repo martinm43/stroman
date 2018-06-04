@@ -12,7 +12,7 @@
 #include <armadillo>
 #include <mcss.h>
 
-#define MAX_ITER 10000
+#define MAX_ITER 10
 
 using namespace std;
 using namespace arma;
@@ -115,6 +115,10 @@ int main()
         float rating = sqlite3_column_double(stmt,5);
         teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
     }
+
+    size_t const half_size=teams.size()/2;
+
+    cout << half_size << endl;
 
     /* S3 - GETTING THE NUMBER OF FUTURE GAMES FOR S4 */
 
@@ -248,6 +252,10 @@ int main()
             if(i==0 || i==5 || i == 10 || i== 15 | i==20 | i==25){
                 sim_playoff_total.row(team_id-1)[0]++;
             }
+
+            //Wildcard calculation
+            vector<Team> nat_league(sim_teams.begin(), sim_teams.begin()+half_size);
+            vector<Team> amer_league(sim_teams.begin()+half_size, sim_teams.end());
         }
 
 
