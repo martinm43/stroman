@@ -3,7 +3,6 @@
 /* Reading values from the sqlite api into an array*/
 
 #include <iomanip>
-#include <stdio.h>
 #include <iostream>
 #include <vector>
 #include <sqlite3.h>
@@ -242,15 +241,12 @@ int main()
             int team_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
 
-            /* - debug printing the teams
-            cout << setw(13) << team_division << " | " 
-                 << setw(10) << team_name << " | " 
-                 << setw(3) << team_wins << " | " 
-                 << setw(3) << team_id << endl;
-            */
-
             if(i==0 || i==5 || i == 10 || i== 15 | i==20 | i==25){
                 sim_playoff_total.row(team_id-1)[0]++;
+
+            /* need to sort the teams that aren't leaders in each league
+                so 1-4,6-9,11-14 */
+
             }
 
             //Wildcard calculation
@@ -260,8 +256,14 @@ int main()
 
 
     }
+
+    for(int i=0;i<30;i++){
+        sim_playoff_total.row(i)[2]=sim_playoff_total.row(i)[0]+sim_playoff_total.row(i)[1];
+    }
+
     cout << "Debug printing a preliminary table w. division wins and wildcard wins." << endl;
     cout << fixed << sim_playoff_total << endl;
+
 
 return 0;
 }
