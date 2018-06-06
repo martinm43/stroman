@@ -115,6 +115,10 @@ int main()
         teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
     }
 
+    size_t const half_size=teams.size()/2;
+
+    cout << half_size << endl;
+
     /* S3 - GETTING THE NUMBER OF FUTURE GAMES FOR S4 */
 
     SQLStatement =  "select count(*) from "
@@ -244,6 +248,10 @@ int main()
                 so 1-4,6-9,11-14 */
 
             }
+
+            //Wildcard calculation
+            vector<Team> nat_league(sim_teams.begin(), sim_teams.begin()+half_size);
+            vector<Team> amer_league(sim_teams.begin()+half_size, sim_teams.end());
         }
 
 
