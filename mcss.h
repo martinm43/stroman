@@ -75,7 +75,7 @@ struct teams_sort
                 return true;
             else
                 return false;
-        else if (Team1.get_division() > Team2.get_division())
+        else if (Team1.get_division() < Team2.get_division())
             return true;
         else
             return false;
