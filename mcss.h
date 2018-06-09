@@ -61,8 +61,8 @@ public:
 
 double SRS_regress(double rating_away, double rating_home)
 {
-    float m=0.0001;
-    float b=-0.2; 
+    float m=0.55;
+    float b=-0.15; 
     return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
 }
 
@@ -75,7 +75,7 @@ struct teams_sort
                 return true;
             else
                 return false;
-        else if (Team1.get_division() > Team2.get_division())
+        else if (Team1.get_division() < Team2.get_division())
             return true;
         else
             return false;

@@ -10,7 +10,9 @@ mlbgame, using the MLB license, located at https://github.com/panzarino/mlbgame/
 Using an MIT license
 
 Future Tasks:
-* Create mcss.cpp from mcss_average.cpp
+* Check monte carlo odds vs pythagorean projected wins (maybe in Python)
+* Need to harmonize the "division win percentages"
+* Modify C++ files to use argv and argc
 * Update pitching data (starting with pitcher names) in table.
 * Add a depository/list of "favourite baseball quotes" for program use.
 * GUI for updating missed/postphoned games, could be as easy as an Excel sheet/python script combination.
@@ -81,6 +83,7 @@ The goal here is not to track specific wins and losses at this point, but to
 assess team performance using raw stats.
 
 C/C++ Files
+Requires armadillo and sqlite3
 
 Intention is to try and write some of the files (mcss, mcss_averages, and full
 ratings calculations) in C++
@@ -89,7 +92,12 @@ ratings calculations) in C++
 Obtains known wins, then simulates the rest of the season 100,000 times and determines the
 average number of wins for the rest of the season. Teams are then sorted by division and 
 total wins.
--This file will be slowly modified in order to create the final simulation. 
+
+2. mcss
+Calculates the playoff odds using wildcard and head to head wins
+
+3. mcss.h
+Header file containing necessary classes, functions, and structures
 
 Compared to its similar file:
 "time python mcss_average.py 10000" - 1m 18.743s

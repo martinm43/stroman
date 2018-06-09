@@ -9,7 +9,7 @@ import random
 import numpy as np
 
 from james import SRS_regress
-from mlb_data_models import Team, Game, SRSRating
+from mlb_data_models import Team, Game, SRSRating, database
 
 def big_inserter(
         db,
@@ -136,54 +136,31 @@ def future_games_dicts():
     """
     Returns a list of dicts of future games (used in all the mcss files)
     """
+
     # dummy variable to represent the query (retrieve ratings for current day)
-    x = SRSRating.select().where(
-        SRSRating.rating_date == datetime.now(). replace(
-            hour=0, minute=0, second=0, microsecond=0)).order_by(
-                SRSRating.team_id)
-
+    #x = SRSRating.select().where(
+    #    SRSRating.rating_date == datetime.now(). replace(
+    #        hour=0, minute=0, second=0, microsecond=0)).order_by(
+    #            SRSRating.team_id)
+    #
     # retrieve ratings for current day
-    ratings = [i.rating for i in x]
 
-    if ratings == []:
-        print('Current ratings do not exist yet. Please run full ratings calculations')
-        return 1
+    query_result = database.execute_sql("select t.id, s.rating from teams as t \
+                             inner join SRS_Ratings as s \
+                             on s.team_id=t.id \
+                             where s.rating <> 0 and s.rating_date = (\
+                                    select rating_date from SRS_ratings order by rating_date desc limit 1 ) \
+                             order by t.id asc;")
 
-    # Ported from old "standings_calculations" file
-    ratings_dict_list = [{'abbreviation': 'Ana'},
-                         {'abbreviation': 'Ari'},
-                         {'abbreviation': 'Atl'},
-                         {'abbreviation': 'Bal'},
-                         {'abbreviation': 'Bos'},
-                         {'abbreviation': 'ChC'},
-                         {'abbreviation': 'ChW'},
-                         {'abbreviation': 'Cin'},
-                         {'abbreviation': 'Cle'},
-                         {'abbreviation': 'Col'},
-                         {'abbreviation': 'Det'},
-                         {'abbreviation': 'Fla'},
-                         {'abbreviation': 'Hou'},
-                         {'abbreviation': 'Kan'},
-                         {'abbreviation': 'Los'},
-                         {'abbreviation': 'Mil'},
-                         {'abbreviation': 'Min'},
-                         {'abbreviation': 'NYM'},
-                         {'abbreviation': 'NYY'},
-                         {'abbreviation': 'Oak'},
-                         {'abbreviation': 'Phi'},
-                         {'abbreviation': 'Pit'},
-                         {'abbreviation': 'Sdg'},
-                         {'abbreviation': 'Sea'},
-                         {'abbreviation': 'Sfo'},
-                         {'abbreviation': 'StL'},
-                         {'abbreviation': 'Tam'},
-                         {'abbreviation': 'Tex'},
-                         {'abbreviation': 'Tor'},
-                         {'abbreviation': 'Was'}]
+    x=[] #get empty list
+    x_dict={} #create empty dict
+    for t_id, t_rating in query_result:
+        x_dict['team_id'] = t_id
+        x_dict['rating'] = t_rating
+        x.append(x_dict)
 
-    for i, x in enumerate(ratings_dict_list):
-        x['team_id'] = i + 1
-        x['rating'] = float(ratings[i])
+    #x dict {'team_id':,'rating':}
+
 
     # pprint(ratings_dict_list)
 
