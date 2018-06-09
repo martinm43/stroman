@@ -1,7 +1,0 @@
-digraph "Graphical Class Hierarchy"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir="LR";
-  Node1 [label="mlb_data_models.Team.Meta",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmlb__data__models_1_1Team_1_1Meta.html"];
-}
