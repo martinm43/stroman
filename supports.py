@@ -196,7 +196,6 @@ def future_games_dicts():
 
 
     #x dict {'team_id':,'rating':}
-    pprint(x)
     ratings_dict_list=x
 
     # pprint(ratings_dict_list)

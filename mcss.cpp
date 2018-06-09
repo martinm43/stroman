@@ -11,7 +11,7 @@
 #include <armadillo>
 #include <mcss.h>
 
-#define MAX_ITER 10000
+#define MAX_ITER 100000
 
 using namespace std;
 using namespace arma;
@@ -273,7 +273,9 @@ int main()
     }
 
     cout << "Debug printing a preliminary table w. division wins and wildcard wins." << endl;
-    cout << fixed << sim_playoff_total << endl;
+    for(int i=0;i<30;i++){
+    cout << i+1 << " " << sim_playoff_total.row(i)[0] << endl;
+    }
 
 
 return 0;
