@@ -84,6 +84,8 @@ int main()
 
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
 
+
+/*
     SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating "
                     "from teams as t "
                     "inner join SRS_Ratings as s "
@@ -92,7 +94,16 @@ int main()
                     "and s.rating_date = (select rating_date from SRS_ratings "
                     "order by rating_date desc limit 1) "
                     "order by t.id asc ";
+*/
 
+    SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating "
+                    "from teams as t "
+                    "inner join SRS_Ratings as s "
+                    "on s.team_id=t.id "
+                    "where s.rating <> 0 "
+                    "and s.rating_date = (select rating_date from SRS_ratings "
+                    "order by rating_date desc limit 1) "
+                    "order by t.id asc ";
 
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
                             -1, &stmt, NULL);

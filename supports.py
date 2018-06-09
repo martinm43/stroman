@@ -8,6 +8,8 @@ import random
 
 import numpy as np
 
+from pprint import pprint
+
 from james import SRS_regress
 from mlb_data_models import Team, Game, SRSRating, database
 
@@ -152,15 +154,50 @@ def future_games_dicts():
                                     select rating_date from SRS_ratings order by rating_date desc limit 1 ) \
                              order by t.id asc;")
 
+    # Ported from old "standings_calculations" file
+    ratings_dict_list = [{'abbreviation': 'Ana'},
+                         {'abbreviation': 'Ari'},
+                         {'abbreviation': 'Atl'},
+                         {'abbreviation': 'Bal'},
+                         {'abbreviation': 'Bos'},
+                         {'abbreviation': 'ChC'},
+                         {'abbreviation': 'ChW'},
+                         {'abbreviation': 'Cin'},
+                         {'abbreviation': 'Cle'},
+                         {'abbreviation': 'Col'},
+                         {'abbreviation': 'Det'},
+                         {'abbreviation': 'Fla'},
+                         {'abbreviation': 'Hou'},
+                         {'abbreviation': 'Kan'},
+                         {'abbreviation': 'Los'},
+                         {'abbreviation': 'Mil'},
+                         {'abbreviation': 'Min'},
+                         {'abbreviation': 'NYM'},
+                         {'abbreviation': 'NYY'},
+                         {'abbreviation': 'Oak'},
+                         {'abbreviation': 'Phi'},
+                         {'abbreviation': 'Pit'},
+                         {'abbreviation': 'Sdg'},
+                         {'abbreviation': 'Sea'},
+                         {'abbreviation': 'Sfo'},
+                         {'abbreviation': 'StL'},
+                         {'abbreviation': 'Tam'},
+                         {'abbreviation': 'Tex'},
+                         {'abbreviation': 'Tor'},
+                         {'abbreviation': 'Was'}]
+
+
     x=[] #get empty list
-    x_dict={} #create empty dict
     for t_id, t_rating in query_result:
+        x_dict={}
         x_dict['team_id'] = t_id
         x_dict['rating'] = t_rating
         x.append(x_dict)
 
-    #x dict {'team_id':,'rating':}
 
+    #x dict {'team_id':,'rating':}
+    pprint(x)
+    ratings_dict_list=x
 
     # pprint(ratings_dict_list)
 
