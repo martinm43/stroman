@@ -1,0 +1,73 @@
+\hypertarget{namespaceglobal__update}{}\section{global\+\_\+update Namespace Reference}
+\label{namespaceglobal__update}\index{global\+\_\+update@{global\+\_\+update}}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries M\+A\+X\+\_\+\+D\+A\+Y\+S\+\_\+\+B\+A\+CK} = int(sys.\+argv\mbox{[}1\mbox{]})\hypertarget{namespaceglobal__update_a46c16b784d05e89aff8a0c222154d057}{}\label{namespaceglobal__update_a46c16b784d05e89aff8a0c222154d057}
+
+\item 
+{\bfseries game\+\_\+d} = datetime.\+today()-\/timedelta(days=i)\hypertarget{namespaceglobal__update_a54d39a4cedb5943fc96bad87a42ef0fd}{}\label{namespaceglobal__update_a54d39a4cedb5943fc96bad87a42ef0fd}
+
+\item 
+{\bfseries month} = mlbgame.\+games(game\+\_\+d.\+year, game\+\_\+d.\+month, game\+\_\+d.\+day)\hypertarget{namespaceglobal__update_afe8b6052b6c07523c53a501212b72dbd}{}\label{namespaceglobal__update_afe8b6052b6c07523c53a501212b72dbd}
+
+\item 
+{\bfseries games} = mlbgame.\+combine\+\_\+games(month)\hypertarget{namespaceglobal__update_a1d2daa63c82c9f2c434af5d767616d5e}{}\label{namespaceglobal__update_a1d2daa63c82c9f2c434af5d767616d5e}
+
+\item 
+list {\bfseries game\+\_\+list} = \mbox{[}$\,$\mbox{]}\hypertarget{namespaceglobal__update_a35b1331036d7d2c780a370363a6b71e5}{}\label{namespaceglobal__update_a35b1331036d7d2c780a370363a6b71e5}
+
+\item 
+{\bfseries stats} = mlbgame.\+team\+\_\+stats(game.\+game\+\_\+id)\hypertarget{namespaceglobal__update_a37364e0878f011a944c7fb2df5d2ff86}{}\label{namespaceglobal__update_a37364e0878f011a944c7fb2df5d2ff86}
+
+\item 
+{\bfseries home\+\_\+team} = game.\+home\+\_\+team\hypertarget{namespaceglobal__update_a3f485b0d2a8f5d1aaa4c433391800210}{}\label{namespaceglobal__update_a3f485b0d2a8f5d1aaa4c433391800210}
+
+\item 
+{\bfseries away\+\_\+team} = game.\+away\+\_\+team\hypertarget{namespaceglobal__update_a8fa294169b3a728c148723e727772df5}{}\label{namespaceglobal__update_a8fa294169b3a728c148723e727772df5}
+
+\item 
+dictionary {\bfseries game\+\_\+dict}
+\item 
+{\bfseries teams\+\_\+index} = Team.\+select(Team.\+id, Team.\+mlbgames\+\_\+name).execute()\hypertarget{namespaceglobal__update_a0fd1e3180de74052ac30d2e658cd9cc6}{}\label{namespaceglobal__update_a0fd1e3180de74052ac30d2e658cd9cc6}
+
+\item 
+{\bfseries game\+\_\+scheduled\+\_\+date}
+\item 
+{\bfseries away\+\_\+runs}\hypertarget{namespaceglobal__update_ae2a6b01480c3a99b27c63a527f0a8d3e}{}\label{namespaceglobal__update_ae2a6b01480c3a99b27c63a527f0a8d3e}
+
+\item 
+{\bfseries home\+\_\+runs}\hypertarget{namespaceglobal__update_a9a18817cfde4467ab9d0a7f97bb78bd2}{}\label{namespaceglobal__update_a9a18817cfde4467ab9d0a7f97bb78bd2}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Gets data from the mlbgame api
+and then updates the existing db entries
+
+Need to doublecheck/tune algo
+\end{DoxyVerb}
+ 
+
+\subsection{Variable Documentation}
+\index{global\+\_\+update@{global\+\_\+update}!game\+\_\+dict@{game\+\_\+dict}}
+\index{game\+\_\+dict@{game\+\_\+dict}!global\+\_\+update@{global\+\_\+update}}
+\subsubsection[{\texorpdfstring{game\+\_\+dict}{game_dict}}]{\setlength{\rightskip}{0pt plus 5cm}dictionary global\+\_\+update.\+game\+\_\+dict}\hypertarget{namespaceglobal__update_a788a9f6338bc02f2c498baf2b0e529a4}{}\label{namespaceglobal__update_a788a9f6338bc02f2c498baf2b0e529a4}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = \{\textcolor{stringliteral}{'mlbgame\_away\_team\_name'}: away\_team,
+2                          \textcolor{stringliteral}{'away\_runs'}: stats.away\_batting.r, \textcolor{comment}{#pylint:disable=no-member}
+3                          \textcolor{stringliteral}{'mlbgame\_home\_team\_name'}: home\_team,
+4                          \textcolor{stringliteral}{'home\_runs'}: stats.home\_batting.r, \textcolor{comment}{#pylint:disable=no-member}
+5                          \textcolor{stringliteral}{'mlbgame\_id\_str'}: game.game\_id,
+6                          \textcolor{stringliteral}{'scheduled\_date'}: game\_d.strftime(\textcolor{stringliteral}{'%Y-%m-%d'})\}
+\end{DoxyCode}
+\index{global\+\_\+update@{global\+\_\+update}!game\+\_\+scheduled\+\_\+date@{game\+\_\+scheduled\+\_\+date}}
+\index{game\+\_\+scheduled\+\_\+date@{game\+\_\+scheduled\+\_\+date}!global\+\_\+update@{global\+\_\+update}}
+\subsubsection[{\texorpdfstring{game\+\_\+scheduled\+\_\+date}{game_scheduled_date}}]{\setlength{\rightskip}{0pt plus 5cm}global\+\_\+update.\+game\+\_\+scheduled\+\_\+date}\hypertarget{namespaceglobal__update_a083f1bcb21fb3ebb27ca4c461abdae98}{}\label{namespaceglobal__update_a083f1bcb21fb3ebb27ca4c461abdae98}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = datetime.strptime(
+2             g[\textcolor{stringliteral}{'scheduled\_date'}], \textcolor{stringliteral}{'%Y-%m-%d'})
+\end{DoxyCode}

@@ -1,0 +1,188 @@
+\hypertarget{namespacemcss}{}\section{mcss Namespace Reference}
+\label{namespacemcss}\index{mcss@{mcss}}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+list {\bfseries sim\+\_\+results} = \mbox{[}$\,$\mbox{]}\hypertarget{namespacemcss_a118e64826a48fb7dbe8e94f0d41b048e}{}\label{namespacemcss_a118e64826a48fb7dbe8e94f0d41b048e}
+
+\item 
+{\bfseries cursor} = database.\+execute\+\_\+sql(\textquotesingle{}select distinct division from teams;\textquotesingle{})\hypertarget{namespacemcss_afbb1f99c5bc09facf42dc6aab22b3ddc}{}\label{namespacemcss_afbb1f99c5bc09facf42dc6aab22b3ddc}
+
+\item 
+list {\bfseries list\+\_\+of\+\_\+divisions} = \mbox{[}row\mbox{[}0\mbox{]} for row in cursor\mbox{]}\hypertarget{namespacemcss_a38274d2c6587000deba8dfe2dcfedb99}{}\label{namespacemcss_a38274d2c6587000deba8dfe2dcfedb99}
+
+\item 
+{\bfseries league\+\_\+teams}
+\item 
+{\bfseries header\+\_\+league\+\_\+teams} = league\+\_\+teams\hypertarget{namespacemcss_a78db834a61f7f593b2f1ade3a1414717}{}\label{namespacemcss_a78db834a61f7f593b2f1ade3a1414717}
+
+\item 
+{\bfseries playoff\+\_\+matrix} = np.\+zeros((30, 3))\hypertarget{namespacemcss_abbc0ebe4969dd30954248b8518a97bfa}{}\label{namespacemcss_abbc0ebe4969dd30954248b8518a97bfa}
+
+\item 
+{\bfseries ite} = int(sys.\+argv\mbox{[}1\mbox{]})\hypertarget{namespacemcss_a3cdb91c921b943b593cd0ef3bd31fc6d}{}\label{namespacemcss_a3cdb91c921b943b593cd0ef3bd31fc6d}
+
+\item 
+{\bfseries binomial\+\_\+win\+\_\+probabilities} = future\+\_\+games\+\_\+dicts()\hypertarget{namespacemcss_a2b2ad601f6c6f3ca19e25090e86d9208}{}\label{namespacemcss_a2b2ad601f6c6f3ca19e25090e86d9208}
+
+\item 
+{\bfseries known\+\_\+wins} = games\+\_\+won\+\_\+to\+\_\+date(return\+\_\+format=\textquotesingle{}matrix\textquotesingle{})\hypertarget{namespacemcss_a0b38d6d89c7bb5f44c3b9088902fded4}{}\label{namespacemcss_a0b38d6d89c7bb5f44c3b9088902fded4}
+
+\item 
+{\bfseries wkdir} = os.\+path.\+join(os.\+path.\+dirname(\+\_\+\+\_\+file\+\_\+\+\_\+))\hypertarget{namespacemcss_ae6fb0b085c3a4430b0c54aa0803e0932}{}\label{namespacemcss_ae6fb0b085c3a4430b0c54aa0803e0932}
+
+\item 
+{\bfseries win\+\_\+matrix} = mcss(binomial\+\_\+win\+\_\+probabilities)\hypertarget{namespacemcss_af3d0af907e5403df5026d9463d7c081b}{}\label{namespacemcss_af3d0af907e5403df5026d9463d7c081b}
+
+\item 
+{\bfseries total\+\_\+wins} = np.\+sum(win\+\_\+matrix, axis=0)\hypertarget{namespacemcss_a7950eb7ff9ce9bc663df507dcfb5ad3b}{}\label{namespacemcss_a7950eb7ff9ce9bc663df507dcfb5ad3b}
+
+\item 
+list {\bfseries dt} = \mbox{[}x for x in league\+\_\+teams if x\mbox{[}\textquotesingle{}division\textquotesingle{}\mbox{]} == d\mbox{]}\hypertarget{namespacemcss_a84688ca2c99d77d484ac7f3f77d62d55}{}\label{namespacemcss_a84688ca2c99d77d484ac7f3f77d62d55}
+
+\item 
+list {\bfseries other\+\_\+division\+\_\+team\+\_\+ids}
+\item 
+list {\bfseries other\+\_\+league\+\_\+team\+\_\+ids}
+\item 
+{\bfseries division\+\_\+wins}
+\item 
+{\bfseries league\+\_\+wins}
+\item 
+{\bfseries new\+\_\+dt}
+\item 
+list {\bfseries al\+\_\+wc}
+\item 
+{\bfseries key}\hypertarget{namespacemcss_a621add2c31a418a7dbbe75b049ba0d43}{}\label{namespacemcss_a621add2c31a418a7dbbe75b049ba0d43}
+
+\item 
+list {\bfseries nl\+\_\+wc}
+\item 
+list {\bfseries al\+\_\+wc\+\_\+winners} = \mbox{[}x\mbox{[}\textquotesingle{}team\+\_\+id\textquotesingle{}\mbox{]} for x in al\+\_\+wc\mbox{[}0\+:2\mbox{]}\mbox{]}\hypertarget{namespacemcss_a5880f4b7d1465920413bee7738a5d98c}{}\label{namespacemcss_a5880f4b7d1465920413bee7738a5d98c}
+
+\item 
+list {\bfseries nl\+\_\+wc\+\_\+winners} = \mbox{[}x\mbox{[}\textquotesingle{}team\+\_\+id\textquotesingle{}\mbox{]} for x in nl\+\_\+wc\mbox{[}0\+:2\mbox{]}\mbox{]}\hypertarget{namespacemcss_a861f974161cf9dc8b5c3f65b5c09ccb9}{}\label{namespacemcss_a861f974161cf9dc8b5c3f65b5c09ccb9}
+
+\item 
+{\bfseries summary\+\_\+table}
+\item 
+\hyperlink{namespacemcss_a4ffc2357edc2e03044c10aef3db8a7eb}{file\+\_\+out}
+\begin{DoxyCompactList}\small\item\em Print to Log File \#. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}A bunch of functions that I use to do Monte Carlo simulations of issues
+_Performs Monte Carlo simulation using MLB
+schedule and then determines playoff teams.
+
+Tiebreaker logic to be developed.
+Other functionality (such as processing daily updates)
+are far more important.
+
+MAM\end{DoxyVerb}
+ 
+
+\subsection{Variable Documentation}
+\index{mcss@{mcss}!al\+\_\+wc@{al\+\_\+wc}}
+\index{al\+\_\+wc@{al\+\_\+wc}!mcss@{mcss}}
+\subsubsection[{\texorpdfstring{al\+\_\+wc}{al_wc}}]{\setlength{\rightskip}{0pt plus 5cm}list mcss.\+al\+\_\+wc}\hypertarget{namespacemcss_a196b761c6008151bda7257e9823cab63}{}\label{namespacemcss_a196b761c6008151bda7257e9823cab63}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = [
+2             x \textcolor{keywordflow}{for} x \textcolor{keywordflow}{in} sim\_results[0] \textcolor{keywordflow}{if} (
+3                 x[\textcolor{stringliteral}{'div\_winner'}] \textcolor{keywordflow}{is} \textcolor{keyword}{False} \textcolor{keywordflow}{and} x[\textcolor{stringliteral}{'league'}] == \textcolor{stringliteral}{'AL'})]
+\end{DoxyCode}
+\index{mcss@{mcss}!division\+\_\+wins@{division\+\_\+wins}}
+\index{division\+\_\+wins@{division\+\_\+wins}!mcss@{mcss}}
+\subsubsection[{\texorpdfstring{division\+\_\+wins}{division_wins}}]{\setlength{\rightskip}{0pt plus 5cm}mcss.\+division\+\_\+wins}\hypertarget{namespacemcss_ad1c91060a8b2a8e7539fe2af56de63c2}{}\label{namespacemcss_ad1c91060a8b2a8e7539fe2af56de63c2}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = sum([win\_matrix[i - 1, t[\textcolor{stringliteral}{'team\_id'}] - 1]
+2                                      \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} other\_division\_team\_ids])
+\end{DoxyCode}
+\index{mcss@{mcss}!file\+\_\+out@{file\+\_\+out}}
+\index{file\+\_\+out@{file\+\_\+out}!mcss@{mcss}}
+\subsubsection[{\texorpdfstring{file\+\_\+out}{file_out}}]{\setlength{\rightskip}{0pt plus 5cm}mcss.\+file\+\_\+out}\hypertarget{namespacemcss_a4ffc2357edc2e03044c10aef3db8a7eb}{}\label{namespacemcss_a4ffc2357edc2e03044c10aef3db8a7eb}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = open(
+2         wkdir +
+3         \textcolor{stringliteral}{'MCSS\_'} +
+4         datetime.now().strftime(\textcolor{stringliteral}{'%Y-%m-%d'}) +
+5         \textcolor{stringliteral}{'\_'} +
+6         str(ite) +
+7         \textcolor{stringliteral}{'\_iter.txt'},
+8         \textcolor{stringliteral}{'w'})
+\end{DoxyCode}
+
+
+Print to Log File \#. 
+
+\index{mcss@{mcss}!league\+\_\+teams@{league\+\_\+teams}}
+\index{league\+\_\+teams@{league\+\_\+teams}!mcss@{mcss}}
+\subsubsection[{\texorpdfstring{league\+\_\+teams}{league_teams}}]{\setlength{\rightskip}{0pt plus 5cm}list mcss.\+league\+\_\+teams}\hypertarget{namespacemcss_a94bc0de86c2e77402b118a7f7cf60e9b}{}\label{namespacemcss_a94bc0de86c2e77402b118a7f7cf60e9b}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = Team.select(
+2         Team.team\_name,
+3         Team.id,
+4         Team.division,
+5         Team.league)
+\end{DoxyCode}
+\index{mcss@{mcss}!league\+\_\+wins@{league\+\_\+wins}}
+\index{league\+\_\+wins@{league\+\_\+wins}!mcss@{mcss}}
+\subsubsection[{\texorpdfstring{league\+\_\+wins}{league_wins}}]{\setlength{\rightskip}{0pt plus 5cm}mcss.\+league\+\_\+wins}\hypertarget{namespacemcss_a7157ddcf5faf0a3e3962a9a9a321b675}{}\label{namespacemcss_a7157ddcf5faf0a3e3962a9a9a321b675}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = sum([win\_matrix[i - 1, t[\textcolor{stringliteral}{'team\_id'}] - 1]
+2                                    \textcolor{keywordflow}{for} i \textcolor{keywordflow}{in} other\_league\_team\_ids])
+\end{DoxyCode}
+\index{mcss@{mcss}!new\+\_\+dt@{new\+\_\+dt}}
+\index{new\+\_\+dt@{new\+\_\+dt}!mcss@{mcss}}
+\subsubsection[{\texorpdfstring{new\+\_\+dt}{new_dt}}]{\setlength{\rightskip}{0pt plus 5cm}mcss.\+new\+\_\+dt}\hypertarget{namespacemcss_aeedb6bca27d8005d9dd359eb37632167}{}\label{namespacemcss_aeedb6bca27d8005d9dd359eb37632167}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = sorted(
+2                 dt, key=\textcolor{keyword}{lambda} k: (-k[\textcolor{stringliteral}{'total\_wins'}], -k[\textcolor{stringliteral}{'division\_wins'}], -k[\textcolor{stringliteral}{'league\_wins'}]))
+\end{DoxyCode}
+\index{mcss@{mcss}!nl\+\_\+wc@{nl\+\_\+wc}}
+\index{nl\+\_\+wc@{nl\+\_\+wc}!mcss@{mcss}}
+\subsubsection[{\texorpdfstring{nl\+\_\+wc}{nl_wc}}]{\setlength{\rightskip}{0pt plus 5cm}list mcss.\+nl\+\_\+wc}\hypertarget{namespacemcss_a91351d4c9aaef5a99d3cbddb7b7ba641}{}\label{namespacemcss_a91351d4c9aaef5a99d3cbddb7b7ba641}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = [
+2             x \textcolor{keywordflow}{for} x \textcolor{keywordflow}{in} sim\_results[0] \textcolor{keywordflow}{if} (
+3                 x[\textcolor{stringliteral}{'div\_winner'}] \textcolor{keywordflow}{is} \textcolor{keyword}{False} \textcolor{keywordflow}{and} x[\textcolor{stringliteral}{'league'}] == \textcolor{stringliteral}{'NL'})]
+\end{DoxyCode}
+\index{mcss@{mcss}!other\+\_\+division\+\_\+team\+\_\+ids@{other\+\_\+division\+\_\+team\+\_\+ids}}
+\index{other\+\_\+division\+\_\+team\+\_\+ids@{other\+\_\+division\+\_\+team\+\_\+ids}!mcss@{mcss}}
+\subsubsection[{\texorpdfstring{other\+\_\+division\+\_\+team\+\_\+ids}{other_division_team_ids}}]{\setlength{\rightskip}{0pt plus 5cm}list mcss.\+other\+\_\+division\+\_\+team\+\_\+ids}\hypertarget{namespacemcss_a34f37c5a402c79f9852c87b7570304c9}{}\label{namespacemcss_a34f37c5a402c79f9852c87b7570304c9}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = [x[\textcolor{stringliteral}{'team\_id'}]
+2                                            \textcolor{keywordflow}{for} x \textcolor{keywordflow}{in} dt \textcolor{keywordflow}{if} x[\textcolor{stringliteral}{'team\_id'}] != t[\textcolor{stringliteral}{'team\_id'}]]
+\end{DoxyCode}
+\index{mcss@{mcss}!other\+\_\+league\+\_\+team\+\_\+ids@{other\+\_\+league\+\_\+team\+\_\+ids}}
+\index{other\+\_\+league\+\_\+team\+\_\+ids@{other\+\_\+league\+\_\+team\+\_\+ids}!mcss@{mcss}}
+\subsubsection[{\texorpdfstring{other\+\_\+league\+\_\+team\+\_\+ids}{other_league_team_ids}}]{\setlength{\rightskip}{0pt plus 5cm}list mcss.\+other\+\_\+league\+\_\+team\+\_\+ids}\hypertarget{namespacemcss_a348e552da07298068284f2e358fe9cf4}{}\label{namespacemcss_a348e552da07298068284f2e358fe9cf4}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = [
+2                     x[\textcolor{stringliteral}{'team\_id'}] \textcolor{keywordflow}{for} x \textcolor{keywordflow}{in} league\_teams \textcolor{keywordflow}{if} x[\textcolor{stringliteral}{'league'}] == t[\textcolor{stringliteral}{'league'}]]
+\end{DoxyCode}
+\index{mcss@{mcss}!summary\+\_\+table@{summary\+\_\+table}}
+\index{summary\+\_\+table@{summary\+\_\+table}!mcss@{mcss}}
+\subsubsection[{\texorpdfstring{summary\+\_\+table}{summary_table}}]{\setlength{\rightskip}{0pt plus 5cm}mcss.\+summary\+\_\+table}\hypertarget{namespacemcss_a60128f161d9bc999e29b667b81be2ba1}{}\label{namespacemcss_a60128f161d9bc999e29b667b81be2ba1}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = tabulate(
+2         header\_league\_teams,
+3         headers=[
+4             \textcolor{stringliteral}{'Division'},
+5             \textcolor{stringliteral}{'Team'},
+6             \textcolor{stringliteral}{'Projected Wins'},
+7             \textcolor{stringliteral}{'Wild Card Odds'},
+8             \textcolor{stringliteral}{'Division Odds'},
+9             \textcolor{stringliteral}{'Playoff Odds'}],
+10         tablefmt=\textcolor{stringliteral}{'rst'})
+\end{DoxyCode}

@@ -1,0 +1,83 @@
+\hypertarget{namespacemcss__average}{}\section{mcss\+\_\+average Namespace Reference}
+\label{namespacemcss__average}\index{mcss\+\_\+average@{mcss\+\_\+average}}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries wkdir} = os.\+path.\+join(os.\+path.\+dirname(\+\_\+\+\_\+file\+\_\+\+\_\+))\hypertarget{namespacemcss__average_ae616d8308502bb701c7a6be99d38dbfc}{}\label{namespacemcss__average_ae616d8308502bb701c7a6be99d38dbfc}
+
+\item 
+{\bfseries games\+\_\+won} = games\+\_\+won\+\_\+to\+\_\+date()\hypertarget{namespacemcss__average_af0407a471b8414f68f5d5b59f1b57b95}{}\label{namespacemcss__average_af0407a471b8414f68f5d5b59f1b57b95}
+
+\item 
+{\bfseries league\+\_\+teams}
+\item 
+{\bfseries ite} = int(sys.\+argv\mbox{[}1\mbox{]})\hypertarget{namespacemcss__average_ac8bf878fa7748c48c2cc9021c33aa5ec}{}\label{namespacemcss__average_ac8bf878fa7748c48c2cc9021c33aa5ec}
+
+\item 
+{\bfseries binomial\+\_\+win\+\_\+probabilities} = future\+\_\+games\+\_\+dicts()\hypertarget{namespacemcss__average_a37592c89802506ab77079b66a773474a}{}\label{namespacemcss__average_a37592c89802506ab77079b66a773474a}
+
+\item 
+{\bfseries sim\+\_\+results} = np.\+zeros(30)\hypertarget{namespacemcss__average_a352c20dbeaed4f09a117aa8d5f6a0117}{}\label{namespacemcss__average_a352c20dbeaed4f09a117aa8d5f6a0117}
+
+\item 
+{\bfseries axis}\hypertarget{namespacemcss__average_acd5c8d2b0bdff94cce3ca98fae5d9775}{}\label{namespacemcss__average_acd5c8d2b0bdff94cce3ca98fae5d9775}
+
+\item 
+\hyperlink{namespacemcss__average_ad3db1f8d740256bab2c357f5d8510c27}{key}\hypertarget{namespacemcss__average_ad3db1f8d740256bab2c357f5d8510c27}{}\label{namespacemcss__average_ad3db1f8d740256bab2c357f5d8510c27}
+
+\begin{DoxyCompactList}\small\item\em Writing the table to screen \#. \end{DoxyCompactList}\item 
+{\bfseries averages\+\_\+table}
+\item 
+\hyperlink{namespacemcss__average_af970b09eef3f66efa462ad2bf266a9a0}{file\+\_\+out}
+\begin{DoxyCompactList}\small\item\em Print to Log File \#. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}A bunch of functions that I use to do Monte Carlo simulations of issues
+This function returns "raw projected wins". A good teaser.
+\end{DoxyVerb}
+ 
+
+\subsection{Variable Documentation}
+\index{mcss\+\_\+average@{mcss\+\_\+average}!averages\+\_\+table@{averages\+\_\+table}}
+\index{averages\+\_\+table@{averages\+\_\+table}!mcss\+\_\+average@{mcss\+\_\+average}}
+\subsubsection[{\texorpdfstring{averages\+\_\+table}{averages_table}}]{\setlength{\rightskip}{0pt plus 5cm}mcss\+\_\+average.\+averages\+\_\+table}\hypertarget{namespacemcss__average_ad2959c222235027543432c97be938654}{}\label{namespacemcss__average_ad2959c222235027543432c97be938654}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = tabulate(
+2     league\_teams,
+3     headers=[
+4         \textcolor{stringliteral}{'Division'},
+5         \textcolor{stringliteral}{'Team'},
+6         \textcolor{stringliteral}{'Projected Wins'}],
+7     tablefmt=\textcolor{stringliteral}{'rst'})
+\end{DoxyCode}
+\index{mcss\+\_\+average@{mcss\+\_\+average}!file\+\_\+out@{file\+\_\+out}}
+\index{file\+\_\+out@{file\+\_\+out}!mcss\+\_\+average@{mcss\+\_\+average}}
+\subsubsection[{\texorpdfstring{file\+\_\+out}{file_out}}]{\setlength{\rightskip}{0pt plus 5cm}mcss\+\_\+average.\+file\+\_\+out}\hypertarget{namespacemcss__average_af970b09eef3f66efa462ad2bf266a9a0}{}\label{namespacemcss__average_af970b09eef3f66efa462ad2bf266a9a0}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = open(
+2     wkdir +
+3     \textcolor{stringliteral}{'Monte\_Carlo\_Average\_Wins\_'} +
+4     datetime.now().strftime(\textcolor{stringliteral}{'%Y-%m-%d'}) +
+5     \textcolor{stringliteral}{'\_'} +
+6     str(ite) +
+7     \textcolor{stringliteral}{'\_iter.txt'},
+8     \textcolor{stringliteral}{'w'})
+\end{DoxyCode}
+
+
+Print to Log File \#. 
+
+\index{mcss\+\_\+average@{mcss\+\_\+average}!league\+\_\+teams@{league\+\_\+teams}}
+\index{league\+\_\+teams@{league\+\_\+teams}!mcss\+\_\+average@{mcss\+\_\+average}}
+\subsubsection[{\texorpdfstring{league\+\_\+teams}{league_teams}}]{\setlength{\rightskip}{0pt plus 5cm}list mcss\+\_\+average.\+league\+\_\+teams}\hypertarget{namespacemcss__average_a8e4d9df3ff28d04b5c35ec9c051bef0f}{}\label{namespacemcss__average_a8e4d9df3ff28d04b5c35ec9c051bef0f}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+1 = Team.select(
+2         Team.team\_name,
+3         Team.id,
+4         Team.division,
+5         Team.league)
+\end{DoxyCode}
