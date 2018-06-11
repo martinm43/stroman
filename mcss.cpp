@@ -11,7 +11,7 @@
 #include <armadillo>
 #include <mcss.h>
 
-#define MAX_ITER 10
+#define MAX_ITER 1
 
 using namespace std;
 using namespace arma;
@@ -28,8 +28,6 @@ int main()
     //Two vectors for holding key information to be used later
     vector<Game> games;
     vector<Team> teams;
-    vector<Team> nat_league;
-    vector<Team> amer_league;
 
     // Matrix examples.
     mat Head_To_Head = zeros<mat>(30,30);
@@ -225,26 +223,30 @@ int main()
                 MCSS_Head_To_Head.row(home_team_id)[away_team_id]++;
             else
                 MCSS_Head_To_Head.row(away_team_id)[home_team_id]++;
-
-
         }
 
         debug_total.zeros();
         debug_total = MCSS_Head_To_Head+Head_To_Head;
 
+        //Calculate raw wins - only concerned with that now (can implement tie breaking functionality later)
         mat total_wins = sum(debug_total.t());
 
-        //cout << total_wins << endl;
+        //Create a copy of the teams list, only defined in the scope of this loop
         vector<Team> sim_teams = teams;
 
-
+        //Round all wins
         for(int i=0;i<30;i++){
-            //cout << round(total_wins[i]) << endl;
             sim_teams[i].set_total_wins(round(total_wins[i]));
         }
 
         sort(sim_teams.begin(),sim_teams.end(),teams_sort());
 
+        //Create american league and national league vectors.
+        vector<Team>::const_iterator first = sim_teams.begin();
+        vector<Team>::const_iterator mid = sim_teams.begin() + half_size;
+        vector<Team>::const_iterator last = sim_teams.end();
+        vector<Team> amer_league(first,mid);
+        vector<Team> nat_league(mid,last);
 
         //iterate through list of teams to determine division winners.
         for(int i=0;i<30;i++){
@@ -255,35 +257,27 @@ int main()
 
             if(i==0 || i==5 || i == 10 || i== 15 | i==20 | i==25){
                 sim_playoff_total.row(team_id-1)[0]++;
-
+            }
             /* need to sort the teams that aren't leaders in each league
                 so 1-4,6-9,11-14 */
 
+        }
+
+            //Wildcard calculation - remember things created inside loops only exist inside the loop
+            for(int team_i=0;team_i<3;team_i++){
+                string team_name = amer_league[team_i].get_mlbgames_name();
+                int team_wins = amer_league[team_i].get_total_wins();
+                cout << team_name << ": " << team_wins << endl; 
             }
 
-            //Wildcard calculation
-        }
-
-            nat_league(sim_teams.begin(), sim_teams.begin()+half_size);
-            amer_league(sim_teams.begin()+half_size, sim_teams.end());
 
     }
 
-        for(int i=0;i<15;i++){
-            string team_name = nat_league[i].get_mlbgames_name();
-            int team_wins = nat_league[i].get_total_wins();
-            cout << team_name << ": " << team_wins << endl; 
-        }
 
-
-    for(int i=0;i<30;i++){
-        sim_playoff_total.row(i)[2]=sim_playoff_total.row(i)[0]+sim_playoff_total.row(i)[1];
-    }
-
-    cout << "Debug printing a preliminary table w. division wins and wildcard wins." << endl;
-    for(int i=0;i<30;i++){
-        cout << i+1 << " " << sim_playoff_total.row(i)[0] << endl;
-    }
+    //cout << "Debug printing a preliminary table w. division wins and wildcard wins." << endl;
+    //for(int i=0;i<30;i++){
+    //    cout << i+1 << " " << sim_playoff_total.row(i)[0] << endl;
+    //}
 
 
 return 0;
