@@ -233,7 +233,7 @@ int main()
          << left << setw(12) << " Team" << "|" 
          << left << setw(3) << " Wins" << endl;
 
-    cout<<"********************************"<<endl;
+    cout<<"***********************************"<<endl;
 
     for(int i=0;i<30;i++){
         string team_name = teams[i].get_mlbgames_name();
