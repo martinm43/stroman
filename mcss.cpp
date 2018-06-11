@@ -11,7 +11,7 @@
 #include <armadillo>
 #include <mcss.h>
 
-#define MAX_ITER 100000
+#define MAX_ITER 10
 
 using namespace std;
 using namespace arma;
@@ -28,6 +28,8 @@ int main()
     //Two vectors for holding key information to be used later
     vector<Game> games;
     vector<Team> teams;
+    vector<Team> nat_league;
+    vector<Team> amer_league;
 
     // Matrix examples.
     mat Head_To_Head = zeros<mat>(30,30);
@@ -243,11 +245,10 @@ int main()
 
         sort(sim_teams.begin(),sim_teams.end(),teams_sort());
 
-        //cout << "Printing a sorted list of teams." << endl;
 
+        //iterate through list of teams to determine division winners.
         for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_mlbgames_name();
-                //cout << teams[i].get_division() << endl;
             string team_division = sim_teams[i].get_division();
             int team_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
@@ -261,12 +262,19 @@ int main()
             }
 
             //Wildcard calculation
-            vector<Team> nat_league(sim_teams.begin(), sim_teams.begin()+half_size);
-            vector<Team> amer_league(sim_teams.begin()+half_size, sim_teams.end());
         }
 
+            nat_league(sim_teams.begin(), sim_teams.begin()+half_size);
+            amer_league(sim_teams.begin()+half_size, sim_teams.end());
 
     }
+
+        for(int i=0;i<15;i++){
+            string team_name = nat_league[i].get_mlbgames_name();
+            int team_wins = nat_league[i].get_total_wins();
+            cout << team_name << ": " << team_wins << endl; 
+        }
+
 
     for(int i=0;i<30;i++){
         sim_playoff_total.row(i)[2]=sim_playoff_total.row(i)[0]+sim_playoff_total.row(i)[1];
@@ -274,7 +282,7 @@ int main()
 
     cout << "Debug printing a preliminary table w. division wins and wildcard wins." << endl;
     for(int i=0;i<30;i++){
-    cout << i+1 << " " << sim_playoff_total.row(i)[0] << endl;
+        cout << i+1 << " " << sim_playoff_total.row(i)[0] << endl;
     }
 
 
