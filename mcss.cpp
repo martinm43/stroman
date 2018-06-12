@@ -11,7 +11,7 @@
 #include <armadillo>
 #include <mcss.h>
 
-#define MAX_ITER 1
+#define MAX_ITER 10000
 
 using namespace std;
 using namespace arma;
@@ -227,7 +227,7 @@ int main()
         vector<Team>::const_iterator mid = sim_teams.begin() + half_size;
         vector<Team>::const_iterator last = sim_teams.end();
         vector<Team> amer_league(first,mid);
-        vector<Team> nat_league(mid,last);
+        vector<Team> nat_league(mid+1,last); //When you split, you need to start one more entry over.
 
         //American League Wildcard Teams
         vector<Team>::const_iterator amer_league_ac_first = amer_league.begin()+1;
@@ -242,7 +242,7 @@ int main()
         for(int i=0;i<amer_league_wc.size();i++){
                 string team_name = amer_league_wc[i].get_mlbgames_name();
                 int team_wins = amer_league_wc[i].get_total_wins();
-                cout << team_name << ": " << team_wins << endl; 
+                //cout << team_name << ": " << team_wins << endl; 
 
         }
 
@@ -259,9 +259,17 @@ int main()
         for(int i=0;i<nat_league_wc.size();i++){
                 string team_name = nat_league_wc[i].get_mlbgames_name();
                 int team_wins = nat_league_wc[i].get_total_wins();
-                cout << team_name << ": " << team_wins << endl; 
+                //cout << team_name << ": " << team_wins << endl; 
 
         }
+
+        for(int i=0;i<2;i++){
+                int al_wc_team_id = amer_league_wc[i].get_team_id();
+                int nl_wc_team_id = nat_league_wc[i].get_team_id();
+                sim_playoff_total.row(al_wc_team_id-1)[1]++;
+                sim_playoff_total.row(nl_wc_team_id-1)[1]++;
+        }
+
 
        //iterate through list of teams to determine division winners.
         for(int i=0;i<30;i++){
@@ -288,6 +296,10 @@ int main()
 
     }
 
+    for(int i=0;i<30;i++){
+       sim_playoff_total.row(i)[2] = sim_playoff_total.row(i)[1] + sim_playoff_total.row(i)[0];
+    }
+    cout << sim_playoff_total << endl;
 
 return 0;
 }
