@@ -88,6 +88,8 @@ struct wins_sort
     {
         if (Team1.get_total_wins() > Team2.get_total_wins())
             return true;
+        else 
+            return false;
     } 
 };
 
