@@ -147,7 +147,7 @@ if __name__ == '__main__':
     # Print out the headers and a table.
     header_league_teams.sort(
         key=lambda x: (
-            x['division'], -x['Playoff Odds'], -x['Total Wins']))
+            x['team_id'], -x['Playoff Odds'], -x['Total Wins'])) #temporary debug change, sort by division normally
     header_league_teams = [
         (x['division'],
          x['team_name'],
