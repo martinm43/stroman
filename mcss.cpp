@@ -16,6 +16,15 @@
 using namespace std;
 using namespace arma;
 
+template<class Matrix>
+void print_matrix(Matrix matrix) {
+    matrix.print(std::cout);
+}
+
+//only require this instantiation as we are only using the vanilla analysis tool
+template void print_matrix<arma::mat>(arma::mat matrix);
+
+
 int main()
 {
     sqlite3 *db;
@@ -61,11 +70,7 @@ int main()
     }
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        //Writing out the games to the screen (temporary for now, just for error checking)
-        //cout << "Away team id: " << sqlite3_column_int(stmt,0) << endl;
-        //cout << "Away team runs scored: " << sqlite3_column_int(stmt,1) << endl;
 
-        //Store in our vector
         int away_team_id = sqlite3_column_int(stmt,0);
         int away_runs = sqlite3_column_int(stmt,1);
         int home_team_id = sqlite3_column_int(stmt,2);
@@ -178,6 +183,11 @@ int main()
          future_games.row(future_games_row)[1] = sqlite3_column_double(stmt,1);
          future_games.row(future_games_row)[2] = sqlite3_column_int(stmt,2);
          future_games.row(future_games_row)[3] = sqlite3_column_double(stmt,3);
+         /*
+            TO DO: Add the actual calculation of the binomial win odds to the array. It may not be 
+            possible within ihis loop, in order to allow for debugging against its Python counterpart.
+            Be careful! Also you'll have to expand the array/perform additional downstream calculations - MAM
+         */
          future_games_row++;
          //cout << future_games_row << endl;
     }
@@ -238,12 +248,9 @@ int main()
 
         //Sort then print - TO DO: convert to a generic struct don't use the name struct
         sort(amer_league_wc.begin(),amer_league_wc.end(),wins_sort());
-        //Debug print
-        for(int i=0;i<amer_league_wc.size();i++){
-                string team_name = amer_league_wc[i].get_mlbgames_name();
-                int team_wins = amer_league_wc[i].get_total_wins();
-                //cout << team_name << ": " << team_wins << endl; 
-
+        for(vector<Team>::iterator it = amer_league_wc.begin(); it != amer_league_wc.end(); ++it){
+                string team_name = (*it).get_mlbgames_name();
+                int team_wins = (*it).get_total_wins();
         }
 
         //National League Wildcard Teams
@@ -255,12 +262,9 @@ int main()
 
         //Sort then print - TO DO: convert to a generic struct don't use the name struct
         sort(nat_league_wc.begin(),nat_league_wc.end(),wins_sort());
-        //Debug print
-        for(int i=0;i<nat_league_wc.size();i++){
-                string team_name = nat_league_wc[i].get_mlbgames_name();
-                int team_wins = nat_league_wc[i].get_total_wins();
-                //cout << team_name << ": " << team_wins << endl; 
-
+        for(vector<Team>::iterator it = nat_league_wc.begin(); it != nat_league_wc.end(); ++it){
+                string team_name = (*it).get_mlbgames_name();
+                int team_wins = (*it).get_total_wins();
         }
 
         for(int i=0;i<2;i++){
@@ -285,14 +289,6 @@ int main()
                 so 1-4,6-9,11-14 */
 
         }
-
-            //Wildcard calculation - remember things created inside loops only exist inside the loop
-            //for(int team_i=0;team_i<3;team_i++){
-            //    string team_name = amer_league[team_i].get_mlbgames_name();
-            //    int team_wins = amer_league[team_i].get_total_wins();
-            //    cout << team_name << ": " << team_wins << endl; 
-            //}
-
 
     }
 

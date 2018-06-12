@@ -237,4 +237,4 @@ def mcss(game_dict_list):
 
 if __name__ == '__main__':
     print('1')
-    
+    pprint(future_games_dicts())
