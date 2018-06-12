@@ -82,4 +82,13 @@ struct teams_sort
     } 
 };
 
+struct wins_sort
+{
+    inline bool operator()(const Team& Team1, const Team& Team2)
+    {
+        if (Team1.get_total_wins() > Team2.get_total_wins())
+            return true;
+    } 
+};
+
 #endif

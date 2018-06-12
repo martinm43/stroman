@@ -79,22 +79,8 @@ int main()
     }
 
     cout << "Games successfully entered" << endl;
-    //cout << "Head to Head Matrix:" << endl;
-    //cout << Head_To_Head << endl;
 
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
-
-
-/*
-    SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating "
-                    "from teams as t "
-                    "inner join SRS_Ratings as s "
-                    "on s.team_id=t.id "
-                    "where s.rating <> 0 "
-                    "and s.rating_date = (select rating_date from SRS_ratings "
-                    "order by rating_date desc limit 1) "
-                    "order by t.id asc ";
-*/
 
     SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating "
                     "from teams as t "
@@ -214,11 +200,6 @@ int main()
             int home_team_id = future_games.row(i)[2]-1;
             float home_team_rtg = future_games.row(i)[3];
 
-            //cout << away_team_id << endl;
-            //cout << away_team_rtg << endl;
-            //cout << home_team_id << endl;
-            //cout << home_team_rtg << endl;
-
             if (uniformRandom()<SRS_regress(away_team_rtg,home_team_rtg))
                 MCSS_Head_To_Head.row(home_team_id)[away_team_id]++;
             else
@@ -248,7 +229,41 @@ int main()
         vector<Team> amer_league(first,mid);
         vector<Team> nat_league(mid,last);
 
-        //iterate through list of teams to determine division winners.
+        //American League Wildcard Teams
+        vector<Team>::const_iterator amer_league_ac_first = amer_league.begin()+1;
+        vector<Team>::const_iterator amer_league_ac_end = amer_league.begin()+4;
+        vector<Team> amer_league_wc(amer_league_ac_first,amer_league_ac_end);
+        amer_league_wc.insert(amer_league_wc.end(),amer_league.begin()+6,amer_league.begin()+9);
+        amer_league_wc.insert(amer_league_wc.end(),amer_league.begin()+11,amer_league.begin()+14);
+
+        //Sort then print - TO DO: convert to a generic struct don't use the name struct
+        sort(amer_league_wc.begin(),amer_league_wc.end(),wins_sort());
+        //Debug print
+        for(int i=0;i<amer_league_wc.size();i++){
+                string team_name = amer_league_wc[i].get_mlbgames_name();
+                int team_wins = amer_league_wc[i].get_total_wins();
+                cout << team_name << ": " << team_wins << endl; 
+
+        }
+
+        //National League Wildcard Teams
+        vector<Team>::const_iterator nat_league_ac_first = nat_league.begin()+1;
+        vector<Team>::const_iterator nat_league_ac_end = nat_league.begin()+4;
+        vector<Team> nat_league_wc(nat_league_ac_first,nat_league_ac_end);
+        nat_league_wc.insert(nat_league_wc.end(),nat_league.begin()+6,nat_league.begin()+9);
+        nat_league_wc.insert(nat_league_wc.end(),nat_league.begin()+11,nat_league.begin()+14);
+
+        //Sort then print - TO DO: convert to a generic struct don't use the name struct
+        sort(nat_league_wc.begin(),nat_league_wc.end(),wins_sort());
+        //Debug print
+        for(int i=0;i<nat_league_wc.size();i++){
+                string team_name = nat_league_wc[i].get_mlbgames_name();
+                int team_wins = nat_league_wc[i].get_total_wins();
+                cout << team_name << ": " << team_wins << endl; 
+
+        }
+
+       //iterate through list of teams to determine division winners.
         for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_mlbgames_name();
             string team_division = sim_teams[i].get_division();
@@ -264,20 +279,14 @@ int main()
         }
 
             //Wildcard calculation - remember things created inside loops only exist inside the loop
-            for(int team_i=0;team_i<3;team_i++){
-                string team_name = amer_league[team_i].get_mlbgames_name();
-                int team_wins = amer_league[team_i].get_total_wins();
-                cout << team_name << ": " << team_wins << endl; 
-            }
+            //for(int team_i=0;team_i<3;team_i++){
+            //    string team_name = amer_league[team_i].get_mlbgames_name();
+            //    int team_wins = amer_league[team_i].get_total_wins();
+            //    cout << team_name << ": " << team_wins << endl; 
+            //}
 
 
     }
-
-
-    //cout << "Debug printing a preliminary table w. division wins and wildcard wins." << endl;
-    //for(int i=0;i<30;i++){
-    //    cout << i+1 << " " << sim_playoff_total.row(i)[0] << endl;
-    //}
 
 
 return 0;
