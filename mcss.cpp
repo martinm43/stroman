@@ -11,7 +11,7 @@
 #include <armadillo>
 #include <mcss.h>
 
-#define MAX_ITER 1000000
+#define MAX_ITER 10000
 
 using namespace std;
 using namespace arma;
@@ -297,8 +297,16 @@ int main()
     }
 
     for(int i=0;i<30;i++){
-       sim_playoff_total.row(i)[2] = sim_playoff_total.row(i)[1] + sim_playoff_total.row(i)[0];
+        float wild_card_odds = sim_playoff_total.row(i)[0]/MAX_ITER;
+        float division_odds = sim_playoff_total.row(i)[1]/MAX_ITER;
+        float playoff_odds = (sim_playoff_total.row(i)[0] + sim_playoff_total.row(i)[1])/MAX_ITER;
+        teams[i].set_wild_card_odds(wild_card_odds);
+        teams[i].set_division_odds(division_odds);
+        teams[i].set_playoff_odds(playoff_odds);
+        cout << teams[i].get_mlbgames_name() << " : " << teams[i].get_playoff_odds() << endl;
     }
+
+    
     cout << sim_playoff_total << endl;
 
 return 0;

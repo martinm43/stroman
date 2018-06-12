@@ -36,8 +36,11 @@ private:
     std::string _abbreviation;
     std::string _division;
     std::string _league;
-    float _rating;
-    int _total_wins;
+    float _rating; //these all make sense to have defaults
+    int _total_wins; //default total wins at 0
+    float _wild_card_odds;
+    float _division_odds;
+    float _playoff_odds;
 
 public:
 
@@ -54,10 +57,18 @@ public:
     std::string get_division() const {return _division;}
     std::string get_league() const {return _league;}
     float get_rating() const {return _rating;}
+    int get_total_wins() const {return _total_wins;}
+
 
     void set_total_wins(int val) {_total_wins = val;}
-    int get_total_wins() const {return _total_wins;}
+    void set_wild_card_odds(float val) {_wild_card_odds = val;}
+    void set_division_odds(float val) {_division_odds = val;}
+    void set_playoff_odds(float val) {_playoff_odds = val;}
+    float get_wild_card_odds() const {return _wild_card_odds;}
+    float get_division_odds() const {return _division_odds;}
+    float get_playoff_odds() const {return _playoff_odds;}
 };
+
 
 double SRS_regress(double rating_away, double rating_home)
 {
