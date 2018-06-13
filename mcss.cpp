@@ -11,7 +11,7 @@
 #include <armadillo>
 #include <mcss.h>
 
-#define MAX_ITER 10000000
+#define MAX_ITER 10000
 
 using namespace std;
 using namespace arma;
@@ -299,8 +299,9 @@ int main()
         teams[i].set_wild_card_odds(wild_card_odds);
         teams[i].set_division_odds(division_odds);
         teams[i].set_playoff_odds(playoff_odds);
-        cout << teams[i].get_mlbgames_name() << " : " << teams[i].get_playoff_odds() << endl;
+        cout << teams[i].get_mlbgames_name() << " : " 
+          << fixed << setprecision(1) << teams[i].get_playoff_odds()*100 << "%" << endl;
     }
-
+    cout << MAX_ITER << " iterations complete." << endl;
 return 0;
 }
