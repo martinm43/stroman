@@ -298,8 +298,8 @@ int main()
 
     //assign the values
     for(int i=0;i<30;i++){
-        float wild_card_odds = sim_playoff_total.row(i)[0]/MAX_ITER;
-        float division_odds = sim_playoff_total.row(i)[1]/MAX_ITER;
+        float wild_card_odds = sim_playoff_total.row(i)[1]/MAX_ITER;
+        float division_odds = sim_playoff_total.row(i)[0]/MAX_ITER;
         float playoff_odds = (sim_playoff_total.row(i)[0] + sim_playoff_total.row(i)[1])/MAX_ITER;
         teams[i].set_wild_card_odds(wild_card_odds);
         teams[i].set_division_odds(division_odds);
@@ -340,9 +340,9 @@ int main()
         cout << left << setw(13) << team_division << " | " 
              << left << setw(11) << team_name << " | " 
              << right << setw(12) << team_wins << " | " 
-             << fixed << setprecision(1) << right << setw(14) << wild_card_odds*100.0 << "%" << " | " 
-             << fixed << setprecision(1) << right << setw(13) << division_odds*100.0 << "%" << " | " 
-             << fixed << setprecision(1) << right << setw(14) << playoff_odds*100.0 << "%" << endl;
+             << fixed << setprecision(1) << right << setw(13) << wild_card_odds*100.0 << "%" << " | " 
+             << fixed << setprecision(1) << right << setw(12) << division_odds*100.0 << "%" << " | " 
+             << fixed << setprecision(1) << right << setw(11) << playoff_odds*100.0 << "%" << endl;
     }
     cout << endl;
     cout << "Total number of simulations: " << MAX_ITER << endl;
