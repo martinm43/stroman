@@ -302,8 +302,5 @@ int main()
         cout << teams[i].get_mlbgames_name() << " : " << teams[i].get_playoff_odds() << endl;
     }
 
-    
-    cout << sim_playoff_total << endl;
-
 return 0;
 }
