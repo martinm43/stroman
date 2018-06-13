@@ -11,7 +11,7 @@
 #include <armadillo>
 #include <mcss.h>
 
-#define MAX_ITER 10000
+#define MAX_ITER 100000
 
 using namespace std;
 using namespace arma;
@@ -44,6 +44,7 @@ int main()
     mat Sim_Total = zeros<mat>(30,30);
     mat debug_total = zeros<mat>(30,30);
     mat sim_playoff_total = zeros<mat>(30,3);
+    mat total_wins_total = zeros<mat>(30,1);
 
     //Name of the database
     string DatabaseName("mlb_data.sqlite");
@@ -221,6 +222,7 @@ int main()
 
         //Calculate raw wins - only concerned with that now (can implement tie breaking functionality later)
         mat total_wins = sum(debug_total.t());
+        total_wins_total += total_wins.t();
 
         //Create a copy of the teams list, only defined in the scope of this loop
         vector<Team> sim_teams = teams;
@@ -292,6 +294,9 @@ int main()
 
     }
 
+    total_wins_total/=MAX_ITER;
+
+    //assign the values
     for(int i=0;i<30;i++){
         float wild_card_odds = sim_playoff_total.row(i)[0]/MAX_ITER;
         float division_odds = sim_playoff_total.row(i)[1]/MAX_ITER;
@@ -299,9 +304,50 @@ int main()
         teams[i].set_wild_card_odds(wild_card_odds);
         teams[i].set_division_odds(division_odds);
         teams[i].set_playoff_odds(playoff_odds);
-        cout << teams[i].get_mlbgames_name() << " : " 
-          << fixed << setprecision(1) << teams[i].get_playoff_odds()*100 << "%" << endl;
+        teams[i].set_total_wins(total_wins_total[i]);
     }
-    cout << MAX_ITER << " iterations complete." << endl;
+
+
+    sort(teams.begin(),teams.end(),teams_sort());
+
+    cout<<endl; //extra space
+
+    //Heading printing.
+    cout << left << setw(14) << "Division " << "|" 
+         << left << setw(13) << " Team " << "|" 
+         << left << setw(10) << " Average Wins " << "|"
+         << left << setw(10) << " Wild Card Odds " << "|"
+         << left << setw(10) << " Division Odds " << "|"
+         << left << setw(10) << " Playoff Odds " << endl;
+
+    int header_length = 90; //trial and error
+
+    //Enumerating teams.
+    for(int i=0;i<30;i++){
+            if(i==0 || i==5 || i == 10 || i== 15 | i==20 | i==25){
+                for(int i=0;i<header_length;i++){
+                cout<<"*";
+                }
+            cout<<endl;
+            }
+        //cout << teams[i].get_division() << endl;
+        string team_division = teams[i].get_division();
+        string team_name = teams[i].get_mlbgames_name();
+        int team_wins = teams[i].get_total_wins();
+        float wild_card_odds = teams[i].get_wild_card_odds();
+        float division_odds = teams[i].get_division_odds();
+        float playoff_odds = teams[i].get_playoff_odds();
+        cout << left << setw(13) << team_division << " | " 
+             << left << setw(11) << team_name << " | " 
+             << right << setw(12) << team_wins << " | " 
+             << fixed << setprecision(1) << right << setw(14) << wild_card_odds*100.0 << "%" << " | " 
+             << fixed << setprecision(1) << right << setw(13) << division_odds*100.0 << "%" << " | " 
+             << fixed << setprecision(1) << right << setw(14) << playoff_odds*100.0 << "%" << endl;
+    }
+    cout << endl;
+    cout << "Total number of simulations: " << MAX_ITER << endl;
+
+
+
 return 0;
 }
