@@ -13,7 +13,7 @@
 #include <mcss.h>
 #include <ctime>
 
-#define MAX_ITER 10000
+#define MAX_ITER 100000
 
 using namespace std;
 using namespace arma;
