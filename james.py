@@ -18,7 +18,7 @@ def runs_regress(dpts):
     return 1 / (1 + math.exp(-1 * (0.15 + dpts * 0.2)))
 
 
-def SRS_regress(dSRS, dSRS_coeff=0.45):
+def SRS_regress(dSRS, dSRS_coeff=0.15):
     """
     Performs regression based on team 'SRS' incorporating strength of schedule
     """
