@@ -10,14 +10,12 @@ mlbgame, using the MLB license, located at https://github.com/panzarino/mlbgame/
 Using an MIT license
 
 Future Tasks:
-* Check monte carlo odds vs pythagorean projected wins (maybe in Python)
-* Need to harmonize the "division win percentages"
+* Add in missing games/doubleheaders
+* Correct mcss.py expected wins and odds
 * Modify C++ files to use argv and argc
 * Update pitching data (starting with pitcher names) in table.
 * Add a depository/list of "favourite baseball quotes" for program use.
 * GUI for updating missed/postphoned games, could be as easy as an Excel sheet/python script combination.
-* Can potentially update using GUI sqlitebrowser - this 
-will help with error checking
 
 Ratings Calculation File (common to previous NBA work and current MLB work):
 R1. analytics/burke_solver.py
@@ -42,6 +40,7 @@ Performs Monte Carlo simulation and calculates:
 * head to head records
 * league wins
 * division wins
+Currently incorrect!
 
 4. mcss_averages.py - linted save for variable names
 Reads a dict of games to be played with their binomial 
