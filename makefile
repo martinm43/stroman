@@ -14,3 +14,4 @@ average-make:
 average-debug-make:
 	g++ -o mcss_average mcss_average.cpp -lsqlite3 -larmadillo -I. -g
 
+

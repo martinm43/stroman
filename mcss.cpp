@@ -22,20 +22,14 @@ void print_matrix(Matrix matrix) {
 }
 
 
-mat  hero(){
+mat hero(){
     mat x = zeros<mat>(2,2);
     mat *x_p = &x;
     return *x_p;
 }
 
+mat mcss_function(){
 
-
-//only require this instantiation as we are only using the vanilla analysis tool
-template void print_matrix<arma::mat>(arma::mat matrix);
-
-
-int main()
-{
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
@@ -53,7 +47,7 @@ int main()
     mat Sim_Total = zeros<mat>(30,30);
     mat debug_total = zeros<mat>(30,30);
     mat sim_playoff_total = zeros<mat>(30,3);
-    mat total_wins_total = zeros<mat>(30,1);
+    mat error_matrix = ones<mat>(1,1);
 
     //Name of the database
     string DatabaseName("mlb_data.sqlite");
@@ -68,7 +62,7 @@ int main()
     if( rc ){
      fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
      sqlite3_close(db);
-     return(1);
+     return error_matrix;
     }
     
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
@@ -76,7 +70,7 @@ int main()
     if (rc != SQLITE_OK) {
         cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
         sqlite3_finalize(stmt);
-        return 1;
+        return error_matrix;
     }
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
@@ -112,7 +106,7 @@ int main()
     if (rc != SQLITE_OK) {
         cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
         sqlite3_finalize(stmt);
-        return 1;
+        return error_matrix;
     }
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
@@ -129,7 +123,7 @@ int main()
 
     size_t const half_size=teams.size()/2;
 
-    cout << half_size << endl;
+    //cout << half_size << endl;
 
     /* S3 - GETTING THE NUMBER OF FUTURE GAMES FOR S4 */
 
@@ -146,7 +140,7 @@ int main()
     if (rc != SQLITE_OK) {
         cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
         sqlite3_finalize(stmt);
-        return 1;
+        return error_matrix;
     }
 
     int num_future_games;
@@ -181,7 +175,7 @@ int main()
     if (rc != SQLITE_OK) {
         cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
         sqlite3_finalize(stmt);
-        return 1;
+        return error_matrix;
     }
 
     int future_games_row = 0;
@@ -231,8 +225,11 @@ int main()
 
         //Calculate raw wins - only concerned with that now (can implement tie breaking functionality later)
         mat total_wins = sum(debug_total.t());
-        total_wins_total += total_wins.t();
-
+        //cout << total_wins << endl;
+        for(int i=0;i<30;i++){
+            sim_playoff_total.row(i)[2] = sim_playoff_total.row(i)[2] +  total_wins[i];
+            cout << sim_playoff_total.row(i)[2] << endl;
+        }
         //Create a copy of the teams list, only defined in the scope of this loop
         vector<Team> sim_teams = teams;
 
@@ -300,26 +297,91 @@ int main()
                 so 1-4,6-9,11-14 */
 
         }
-
     }
 
-    total_wins_total/=MAX_ITER;
+    for(int i=0;i<30;i++){
+        sim_playoff_total.row(i)[2] = sim_playoff_total.row(i)[2]/MAX_ITER;
+    }
+
+
+    return sim_playoff_total;
+}
+
+//only require this instantiation as we are only using the vanilla analysis tool
+template void print_matrix<arma::mat>(arma::mat matrix);
+
+
+int main()
+{
+
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    string SQLStatement;
+    string DatabaseName("mlb_data.sqlite");
+    sqlite3_stmt *stmt;
+
+    cout << "running main" << endl;
+    vector<Team> teams;
+    mat simulation_results;
+    simulation_results = mcss_function();
+
+    /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
+
+    rc = sqlite3_open(DatabaseName.c_str(), &db);
+    if( rc ){
+     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+     sqlite3_close(db);
+     return 1;
+    }
+    
+    SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating "
+                    "from teams as t "
+                    "inner join SRS_Ratings as s "
+                    "on s.team_id=t.id "
+                    "where s.rating <> 0 "
+                    "and s.rating_date = (select rating_date from SRS_ratings "
+                    "order by rating_date desc limit 1) "
+                    "order by t.id asc ";
+
+    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
+                            -1, &stmt, NULL);
+
+    if (rc != SQLITE_OK) {
+        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
+        sqlite3_finalize(stmt);
+        return 1;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+
+        //Write information into the vectors.
+        int team_id = sqlite3_column_int(stmt,0);
+        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
+        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
+        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
+        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4))); //does not capture whole division!!
+        float rating = sqlite3_column_double(stmt,5);
+        teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
+    }
+
+    size_t const half_size=teams.size()/2;
+
 
     //assign the values
     for(int i=0;i<30;i++){
-        float wild_card_odds = sim_playoff_total.row(i)[1]/MAX_ITER;
-        float division_odds = sim_playoff_total.row(i)[0]/MAX_ITER;
-        float playoff_odds = (sim_playoff_total.row(i)[0] + sim_playoff_total.row(i)[1])/MAX_ITER;
+        float wild_card_odds = simulation_results.row(i)[1]/MAX_ITER;
+        float division_odds = simulation_results.row(i)[0]/MAX_ITER;
+        float playoff_odds = (simulation_results.row(i)[0] + simulation_results.row(i)[1])/MAX_ITER;
         teams[i].set_wild_card_odds(wild_card_odds);
         teams[i].set_division_odds(division_odds);
         teams[i].set_playoff_odds(playoff_odds);
-        teams[i].set_total_wins(total_wins_total[i]);
+        teams[i].set_total_wins(simulation_results.row(i)[2]);
     }
 
 
     sort(teams.begin(),teams.end(),teams_sort());
 
-    cout<<endl; //extra space
 
     //Heading printing.
     cout << left << setw(14) << "Division " << "|" 
@@ -357,6 +419,5 @@ int main()
     cout << "Total number of simulations: " << MAX_ITER << endl;
 
 
-    cout << hero() << endl;
 return 0;
 }
