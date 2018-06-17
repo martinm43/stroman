@@ -11,7 +11,7 @@
 #include <armadillo>
 #include <mcss.h>
 
-#define MAX_ITER 100
+#define MAX_ITER 10
 
 using namespace std;
 using namespace arma;
@@ -21,6 +21,16 @@ void print_matrix(Matrix matrix) {
     matrix.print(std::cout);
 }
 
+typedef std::vector<double> stdvec;
+typedef std::vector< std::vector<double> > stdvecvec;
+
+stdvecvec mat_to_std_vec(arma::mat &A) {
+    stdvecvec V(A.n_rows);
+    for (size_t i = 0; i < A.n_rows; ++i) {
+        V[i] = arma::conv_to< stdvec >::from(A.row(i));
+    };
+    return V;
+}
 
 mat hero(){
     mat x = zeros<mat>(2,2);
@@ -228,7 +238,7 @@ mat mcss_function(){
         //cout << total_wins << endl;
         for(int i=0;i<30;i++){
             sim_playoff_total.row(i)[2] = sim_playoff_total.row(i)[2] +  total_wins[i];
-            cout << sim_playoff_total.row(i)[2] << endl;
+            //cout << sim_playoff_total.row(i)[2] << endl;
         }
         //Create a copy of the teams list, only defined in the scope of this loop
         vector<Team> sim_teams = teams;
@@ -309,6 +319,11 @@ mat mcss_function(){
 
 //only require this instantiation as we are only using the vanilla analysis tool
 template void print_matrix<arma::mat>(arma::mat matrix);
+
+stdvecvec simulations_result_vectorized(){
+    mat sim_results = mcss_function();
+    return mat_to_std_vec(sim_results);
+}
 
 
 int main()
@@ -418,6 +433,7 @@ int main()
     cout << endl;
     cout << "Total number of simulations: " << MAX_ITER << endl;
 
-
+    stdvecvec simvec = simulations_result_vectorized();
+    cout << simvec[0][2] << endl;
 return 0;
 }
