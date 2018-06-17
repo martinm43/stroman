@@ -11,7 +11,7 @@
 #include <armadillo>
 #include <mcss.h>
 
-#define MAX_ITER 100000
+#define MAX_ITER 100
 
 using namespace std;
 using namespace arma;
@@ -20,6 +20,15 @@ template<class Matrix>
 void print_matrix(Matrix matrix) {
     matrix.print(std::cout);
 }
+
+
+mat  hero(){
+    mat x = zeros<mat>(2,2);
+    mat *x_p = &x;
+    return *x_p;
+}
+
+
 
 //only require this instantiation as we are only using the vanilla analysis tool
 template void print_matrix<arma::mat>(arma::mat matrix);
@@ -348,6 +357,6 @@ int main()
     cout << "Total number of simulations: " << MAX_ITER << endl;
 
 
-
+    cout << hero() << endl;
 return 0;
 }
