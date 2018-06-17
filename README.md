@@ -10,12 +10,8 @@ mlbgame, using the MLB license, located at https://github.com/panzarino/mlbgame/
 Using an MIT license
 
 Future Tasks:
-* Add in missing games/doubleheaders
-* Correct mcss.py expected wins and odds
-* Modify C++ files to use argv and argc
-* Update pitching data (starting with pitcher names) in table.
-* Add a depository/list of "favourite baseball quotes" for program use.
-* GUI for updating missed/postphoned games, could be as easy as an Excel sheet/python script combination.
+* Integrate mcss code into mcss_python.py ("do the heavy lifting in C++, while maintaining the Python interface")
+  - to this task, see also "python-cpp" repo
 
 Ratings Calculation File (common to previous NBA work and current MLB work):
 R1. analytics/burke_solver.py
