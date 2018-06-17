@@ -433,7 +433,5 @@ int main()
     cout << endl;
     cout << "Total number of simulations: " << MAX_ITER << endl;
 
-    stdvecvec simvec = simulations_result_vectorized();
-    cout << simvec[0][2] << endl;
 return 0;
 }
