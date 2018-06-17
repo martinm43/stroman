@@ -21,9 +21,6 @@ void print_matrix(Matrix matrix) {
     matrix.print(std::cout);
 }
 
-typedef std::vector<double> stdvec;
-typedef std::vector< std::vector<double> > stdvecvec;
-
 stdvecvec mat_to_std_vec(arma::mat &A) {
     stdvecvec V(A.n_rows);
     for (size_t i = 0; i < A.n_rows; ++i) {

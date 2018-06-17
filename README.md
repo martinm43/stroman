@@ -35,12 +35,12 @@ differential and adjusted net rating.
 3. global_update.py - fully linted
 Updates multiple games (N days in the past via command line update)
 
-3. mcss.py - linted save for variable names
+3. mcss_python.py - linted save for variable names
 Performs Monte Carlo simulation and calculates:
 * head to head records
 * league wins
 * division wins
-Currently incorrect!
+Currently incorrect - attempting to troubleshoot incorrect math/replace with C++ module
 
 4. mcss_averages.py - linted save for variable names
 Reads a dict of games to be played with their binomial 
@@ -70,16 +70,8 @@ Function containing tiebreaker logic based
 on dicts containing team records and head to heads. Current time of development (may)
 is a bit too early to start thinking about tiebreaker logic for playoffs.
 
-10. missing_read.py - linted save for variable names
-Reads missing games (games that have not yet been played) from an excel worksheet.
-Worksheet is a work in progress, development paused.
-
-11. missing_write.py - linted save for variable names
-Writes missing games to excel worksheet (in progress). 
-Note that there is the possibility that our update dates 
-might be the reason for the win discrepancy.
-The goal here is not to track specific wins and losses at this point, but to
-assess team performance using raw stats.
+10. cpp_setup.py
+Setup file for creating the cython-based C++ library for monte carlo standings simulation.
 
 C/C++ Files
 Requires armadillo and sqlite3
@@ -93,7 +85,7 @@ average number of wins for the rest of the season. Teams are then sorted by divi
 total wins.
 
 2. mcss
-Calculates the playoff odds using wildcard and head to head wins
+Calculates the playoff odds for each team, accounting for wildcards (but not accounting for end of season tie logic)
 
 3. mcss.h
 Header file containing necessary classes, functions, and structures
@@ -101,3 +93,8 @@ Header file containing necessary classes, functions, and structures
 Compared to its similar file:
 "time python mcss_average.py 10000" - 1m 18.743s
 "time bash -c "./mcss_average"" - 7.267s, 11x faster.
+
+Cython
+
+1. cpp_setup.pyx
+Cython file for linking the cpp function

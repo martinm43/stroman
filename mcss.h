@@ -1,6 +1,7 @@
 #ifndef MCSS_H
 #define MCSS_H
 
+#include<armadillo>
 #include<iostream>
 
 double SRS_regress(double rating_away, double rating_home);
@@ -103,5 +104,11 @@ struct wins_sort
             return false;
     } 
 };
+
+typedef std::vector<double> stdvec;
+typedef std::vector< std::vector<double> > stdvecvec;
+
+stdvecvec mat_to_std_vec(arma::mat &A);
+stdvecvec simulations_result_vectorized();
 
 #endif
