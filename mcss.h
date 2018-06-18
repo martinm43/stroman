@@ -4,10 +4,6 @@
 #include<armadillo>
 #include<iostream>
 
-double uniformRandom() {
-  return ( (double)(rand()) + 1. )/( (double)(RAND_MAX) + 1. );
-}
-
 class Game{
 private:
 
@@ -67,13 +63,6 @@ public:
     float get_playoff_odds() const {return _playoff_odds;}
 };
 
-
-double SRS_regress(double rating_away, double rating_home)
-{
-    float m=0.15;
-    float b=-0.15; 
-    return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
-}
 
 struct teams_sort
 {

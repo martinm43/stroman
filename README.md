@@ -94,3 +94,5 @@ Cython
 
 1. cpp_setup.pyx
 Cython file for linking the cpp function
+
+NEED TO ADD THE -larmadillo and -lsqlite3 flags on the final step!!

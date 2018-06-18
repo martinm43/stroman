@@ -35,6 +35,17 @@ mat hero(){
     return *x_p;
 }
 
+double uniformRandom() {
+  return ( (double)(rand()) + 1. )/( (double)(RAND_MAX));
+}
+
+double SRS_regress(double rating_away, double rating_home)
+{
+    float m=0.15;
+    float b=-0.15;
+    return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
+}
+
 mat mcss_function(){
 
     sqlite3 *db;
