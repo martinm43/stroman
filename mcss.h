@@ -4,9 +4,6 @@
 #include<armadillo>
 #include<iostream>
 
-double SRS_regress(double rating_away, double rating_home);
-double uniformRandom();
-
 double uniformRandom() {
   return ( (double)(rand()) + 1. )/( (double)(RAND_MAX) + 1. );
 }
