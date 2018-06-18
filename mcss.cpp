@@ -318,6 +318,8 @@ mat mcss_function(){
     }
 
     for(int i=0;i<30;i++){
+        sim_playoff_total.row(i)[0] = sim_playoff_total.row(i)[0]/MAX_ITER;
+        sim_playoff_total.row(i)[1] = sim_playoff_total.row(i)[1]/MAX_ITER;
         sim_playoff_total.row(i)[2] = sim_playoff_total.row(i)[2]/MAX_ITER;
     }
 
@@ -393,9 +395,9 @@ int main()
 
     //assign the values
     for(int i=0;i<30;i++){
-        float wild_card_odds = simulation_results.row(i)[1]/MAX_ITER;
-        float division_odds = simulation_results.row(i)[0]/MAX_ITER;
-        float playoff_odds = (simulation_results.row(i)[0] + simulation_results.row(i)[1])/MAX_ITER;
+        float wild_card_odds = simulation_results.row(i)[1];
+        float division_odds = simulation_results.row(i)[0];
+        float playoff_odds = simulation_results.row(i)[0] + simulation_results.row(i)[1];
         teams[i].set_wild_card_odds(wild_card_odds);
         teams[i].set_division_odds(division_odds);
         teams[i].set_playoff_odds(playoff_odds);
