@@ -96,3 +96,4 @@ Cython
 Cython file for linking the cpp function
 
 NEED TO ADD THE -larmadillo and -lsqlite3 flags on the final step!!
+-lsqlite3 flag to cpp setup and copying back the .so file works

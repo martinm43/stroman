@@ -10,6 +10,5 @@ ext = Extension("mcss",sources=["mcss_ext2.pyx","mcss.cpp"])
 
 setup(
   name = "cython_mcss",
-  ext_modules = cythonize(ext),
-  extra_compile_args=['-O3','-larmadillo','-lsqlite3','-I/Documents/sports_stats/naismith/.']
+  ext_modules = cythonize(ext)
 )
