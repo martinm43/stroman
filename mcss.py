@@ -14,10 +14,10 @@ from mlb_data_models import Team
 team_results=simulations_result_vectorized()
 teams=Team.select()
 
-teams_dict = [dict(zip(['mlbgames_name','division'],[i.mlbgames_name,i.division])) for i in teams]
+teams_dict = [dict(zip(['Team','Division'],[i.mlbgames_name,i.division])) for i in teams]
 for i,d in enumerate(teams_dict):
-    d['% Division'] = team_results[i][0]
-    d['% Wild Card'] = team_results[i][1]
+    d['Win Division'] = team_results[i][0]
+    d['Win Wild Card'] = team_results[i][1]
     d['Avg. Wins'] = team_results[i][2]
     
 pprint(teams_dict)
