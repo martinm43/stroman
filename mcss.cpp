@@ -11,7 +11,7 @@
 #include <armadillo>
 #include "mcss.h"
 
-#define MAX_ITER 100000
+#define MAX_ITER 10000
 
 using namespace std;
 using namespace arma;
@@ -323,7 +323,7 @@ mat mcss_function(){
         sim_playoff_total.row(i)[2] = sim_playoff_total.row(i)[2]/MAX_ITER;
     }
 
-
+    cout << MAX_ITER << " simulations complete." << endl;
     return sim_playoff_total;
 }
 
