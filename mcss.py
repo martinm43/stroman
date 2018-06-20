@@ -7,6 +7,7 @@ and allow for integration with more 'modern' interfaces -think flask or Django
 
 from __future__ import print_function, division
 
+from tabulate import tabulate
 from mcss_ext2 import simulations_result_vectorized
 from pprint import pprint
 from mlb_data_models import Team
@@ -20,4 +21,5 @@ for i,d in enumerate(teams_dict):
     d['Win Wild Card'] = team_results[i][1]
     d['Avg. Wins'] = team_results[i][2]
     
-pprint(teams_dict)
+#pprint(teams_dict)
+print(tabulate(teams_dict))
