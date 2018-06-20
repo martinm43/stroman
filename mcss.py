@@ -19,7 +19,7 @@ teams_dict = [dict(zip(['Team','Division'],[i.mlbgames_name,i.division])) for i 
 for i,d in enumerate(teams_dict):
     d['Win Division'] = round(team_results[i][0]*100.0,1)
     d['Win Wild Card'] = round(team_results[i][1]*100.0,1)
-    d['Avg. Wins'] = team_results[i][2]
+    d['Avg. Wins'] = round(team_results[i][2],0)
     d['Make Playoffs'] = d['Win Division'] + d['Win Wild Card']
     
 teams_dict.sort(key=lambda x: (x['Division'],-x['Avg. Wins']))
