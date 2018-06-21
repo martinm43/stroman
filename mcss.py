@@ -1,7 +1,4 @@
 # coding: utf-8
-get_ipython().magic(u'load mcss.py')
-# %load mcss.py
-# %load mcss_ext_test.py
 """
 Using the python library developed using C++ to rapidly speed up how standings are printed and presented
 and allow for integration with more 'modern' interfaces -think flask or Django
