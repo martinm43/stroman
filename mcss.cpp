@@ -277,7 +277,6 @@ mat mcss_function(){
         sort(amer_league_wc.begin(),amer_league_wc.end(),wins_sort());
         for(vector<Team>::iterator it = amer_league_wc.begin(); it != amer_league_wc.end(); ++it){
                 string team_name = (*it).get_mlbgames_name();
-                int team_wins = (*it).get_total_wins();
         }
 
         //National League Wildcard Teams
@@ -291,7 +290,6 @@ mat mcss_function(){
         sort(nat_league_wc.begin(),nat_league_wc.end(),wins_sort());
         for(vector<Team>::iterator it = nat_league_wc.begin(); it != nat_league_wc.end(); ++it){
                 string team_name = (*it).get_mlbgames_name();
-                int team_wins = (*it).get_total_wins();
         }
 
         for(int i=0;i<2;i++){
@@ -306,10 +304,9 @@ mat mcss_function(){
         for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_mlbgames_name();
             string team_division = sim_teams[i].get_division();
-            int team_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
 
-            if(i==0 || i==5 || i == 10 || i== 15 | i==20 | i==25){
+            if(i==0 || i==5 || i == 10 || i == 15 | i==20 | i == 25){
                 sim_playoff_total.row(team_id-1)[0]++;
             }
             /* need to sort the teams that aren't leaders in each league
@@ -337,6 +334,7 @@ stdvecvec simulations_result_vectorized(){
 }
 
 
+//C++ Printing and processing function.
 int main()
 {
 
@@ -390,9 +388,6 @@ int main()
         float rating = sqlite3_column_double(stmt,5);
         teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
     }
-
-    size_t const half_size=teams.size()/2;
-
 
     //assign the values
     for(int i=0;i<30;i++){
