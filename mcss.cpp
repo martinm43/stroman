@@ -170,7 +170,7 @@ mat mcss_function(){
 
     cout << "Number of games to predict: " << num_future_games << endl;
 
-    mat future_games = zeros<mat>(num_future_games,4);
+    mat future_games = zeros<mat>(num_future_games,3);
 
     sqlite3_finalize(stmt);
 
@@ -202,9 +202,12 @@ mat mcss_function(){
 
          //Debug print to screen - example (away team, away rtg, home team, home rtg)
          future_games.row(future_games_row)[0] = sqlite3_column_int(stmt,0);
-         future_games.row(future_games_row)[1] = sqlite3_column_double(stmt,1);
-         future_games.row(future_games_row)[2] = sqlite3_column_int(stmt,2);
-         future_games.row(future_games_row)[3] = sqlite3_column_double(stmt,3);
+         future_games.row(future_games_row)[1] = sqlite3_column_int(stmt,2);
+
+         double away_team_rtg = sqlite3_column_double(stmt,1);
+         double home_team_rtg = sqlite3_column_double(stmt,3);
+
+         future_games.row(future_games_row)[2] = SRS_regress(away_team_rtg,home_team_rtg);
          /*
             TO DO: Add the actual calculation of the binomial win odds to the array. It may not be 
             possible within ihis loop, in order to allow for debugging against its Python counterpart.
@@ -228,11 +231,9 @@ mat mcss_function(){
         for(int i=0;i<num_future_games;i++)
         {
             int away_team_id = future_games.row(i)[0]-1;
-            float away_team_rtg = future_games.row(i)[1];
-            int home_team_id = future_games.row(i)[2]-1;
-            float home_team_rtg = future_games.row(i)[3];
+            int home_team_id = future_games.row(i)[1]-1;
 
-            if (uniformRandom()<SRS_regress(away_team_rtg,home_team_rtg))
+            if (uniformRandom()<future_games.row(i)[2])
                 MCSS_Head_To_Head.row(home_team_id)[away_team_id]++;
             else
                 MCSS_Head_To_Head.row(away_team_id)[home_team_id]++;
