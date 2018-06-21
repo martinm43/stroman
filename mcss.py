@@ -1,4 +1,6 @@
 # coding: utf-8
+get_ipython().magic(u'load mcss.py')
+# %load mcss.py
 # %load mcss_ext_test.py
 """
 Using the python library developed using C++ to rapidly speed up how standings are printed and presented
@@ -32,11 +34,11 @@ for i,d in enumerate(teams_dict):
 
 teams_dict.sort(key=lambda x: (x['Division'],-x['Avg. Wins']))
 
-team_tuples = [(d['Division'],d['Team'],d['Avg. Wins'],\
-        d['Win Division'],d['Win Wild Card'],d['Make Playoffs']) for d in teams_dict]
+team_tuples = [(d['Division'],d['Team'],d['Avg. Wins'],        d['Win Division'],d['Win Wild Card'],d['Make Playoffs']) for d in teams_dict]
 
-results_table = tabulate(team_tuples, headers=['Division','Team','Avg. Wins',\
-                            'Win Division','Win Wild Card','Make Playoffs'],\
-                        tablefmt='rst',numalign='left')
+results_table = tabulate(team_tuples, headers=['Division','Team','Avg. Wins',                            'Win Division','Win Wild Card','Make Playoffs'],                        tablefmt='rst',numalign='left')
 
 print(results_table)
+query=Team.select()
+divisions = [t.division for t in query]
+divisions = list(set(divisions))
