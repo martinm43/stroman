@@ -29,12 +29,6 @@ stdvecvec mat_to_std_vec(arma::mat &A) {
     return V;
 }
 
-mat hero(){
-    mat x = zeros<mat>(2,2);
-    mat *x_p = &x;
-    return *x_p;
-}
-
 double uniformRandom() {
   return ( (double)(rand()) + 1. )/( (double)(RAND_MAX));
 }
@@ -93,7 +87,7 @@ mat return_head_to_head(){
     return Head_To_Head;
 }
 
-mat mcss_function(){
+mat mcss_function(mat mat_head_to_head){
 
     sqlite3 *db;
     char *zErrMsg = 0;
@@ -148,7 +142,7 @@ mat mcss_function(){
 
     }
 
-    Head_To_Head = return_head_to_head();
+    Head_To_Head = mat_head_to_head;
     cout << "Games successfully entered" << endl;
 
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
@@ -372,8 +366,8 @@ mat mcss_function(){
 //only require this instantiation as we are only using the vanilla analysis tool
 template void print_matrix<arma::mat>(arma::mat matrix);
 
-stdvecvec simulations_result_vectorized(){
-    mat sim_results = mcss_function();
+stdvecvec simulations_result_vectorized(mat head_to_head_results){
+    mat sim_results = mcss_function(head_to_head_results);
     return mat_to_std_vec(sim_results);
 }
 
@@ -391,8 +385,12 @@ int main()
 
     cout << "running main" << endl;
     vector<Team> teams;
+
+    mat head_to_head_results;
+    head_to_head_results = return_head_to_head();
+
     mat simulation_results;
-    simulation_results = mcss_function();
+    simulation_results = mcss_function(head_to_head_results);
 
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
 

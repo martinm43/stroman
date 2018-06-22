@@ -9,4 +9,4 @@ from libcpp.vector cimport vector
 
 # c++ interface to cython
 cdef extern from "mcss.h":
-    vector[vector[double]] simulations_result_vectorized()
+    vector[vector[double]] simulations_result_vectorized(vector[vector[double]])
