@@ -46,6 +46,54 @@ double SRS_regress(double rating_away, double rating_home)
     return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
 }
 
+mat return_head_to_head(){
+
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    string DatabaseName("mlb_data.sqlite");
+    mat error_matrix = ones<mat>(1,1);
+    mat Head_To_Head = zeros<mat>(30,30);
+    vector<Game> games;
+
+
+    /* S1 - GETTING LIST OF KNOWN WINS */
+    string SQLStatement("SELECT away_team, away_runs, home_team, home_runs "
+                       "FROM games WHERE scheduled_date <= datetime('now','-1 day');");
+
+    sqlite3_stmt *stmt;
+
+    rc = sqlite3_open(DatabaseName.c_str(), &db);
+    if( rc ){
+     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+     sqlite3_close(db);
+     return error_matrix;
+    }
+    
+    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
+                            -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
+        sqlite3_finalize(stmt);
+        return error_matrix;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int away_team_id = sqlite3_column_int(stmt,0);
+        int away_runs = sqlite3_column_int(stmt,1);
+        int home_team_id = sqlite3_column_int(stmt,2);
+        int home_runs = sqlite3_column_int(stmt,3);
+        if (home_runs > away_runs)
+            Head_To_Head.row(home_team_id-1)[away_team_id-1]++;
+        else
+            Head_To_Head.row(away_team_id-1)[home_team_id-1]++;
+    }
+
+    cout << "Games successfully entered" << endl;
+
+    return Head_To_Head;
+}
+
 mat mcss_function(){
 
     sqlite3 *db;
@@ -70,7 +118,8 @@ mat mcss_function(){
     //Name of the database
     string DatabaseName("mlb_data.sqlite");
 
-    /* S1 - GETTING LIST OF KNOWN WINS */
+
+    /* S1 - GETTING LIST OF KNOWN WINS*/
     string SQLStatement("SELECT away_team, away_runs, home_team, home_runs "
                        "FROM games WHERE scheduled_date <= datetime('now','-1 day');");
 
@@ -82,7 +131,7 @@ mat mcss_function(){
      sqlite3_close(db);
      return error_matrix;
     }
-    
+
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
                             -1, &stmt, NULL);
     if (rc != SQLITE_OK) {
@@ -90,6 +139,7 @@ mat mcss_function(){
         sqlite3_finalize(stmt);
         return error_matrix;
     }
+
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
@@ -99,12 +149,9 @@ mat mcss_function(){
         int home_runs = sqlite3_column_int(stmt,3);
         games.push_back(Game(away_team_id,away_runs,home_team_id,home_runs));
 
-        if (home_runs > away_runs)
-            Head_To_Head.row(home_team_id-1)[away_team_id-1]++;
-        else
-            Head_To_Head.row(away_team_id-1)[home_team_id-1]++;
     }
 
+    Head_To_Head = return_head_to_head();
     cout << "Games successfully entered" << endl;
 
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
