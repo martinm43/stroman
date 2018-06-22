@@ -54,7 +54,6 @@ mat return_head_to_head(){
     string DatabaseName("mlb_data.sqlite");
     mat error_matrix = ones<mat>(1,1);
     mat Head_To_Head = zeros<mat>(30,30);
-    vector<Game> games;
 
 
     /* S1 - GETTING LIST OF KNOWN WINS */
@@ -104,7 +103,6 @@ mat mcss_function(){
     srand(time(NULL));
 
     //Two vectors for holding key information to be used later
-    vector<Game> games;
     vector<Team> teams;
 
     // Matrix examples.
@@ -147,7 +145,6 @@ mat mcss_function(){
         int away_runs = sqlite3_column_int(stmt,1);
         int home_team_id = sqlite3_column_int(stmt,2);
         int home_runs = sqlite3_column_int(stmt,3);
-        games.push_back(Game(away_team_id,away_runs,home_team_id,home_runs));
 
     }
 

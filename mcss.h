@@ -4,24 +4,6 @@
 #include<armadillo>
 #include<iostream>
 
-class Game{
-private:
-
-   int _away_team_id;
-   int _away_runs;
-   int _home_team_id;
-   int _home_runs;
-
-public:
-   Game(int away_team_id, int away_runs, int home_team_id, int home_runs): 
-     _away_team_id(away_team_id), _away_runs(away_runs), _home_team_id(home_team_id), _home_runs(home_runs) {}
-
-   int get_away_team_id() const {return _away_team_id;}
-   int get_away_runs() const {return _away_runs;}
-   int get_home_team_id() const {return _home_team_id;}
-   int get_home_runs() const {return _home_runs;}
-};
-
 class Team{
 private:
 
