@@ -7,5 +7,5 @@
 cimport mcss_ext
 
 # c++ interface to cython
-def simulations_result_vectorized(head_to_head):
-    return mcss_ext.simulations_result_vectorized(head_to_head)
+def simulations_result_vectorized(head_to_head, future_games):
+    return mcss_ext.simulations_result_vectorized(head_to_head, future_games)
