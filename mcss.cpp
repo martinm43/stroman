@@ -200,7 +200,7 @@ mat return_future_games(){
     return future_games;
 }
 
-mat mcss_function(mat mat_head_to_head){
+mat mcss_function(mat mat_head_to_head, mat future_games){
 
     sqlite3 *db;
     char *zErrMsg = 0;
@@ -275,88 +275,6 @@ mat mcss_function(mat mat_head_to_head){
 
     size_t const half_size=teams.size()/2;
 
-    //cout << half_size << endl;
-
-    /* S3 - GETTING THE NUMBER OF FUTURE GAMES FOR S4 
-    
-    SQLStatement =  "select count(*) from "
-                    "games as g inner join srs_ratings as ra on "
-                    "ra.team_id=g.away_team inner join srs_ratings as rh on "
-                    "rh.team_id=g.home_team where g.scheduled_date >= datetime('now') "
-                    "and ra.rating_date = (select max(rating_date) from srs_ratings) "
-                    "and rh.rating_date = (select max(rating_date) from srs_ratings);";
-
-    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
-                            -1, &stmt, NULL);
-
-    if (rc != SQLITE_OK) {
-        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
-        sqlite3_finalize(stmt);
-        return error_matrix;
-    }
-
-    int num_future_games;
-
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-
-        num_future_games = sqlite3_column_int(stmt,0);
-    }
-
-    cout << "Number of games to predict: " << num_future_games << endl;
-
-    mat future_games = zeros<mat>(num_future_games,3);
-
-    sqlite3_finalize(stmt);
-
-    if (rc == SQLITE_OK) {
-        cerr << "Game processing is complete." << endl;
-    }
-    S3 - GETTING FUTURE GAMES AND THEIR ASSOCIATED RATINGS 
-
-    SQLStatement =  "select g.away_team, ra.rating, g.home_team, rh.rating from "
-                    "games as g inner join srs_ratings as ra on "
-                    "ra.team_id=g.away_team inner join srs_ratings as rh on "
-                    "rh.team_id=g.home_team where g.scheduled_date >= datetime('now') "
-                    "and ra.rating_date = (select max(rating_date) from srs_ratings) "
-                    "and rh.rating_date = (select max(rating_date) from srs_ratings) "
-                    "order by g.id asc";
-
-    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
-                            -1, &stmt, NULL);
-
-    if (rc != SQLITE_OK) {
-        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
-        sqlite3_finalize(stmt);
-        return error_matrix;
-    }
-
-    int future_games_row = 0;
-
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-
-         //Debug print to screen - example (away team, away rtg, home team, home rtg)
-         future_games.row(future_games_row)[0] = sqlite3_column_int(stmt,0);
-         future_games.row(future_games_row)[1] = sqlite3_column_int(stmt,2);
-
-         double away_team_rtg = sqlite3_column_double(stmt,1);
-         double home_team_rtg = sqlite3_column_double(stmt,3);
-
-         future_games.row(future_games_row)[2] = SRS_regress(away_team_rtg,home_team_rtg);
-
-            TO DO: Add the actual calculation of the binomial win odds to the array. It may not be 
-            possible within ihis loop, in order to allow for debugging against its Python counterpart.
-            Be careful! Also you'll have to expand the array/perform additional downstream calculations - MAM
-         future_games_row++;
-         //cout << future_games_row << endl;
-    }
-
-    sqlite3_finalize(stmt);
-
-    if (rc == SQLITE_OK) {
-        cerr << "Processing of future games' binomial win probabilities is complete." << endl;
-    }
-    */
-    mat future_games = return_future_games();
     //cout << future_games << endl;
     int num_future_games = future_games.n_rows;
     for(int x_iter=0;x_iter<MAX_ITER;x_iter++){
@@ -376,10 +294,14 @@ mat mcss_function(mat mat_head_to_head){
 
         debug_total.zeros();
         debug_total = MCSS_Head_To_Head+Head_To_Head;
+
+        /*
         cout << "Head to Head" << endl;
         cout << Head_To_Head << endl;
         cout << "MCSS Head to Head" << endl;
         cout << MCSS_Head_To_Head << endl;
+        */
+
         //Calculate raw wins - only concerned with that now (can implement tie breaking functionality later)
         mat total_wins = sum(debug_total.t());
 
@@ -467,9 +389,10 @@ mat mcss_function(mat mat_head_to_head){
 //only require this instantiation as we are only using the vanilla analysis tool
 template void print_matrix<arma::mat>(arma::mat matrix);
 
-stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python){
+stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python){
     mat head_to_head_mat = std_vec_to_mat(head_to_head_list_python);
-    mat sim_results = mcss_function(head_to_head_mat);
+    mat future_mat = std_vec_to_mat(future_games_list_python);
+    mat sim_results = mcss_function(head_to_head_mat,future_mat);
     return mat_to_std_vec(sim_results);
 }
 
@@ -490,9 +413,10 @@ int main()
 
     mat head_to_head_results;
     head_to_head_results = return_head_to_head();
-
+    mat future_games;
+    future_games = return_future_games();
     mat simulation_results;
-    simulation_results = mcss_function(head_to_head_results);
+    simulation_results = mcss_function(head_to_head_results,future_games);
 
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
 
