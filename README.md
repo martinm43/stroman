@@ -31,12 +31,12 @@ differential and adjusted net rating.
 3. global_update.py - fully linted
 Updates multiple games (N days in the past via command line update)
 
-3. mcss_python.py - linted save for variable names
+3. mcss.py
 Performs Monte Carlo simulation and calculates:
 * head to head records
 * league wins
 * division wins
-Currently incorrect - attempting to troubleshoot incorrect math/replace with C++ module
+Uses Cython module (See "Cython" section)
 
 4. mcss_averages.py - linted save for variable names
 Reads a dict of games to be played with their binomial 
@@ -86,14 +86,16 @@ Calculates the playoff odds for each team, accounting for wildcards (but not acc
 3. mcss.h
 Header file containing necessary classes, functions, and structures
 
-Compared to its similar file:
-"time python mcss_average.py 10000" - 1m 18.743s
-"time bash -c "./mcss_average"" - 7.267s, 11x faster.
 
 Cython
 
-1. cpp_setup.pyx
-Cython file for linking the cpp function
+1. mcss_ext.pxd: states source code, provides function definition in cython syntax 
 
-NEED TO ADD THE -larmadillo and -lsqlite3 flags on the final step!!
--lsqlite3 flag to cpp setup and copying back the .so file works
+2. mcss_ext2.pyx: python function definition
+
+Timing Statistics (all one time):
+"time python mcss_average.py 10000" - 1m 18.743s
+"time bash -c "./mcss_average"" - 7.267s, 11x faster.
+"./mcss" (100,000 iterations) - 8.752s
+"python mcss.py" (after being compiled with cython - 100k iterations) - 8.882s
+^^ latter two are 0.0788s for mcss and 1.317s for mcss cython

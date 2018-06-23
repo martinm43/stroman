@@ -20,11 +20,9 @@ def format_percent(percent_float):
 from supports import games_won_to_date, future_games_list
 games_won_list_cpp = games_won_to_date(return_format="matrix").tolist()
 fg_list_cpp = future_games_list();
-print(fg_list_cpp)
 
 team_results=simulations_result_vectorized(games_won_list_cpp, fg_list_cpp)
 
-pprint(team_results)
 teams=Team.select()
 
 

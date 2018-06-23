@@ -11,7 +11,7 @@
 #include <armadillo>
 #include "mcss.h"
 
-#define MAX_ITER 100000
+#define MAX_ITER 10000
 
 using namespace std;
 using namespace arma;
@@ -407,7 +407,7 @@ template void print_matrix<arma::mat>(arma::mat matrix);
 stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python){
     mat head_to_head_mat = std_vec_to_HH_mat(head_to_head_list_python);
     mat future_mat = std_vec_to_future_mat(future_games_list_python);
-    cout << future_mat << endl;
+    //cout << future_mat << endl;
     mat sim_results = mcss_function(head_to_head_mat,future_mat);
     return mat_to_std_vec(sim_results);
 }
