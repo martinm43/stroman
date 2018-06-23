@@ -94,8 +94,13 @@ Cython
 2. mcss_ext2.pyx: python function definition
 
 Timing Statistics (all one time):
+
 "time python mcss_average.py 10000" - 1m 18.743s
+
 "time bash -c "./mcss_average"" - 7.267s, 11x faster.
+
 "./mcss" (100,000 iterations) - 8.752s
+
 "python mcss.py" (after being compiled with cython - 100k iterations) - 8.882s
+
 ^^ latter two are 0.0788s for mcss and 1.317s for mcss cython
