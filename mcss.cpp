@@ -32,10 +32,10 @@ stdvecvec mat_to_std_vec(arma::mat &A) {
 mat std_vec_to_mat(vector< vector<double> > std_vec_array){
 
     vector<double> std_vec_array_flat;
-    for (int i = 0; i < std_vec_array.size(); i++) 
+    for (size_t i = 0; i < std_vec_array.size(); i++) 
         {
         vector<double> el = std_vec_array[i];
-        for (int j=0; j < el.size(); j++) {
+        for (size_t j=0; j < el.size(); j++) {
             std_vec_array_flat.push_back(el[j]);
         }
     }
@@ -59,7 +59,6 @@ double SRS_regress(double rating_away, double rating_home)
 mat return_head_to_head(){
 
     sqlite3 *db;
-    char *zErrMsg = 0;
     int rc;
     string DatabaseName("mlb_data.sqlite");
     mat error_matrix = ones<mat>(1,1);
@@ -106,7 +105,6 @@ mat return_head_to_head(){
 mat return_future_games(){
 
     sqlite3 *db;
-    char *zErrMsg = 0;
     int rc;
     string DatabaseName("mlb_data.sqlite");
     mat error_matrix = ones<mat>(1,1);
@@ -140,7 +138,7 @@ mat return_future_games(){
         return error_matrix;
     }
 
-    int num_future_games;
+    static int num_future_games;
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
@@ -203,7 +201,6 @@ mat return_future_games(){
 mat mcss_function(mat mat_head_to_head, mat future_games){
 
     sqlite3 *db;
-    char *zErrMsg = 0;
     int rc;
 
     //Random info
@@ -366,7 +363,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games){
             string team_division = sim_teams[i].get_division();
             int team_id = sim_teams[i].get_team_id();
 
-            if(i==0 || i==5 || i == 10 || i == 15 | i==20 | i == 25){
+            if( (i == 0) || (i == 5) || (i == 10) || (i == 15) | (i == 20) | (i == 25)){
                 sim_playoff_total.row(team_id-1)[0]++;
             }
             /* need to sort the teams that aren't leaders in each league
@@ -402,7 +399,6 @@ int main()
 {
 
     sqlite3 *db;
-    char *zErrMsg = 0;
     int rc;
     string SQLStatement;
     string DatabaseName("mlb_data.sqlite");
@@ -484,7 +480,7 @@ int main()
 
     //Enumerating teams.
     for(int i=0;i<30;i++){
-            if(i==0 || i==5 || i == 10 || i== 15 | i==20 | i==25){
+            if( (i == 0) || (i == 5) || (i == 10) || (i == 15) | (i == 20) | (i == 25)){
                 for(int i=0;i<header_length;i++){
                 cout<<"*";
                 }
