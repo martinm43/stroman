@@ -241,9 +241,9 @@ def future_games_list():
     fg_list=[]
     for d in dict_list:
         fg=[]
-        fg[0] = d['away_team']
-        fg[1] = d['home_team']
-        fg[2] = d['home_win_probability']
+        fg.append(d['away_team'])
+        fg.append(d['home_team'])
+        fg.append(d['home_win_probability'])
         fg_list.append(fg)
     return fg_list
 

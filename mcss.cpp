@@ -196,7 +196,7 @@ mat return_future_games(){
         cerr << "Processing of future games' binomial win probabilities is complete." << endl;
     }
     
-
+    cout << future_games << endl;
     return future_games;
 }
 
