@@ -103,6 +103,57 @@ mat return_head_to_head(){
     return Head_To_Head;
 }
 
+mat return_number_of_games(){
+
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    string DatabaseName("mlb_data.sqlite");
+    mat error_matrix = ones<mat>(1,1);
+    mat Head_To_Head = zeros<mat>(30,30);
+
+
+    /* S1 - GETTING LIST OF KNOWN WINS */
+    string SQLStatement;
+
+    SQLStatement =  "select count(*) from "
+                    "games as g inner join srs_ratings as ra on "
+                    "ra.team_id=g.away_team inner join srs_ratings as rh on "
+                    "rh.team_id=g.home_team where g.scheduled_date >= datetime('now') "
+                    "and ra.rating_date = (select max(rating_date) from srs_ratings) "
+                    "and rh.rating_date = (select max(rating_date) from srs_ratings);";
+
+    sqlite3_stmt *stmt;
+
+    rc = sqlite3_open(DatabaseName.c_str(), &db);
+    if( rc ){
+     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+     sqlite3_close(db);
+     return error_matrix;
+    }
+    
+    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
+                            -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
+        sqlite3_finalize(stmt);
+        return error_matrix;
+    }
+
+    int num_future_games;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+
+        num_future_games = sqlite3_column_int(stmt,0);
+    }
+
+    cout << "Number of games to predict: " << num_future_games << endl;
+
+    mat future_games = zeros<mat>(num_future_games,3);
+
+    return future_games;
+}
+
 mat mcss_function(mat mat_head_to_head){
 
     sqlite3 *db;
