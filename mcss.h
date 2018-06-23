@@ -77,5 +77,5 @@ typedef std::vector<double> stdvec;
 typedef std::vector< std::vector<double> > stdvecvec;
 
 stdvecvec mat_to_std_vec(arma::mat &A);
-stdvecvec simulations_result_vectorized(stdvecvec B);
+stdvecvec simulations_result_vectorized(stdvecvec B, stdvecvec C);
 #endif
