@@ -21,6 +21,7 @@ from supports import games_won_to_date
 games_won_list = games_won_to_date(return_format="matrix").tolist()
 
 team_results=simulations_result_vectorized(games_won_list)
+pprint(team_results)
 teams=Team.select()
 
 teams_dict = [dict(zip(['Team','Division'],[i.mlbgames_name,i.division])) for i in teams]
