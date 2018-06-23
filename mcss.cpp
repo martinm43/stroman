@@ -29,7 +29,7 @@ stdvecvec mat_to_std_vec(arma::mat &A) {
     return V;
 }
 
-mat std_vec_to_mat(vector< vector<double> > std_vec_array){
+mat std_vec_to_HH_mat(vector< vector<double> > std_vec_array){
 
     vector<double> std_vec_array_flat;
     for (size_t i = 0; i < std_vec_array.size(); i++) 
@@ -44,6 +44,23 @@ mat std_vec_to_mat(vector< vector<double> > std_vec_array){
     mat mat_from_vec = mat_from_vec_t.t();
     return mat_from_vec;
 }
+
+mat std_vec_to_future_mat(vector< vector<double> > std_vec_array){
+
+    vector<double> std_vec_array_flat;
+    for (size_t i = 0; i < std_vec_array.size(); i++) 
+        {
+        vector<double> el = std_vec_array[i];
+        for (size_t j=0; j < el.size(); j++) {
+            std_vec_array_flat.push_back(el[j]);
+        }
+    }
+    mat col_vec(std_vec_array_flat);
+    mat mat_from_vec_t = reshape(col_vec,3,std_vec_array.size());
+    mat mat_from_vec = mat_from_vec_t.t();
+    return mat_from_vec;
+}
+
 
 double uniformRandom() {
   return ( (double)(rand()) + 1. )/( (double)(RAND_MAX));
@@ -194,7 +211,7 @@ mat return_future_games(){
         cerr << "Processing of future games' binomial win probabilities is complete." << endl;
     }
     
-    cout << future_games << endl;
+    //cout << future_games << endl;
     return future_games;
 }
 
@@ -218,6 +235,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games){
     mat error_matrix = ones<mat>(1,1);
 
     Head_To_Head = mat_head_to_head;
+    //cout << Head_To_Head << endl;
 
     //Name of the database
     string DatabaseName("mlb_data.sqlite");
@@ -387,8 +405,9 @@ mat mcss_function(mat mat_head_to_head, mat future_games){
 template void print_matrix<arma::mat>(arma::mat matrix);
 
 stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python){
-    mat head_to_head_mat = std_vec_to_mat(head_to_head_list_python);
-    mat future_mat = std_vec_to_mat(future_games_list_python);
+    mat head_to_head_mat = std_vec_to_HH_mat(head_to_head_list_python);
+    mat future_mat = std_vec_to_future_mat(future_games_list_python);
+    cout << future_mat << endl;
     mat sim_results = mcss_function(head_to_head_mat,future_mat);
     return mat_to_std_vec(sim_results);
 }
