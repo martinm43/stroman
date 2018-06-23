@@ -179,10 +179,12 @@ mat mcss_function(mat mat_head_to_head){
 
 
     /* S1 - GETTING LIST OF KNOWN WINS*/
-    string SQLStatement("SELECT away_team, away_runs, home_team, home_runs "
-                       "FROM games WHERE scheduled_date <= datetime('now','-1 day');");
+    string SQLStatement;
+    SQLStatement = "SELECT away_team, away_runs, home_team, home_runs "
+                       "FROM games WHERE scheduled_date <= datetime('now','-1 day');";
 
     sqlite3_stmt *stmt;
+
 
     rc = sqlite3_open(DatabaseName.c_str(), &db);
     if( rc ){
@@ -190,27 +192,6 @@ mat mcss_function(mat mat_head_to_head){
      sqlite3_close(db);
      return error_matrix;
     }
-
-    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
-                            -1, &stmt, NULL);
-    if (rc != SQLITE_OK) {
-        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
-        sqlite3_finalize(stmt);
-        return error_matrix;
-    }
-
-
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-
-        int away_team_id = sqlite3_column_int(stmt,0);
-        int away_runs = sqlite3_column_int(stmt,1);
-        int home_team_id = sqlite3_column_int(stmt,2);
-        int home_runs = sqlite3_column_int(stmt,3);
-
-    }
-
-    Head_To_Head = mat_head_to_head;
-    cout << "Games successfully entered" << endl;
 
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
 
