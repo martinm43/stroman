@@ -235,6 +235,18 @@ def mcss(game_dict_list):
             win_matrix[x['away_team'] - 1, x['home_team'] - 1] += 1
     return win_matrix
 
+def future_games_list():
+    # return away, home, odds (diff is home - away)
+    dict_list = future_games_dicts()
+    fg_list=[]
+    for d in dict_list:
+        fg=[]
+        fg[0] = d['away_team']
+        fg[1] = d['home_team']
+        fg[2] = d['home_win_probability']
+        fg_list.append(fg)
+    return fg_list
+
 if __name__ == '__main__':
     print('1')
     pprint(future_games_dicts())
