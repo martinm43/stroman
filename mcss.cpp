@@ -11,7 +11,7 @@
 #include <armadillo>
 #include "mcss.h"
 
-#define MAX_ITER 10000
+#define MAX_ITER 10
 
 using namespace std;
 using namespace arma;
@@ -103,7 +103,7 @@ mat return_head_to_head(){
     return Head_To_Head;
 }
 
-mat return_number_of_games(){
+mat return_future_games(){
 
     sqlite3 *db;
     char *zErrMsg = 0;
@@ -151,6 +151,52 @@ mat return_number_of_games(){
 
     mat future_games = zeros<mat>(num_future_games,3);
 
+
+    SQLStatement =  "select g.away_team, ra.rating, g.home_team, rh.rating from "
+                    "games as g inner join srs_ratings as ra on "
+                    "ra.team_id=g.away_team inner join srs_ratings as rh on "
+                    "rh.team_id=g.home_team where g.scheduled_date >= datetime('now') "
+                    "and ra.rating_date = (select max(rating_date) from srs_ratings) "
+                    "and rh.rating_date = (select max(rating_date) from srs_ratings) "
+                    "order by g.id asc";
+
+    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
+                            -1, &stmt, NULL);
+
+    if (rc != SQLITE_OK) {
+        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
+        sqlite3_finalize(stmt);
+        return error_matrix;
+    }
+
+    int future_games_row = 0;
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+
+         //Debug print to screen - example (away team, away rtg, home team, home rtg)
+         future_games.row(future_games_row)[0] = sqlite3_column_int(stmt,0);
+         future_games.row(future_games_row)[1] = sqlite3_column_int(stmt,2);
+
+         double away_team_rtg = sqlite3_column_double(stmt,1);
+         double home_team_rtg = sqlite3_column_double(stmt,3);
+
+         future_games.row(future_games_row)[2] = SRS_regress(away_team_rtg,home_team_rtg);
+         /*
+            TO DO: Add the actual calculation of the binomial win odds to the array. It may not be 
+            possible within ihis loop, in order to allow for debugging against its Python counterpart.
+            Be careful! Also you'll have to expand the array/perform additional downstream calculations - MAM
+         */
+         future_games_row++;
+         //cout << future_games_row << endl;
+    }
+
+    sqlite3_finalize(stmt);
+
+    if (rc == SQLITE_OK) {
+        cerr << "Processing of future games' binomial win probabilities is complete." << endl;
+    }
+    
+
     return future_games;
 }
 
@@ -173,6 +219,8 @@ mat mcss_function(mat mat_head_to_head){
     mat debug_total = zeros<mat>(30,30);
     mat sim_playoff_total = zeros<mat>(30,3);
     mat error_matrix = ones<mat>(1,1);
+
+    Head_To_Head = mat_head_to_head;
 
     //Name of the database
     string DatabaseName("mlb_data.sqlite");
@@ -229,8 +277,8 @@ mat mcss_function(mat mat_head_to_head){
 
     //cout << half_size << endl;
 
-    /* S3 - GETTING THE NUMBER OF FUTURE GAMES FOR S4 */
-
+    /* S3 - GETTING THE NUMBER OF FUTURE GAMES FOR S4 
+    
     SQLStatement =  "select count(*) from "
                     "games as g inner join srs_ratings as ra on "
                     "ra.team_id=g.away_team inner join srs_ratings as rh on "
@@ -263,7 +311,7 @@ mat mcss_function(mat mat_head_to_head){
     if (rc == SQLITE_OK) {
         cerr << "Game processing is complete." << endl;
     }
-    /* S3 - GETTING FUTURE GAMES AND THEIR ASSOCIATED RATINGS */
+    S3 - GETTING FUTURE GAMES AND THEIR ASSOCIATED RATINGS 
 
     SQLStatement =  "select g.away_team, ra.rating, g.home_team, rh.rating from "
                     "games as g inner join srs_ratings as ra on "
@@ -294,11 +342,10 @@ mat mcss_function(mat mat_head_to_head){
          double home_team_rtg = sqlite3_column_double(stmt,3);
 
          future_games.row(future_games_row)[2] = SRS_regress(away_team_rtg,home_team_rtg);
-         /*
+
             TO DO: Add the actual calculation of the binomial win odds to the array. It may not be 
             possible within ihis loop, in order to allow for debugging against its Python counterpart.
             Be careful! Also you'll have to expand the array/perform additional downstream calculations - MAM
-         */
          future_games_row++;
          //cout << future_games_row << endl;
     }
@@ -308,8 +355,10 @@ mat mcss_function(mat mat_head_to_head){
     if (rc == SQLITE_OK) {
         cerr << "Processing of future games' binomial win probabilities is complete." << endl;
     }
-    
-
+    */
+    mat future_games = return_future_games();
+    //cout << future_games << endl;
+    int num_future_games = future_games.n_rows;
     for(int x_iter=0;x_iter<MAX_ITER;x_iter++){
     /* S5 - Monte Carlo Simulation */
         //set mcss head to head matrix to zero
@@ -327,10 +376,13 @@ mat mcss_function(mat mat_head_to_head){
 
         debug_total.zeros();
         debug_total = MCSS_Head_To_Head+Head_To_Head;
-
+        cout << "Head to Head" << endl;
+        cout << Head_To_Head << endl;
+        cout << "MCSS Head to Head" << endl;
+        cout << MCSS_Head_To_Head << endl;
         //Calculate raw wins - only concerned with that now (can implement tie breaking functionality later)
         mat total_wins = sum(debug_total.t());
-        //cout << total_wins << endl;
+
         for(int i=0;i<30;i++){
             sim_playoff_total.row(i)[2] = sim_playoff_total.row(i)[2] +  total_wins[i];
             //cout << sim_playoff_total.row(i)[2] << endl;
@@ -408,7 +460,7 @@ mat mcss_function(mat mat_head_to_head){
     }
 
     cout << MAX_ITER << " simulations complete." << endl;
-    cout << sim_playoff_total << endl;
+    //cout << sim_playoff_total << endl;
     return sim_playoff_total;
 }
 
