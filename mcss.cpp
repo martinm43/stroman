@@ -507,21 +507,5 @@ int main()
     cout << endl;
     cout << "Total number of simulations: " << MAX_ITER << endl;
 
-    /* Test of conversion capabilities.
-    cout << "Testing conversion capabilities." << endl;
-    mat test_matrix = return_head_to_head();
-    cout << "Original matrix." << endl;
-    cout << test_matrix << endl;
-    stdvecvec test_vect_of_vec = mat_to_std_vec(test_matrix);
-    mat new_matrix = std_vec_to_mat(test_vect_of_vec);
-    cout << "New matrix."<<endl;
-    cout << new_matrix << endl;
-
-    for(int i=0; i<30; i++){
-      for(int j=0; j<30; j++){
-        cout << test_matrix.row(i)[j]-new_matrix.row(i)[j] << endl;
-        }
-    }
-    */
 return 0;
 }
