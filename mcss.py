@@ -1,5 +1,5 @@
-# coding: utf-8
 """
+Endfile for testing integration with the mcss.cpp shared library
 Using the python library developed using C++ to rapidly speed up how standings are printed and presented
 and allow for integration with more 'modern' interfaces -think flask or Django
 """
@@ -15,7 +15,12 @@ from mlb_data_models import Team
 def format_percent(percent_float):
     return str(percent_float) + '%'
 
-team_results=simulations_result_vectorized()
+
+# get list of known wins
+from supports import games_won_to_date
+games_won_list = games_won_to_date(return_format="matrix").tolist()
+
+team_results=simulations_result_vectorized(games_won_list)
 teams=Team.select()
 
 teams_dict = [dict(zip(['Team','Division'],[i.mlbgames_name,i.division])) for i in teams]
@@ -31,11 +36,11 @@ for i,d in enumerate(teams_dict):
 
 teams_dict.sort(key=lambda x: (x['Division'],-x['Avg. Wins']))
 
-team_tuples = [(d['Division'],d['Team'],d['Avg. Wins'],        d['Win Division'],d['Win Wild Card'],d['Make Playoffs']) for d in teams_dict]
+team_tuples = [(d['Division'],d['Team'],d['Avg. Wins'],
+                d['Win Division'],d['Win Wild Card'],d['Make Playoffs']) for d in teams_dict]
 
-results_table = tabulate(team_tuples, headers=['Division','Team','Avg. Wins',                            'Win Division','Win Wild Card','Make Playoffs'],                        tablefmt='rst',numalign='left')
+results_table = tabulate(team_tuples, headers=['Division','Team','Avg. Wins',
+                'Win Division','Win Wild Card','Make Playoffs'],tablefmt='rst',numalign='left')
 
 print(results_table)
-query=Team.select()
-divisions = [t.division for t in query]
-divisions = list(set(divisions))
+

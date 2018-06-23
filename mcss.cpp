@@ -11,7 +11,7 @@
 #include <armadillo>
 #include "mcss.h"
 
-#define MAX_ITER 10000
+#define MAX_ITER 1000000
 
 using namespace std;
 using namespace arma;
@@ -27,6 +27,22 @@ stdvecvec mat_to_std_vec(arma::mat &A) {
         V[i] = arma::conv_to< stdvec >::from(A.row(i));
     };
     return V;
+}
+
+mat std_vec_to_mat(vector< vector<double> > std_vec_array){
+
+    vector<double> std_vec_array_flat;
+    for (int i = 0; i < std_vec_array.size(); i++) 
+        {
+        vector<double> el = std_vec_array[i];
+        for (int j=0; j < el.size(); j++) {
+            std_vec_array_flat.push_back(el[j]);
+        }
+    }
+    mat col_vec(std_vec_array_flat);
+    mat mat_from_vec_t = reshape(col_vec,30,30);
+    mat mat_from_vec = mat_from_vec_t.t();
+    return mat_from_vec;
 }
 
 double uniformRandom() {
@@ -366,8 +382,9 @@ mat mcss_function(mat mat_head_to_head){
 //only require this instantiation as we are only using the vanilla analysis tool
 template void print_matrix<arma::mat>(arma::mat matrix);
 
-stdvecvec simulations_result_vectorized(mat head_to_head_results){
-    mat sim_results = mcss_function(head_to_head_results);
+stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python){
+    mat head_to_head_mat = std_vec_to_mat(head_to_head_list_python);
+    mat sim_results = mcss_function(head_to_head_mat);
     return mat_to_std_vec(sim_results);
 }
 
@@ -481,5 +498,21 @@ int main()
     cout << endl;
     cout << "Total number of simulations: " << MAX_ITER << endl;
 
+    /* Test of conversion capabilities.
+    cout << "Testing conversion capabilities." << endl;
+    mat test_matrix = return_head_to_head();
+    cout << "Original matrix." << endl;
+    cout << test_matrix << endl;
+    stdvecvec test_vect_of_vec = mat_to_std_vec(test_matrix);
+    mat new_matrix = std_vec_to_mat(test_vect_of_vec);
+    cout << "New matrix."<<endl;
+    cout << new_matrix << endl;
+
+    for(int i=0; i<30; i++){
+      for(int j=0; j<30; j++){
+        cout << test_matrix.row(i)[j]-new_matrix.row(i)[j] << endl;
+        }
+    }
+    */
 return 0;
 }
