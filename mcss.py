@@ -11,7 +11,9 @@ from mcss_ext2 import simulations_result_vectorized
 from pprint import pprint
 from mlb_data_models import Team
 
-#define a "percentization function":
+# define a "percentization function":
+
+
 def format_percent(percent_float):
     return str(percent_float) + '%'
 
@@ -19,31 +21,45 @@ def format_percent(percent_float):
 # get list of known wins
 from supports import games_won_to_date, future_games_list
 games_won_list_cpp = games_won_to_date(return_format="matrix").tolist()
-fg_list_cpp = future_games_list();
+fg_list_cpp = future_games_list()
 
-team_results=simulations_result_vectorized(games_won_list_cpp, fg_list_cpp)
+team_results = simulations_result_vectorized(games_won_list_cpp, fg_list_cpp)
 
-teams=Team.select()
+teams = Team.select()
 
 
-teams_dict = [dict(zip(['Team','Division'],[i.mlbgames_name,i.division])) for i in teams]
-for i,d in enumerate(teams_dict):
-    d['Win Division'] = round(team_results[i][0]*100.0,1)
-    d['Win Wild Card'] = round(team_results[i][1]*100.0,1)
-    d['Avg. Wins'] = round(team_results[i][2],1)
+teams_dict = [
+    dict(zip(['Team', 'Division'], [i.mlbgames_name, i.division])) for i in teams]
+for i, d in enumerate(teams_dict):
+    d['Win Division'] = round(team_results[i][0] * 100.0, 1)
+    d['Win Wild Card'] = round(team_results[i][1] * 100.0, 1)
+    d['Avg. Wins'] = round(team_results[i][2], 1)
     d['Make Playoffs'] = d['Win Division'] + d['Win Wild Card']
-    #Convert into percentages for printing
+    # Convert into percentages for printing
     d['Win Division'] = format_percent(d['Win Division'])
     d['Win Wild Card'] = format_percent(d['Win Wild Card'])
     d['Make Playoffs'] = format_percent(d['Make Playoffs'])
 
-teams_dict.sort(key=lambda x: (x['Division'],-x['Avg. Wins']))
+teams_dict.sort(key=lambda x: (x['Division'], -x['Avg. Wins']))
 
-team_tuples = [(d['Division'],d['Team'],d['Avg. Wins'],
-                d['Win Division'],d['Win Wild Card'],d['Make Playoffs']) for d in teams_dict]
+team_tuples = [
+    (d['Division'],
+     d['Team'],
+     d['Avg. Wins'],
+     d['Win Division'],
+     d['Win Wild Card'],
+     d['Make Playoffs']) for d in teams_dict]
 
-results_table = tabulate(team_tuples, headers=['Division','Team','Avg. Wins',
-                'Win Division','Win Wild Card','Make Playoffs'],tablefmt='rst',numalign='left')
+results_table = tabulate(
+    team_tuples,
+    headers=[
+        'Division',
+        'Team',
+        'Avg. Wins',
+        'Win Division',
+        'Win Wild Card',
+        'Make Playoffs'],
+    tablefmt='rst',
+    numalign='left')
 
 print(results_table)
-
