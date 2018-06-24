@@ -58,11 +58,6 @@ struct teams_sort
         if (Team1.get_division() == Team2.get_division())
             if (Team1.get_total_wins() > Team2.get_total_wins())
                 return true;
-            else if(Team1.get_total_wins() == Team2.get_total_wins())
-                if (uniformRandom_sorting() > 0.5)
-                    return false;
-                else
-                    return true;
             else
                 return false;
         else if (Team1.get_division() < Team2.get_division())
