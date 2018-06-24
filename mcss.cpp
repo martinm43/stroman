@@ -16,10 +16,15 @@
 using namespace std;
 using namespace arma;
 
+//Matrix Printing Tools
+
 template<class Matrix>
 void print_matrix(Matrix matrix) {
     matrix.print(std::cout);
 }
+
+//Converting vectors from python into appropriate matrices
+//and vice versa.
 
 stdvecvec mat_to_std_vec(arma::mat &A) {
     stdvecvec V(A.n_rows);
@@ -61,6 +66,7 @@ mat std_vec_to_future_mat(vector< vector<double> > std_vec_array){
     return mat_from_vec;
 }
 
+//Crude statistical model, implemented locally.
 
 double uniformRandom() {
   return ( (double)(rand()) + 1. )/( (double)(RAND_MAX));
@@ -72,6 +78,9 @@ double SRS_regress(double rating_away, double rating_home)
     float b=-0.15;
     return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
 }
+
+//Functions accepting void (using raw SQL written by author)
+//and returning matrices for mcss_function (the monte carlo simulation)
 
 mat return_head_to_head(){
 
@@ -215,6 +224,8 @@ mat return_future_games(){
     return future_games;
 }
 
+//The Monte Carlo "muscle." All SQL based functions are abstracted outside this loop
+//so other more "user friendly" languages can transmit information to this loop.
 mat mcss_function(mat mat_head_to_head, mat future_games){
 
     sqlite3 *db;
@@ -243,9 +254,6 @@ mat mcss_function(mat mat_head_to_head, mat future_games){
 
     /* S1 - GETTING LIST OF KNOWN WINS*/
     string SQLStatement;
-    SQLStatement = "SELECT away_team, away_runs, home_team, home_runs "
-                       "FROM games WHERE scheduled_date <= datetime('now','-1 day');";
-
     sqlite3_stmt *stmt;
 
 
@@ -424,7 +432,7 @@ int main()
     sqlite3_stmt *stmt;
 
     cout << "running main" << endl;
-    vector<Team> teams;
+    stdteamvec teams;
 
     mat head_to_head_results;
     head_to_head_results = return_head_to_head();

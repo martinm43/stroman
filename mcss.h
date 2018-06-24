@@ -45,6 +45,11 @@ public:
     float get_playoff_odds() const {return _playoff_odds;}
 };
 
+double uniformRandom_sorting() {
+  return ( (double)(rand()) + 1. )/( (double)(RAND_MAX));
+}
+
+
 
 struct teams_sort
 {
@@ -53,6 +58,11 @@ struct teams_sort
         if (Team1.get_division() == Team2.get_division())
             if (Team1.get_total_wins() > Team2.get_total_wins())
                 return true;
+            else if(Team1.get_total_wins() == Team2.get_total_wins())
+                if (uniformRandom_sorting() > 0.5)
+                    return false;
+                else
+                    return true;
             else
                 return false;
         else if (Team1.get_division() < Team2.get_division())
@@ -75,8 +85,11 @@ struct wins_sort
 
 typedef std::vector<double> stdvec;
 typedef std::vector< std::vector<double> > stdvecvec;
+typedef std::vector<Team> stdteamvec;
+
 
 stdvecvec mat_to_std_vec(arma::mat &A);
 //Functions being passed to cython must use pass by value, not pass by reference (passed not &passed)
 stdvecvec simulations_result_vectorized(stdvecvec B, stdvecvec C);
+
 #endif
