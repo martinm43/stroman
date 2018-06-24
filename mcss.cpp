@@ -224,6 +224,63 @@ mat return_future_games(){
     return future_games;
 }
 
+stdteamvec return_league_teams(){
+
+    stdteamvec list_of_teams;
+
+    stdteamvec error_team_list;
+    Team error_team(-1,"ERROR","ERROR","ERROR","ERROR",-99);
+    error_team_list.push_back(error_team);
+
+    sqlite3 *db;
+    int rc;
+    string DatabaseName("mlb_data.sqlite");
+
+    /* S1 - GETTING LIST OF KNOWN WINS */
+    string SQLStatement;
+
+    SQLStatement = "select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating "
+                    "from teams as t "
+                    "inner join SRS_Ratings as s "
+                    "on s.team_id=t.id "
+                    "where s.rating <> 0 "
+                    "and s.rating_date = (select rating_date from SRS_ratings "
+                    "order by rating_date desc limit 1) "
+                    "order by t.id asc ";
+
+    sqlite3_stmt *stmt;
+
+    rc = sqlite3_open(DatabaseName.c_str(), &db);
+    if( rc ){
+     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+     sqlite3_close(db);
+     return error_team_list;
+    }
+    
+    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
+                            -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
+        sqlite3_finalize(stmt);
+        return error_team_list;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+
+        int team_id = sqlite3_column_int(stmt,0);
+        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
+        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
+        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
+        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4)));
+        float rating = sqlite3_column_double(stmt,5);
+        list_of_teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
+   
+    }
+
+    cout << "Games successfully entered" << endl;
+    return list_of_teams;
+}
+
 //The Monte Carlo "muscle." All SQL based functions are abstracted outside this loop
 //so other more "user friendly" languages can transmit information to this loop.
 mat mcss_function(mat mat_head_to_head, mat future_games){
@@ -253,9 +310,6 @@ mat mcss_function(mat mat_head_to_head, mat future_games){
 
 
     /* S1 - GETTING LIST OF KNOWN WINS*/
-    string SQLStatement;
-    sqlite3_stmt *stmt;
-
 
     rc = sqlite3_open(DatabaseName.c_str(), &db);
     if( rc ){
@@ -264,39 +318,11 @@ mat mcss_function(mat mat_head_to_head, mat future_games){
      return error_matrix;
     }
 
-    /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
-
-    SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating "
-                    "from teams as t "
-                    "inner join SRS_Ratings as s "
-                    "on s.team_id=t.id "
-                    "where s.rating <> 0 "
-                    "and s.rating_date = (select rating_date from SRS_ratings "
-                    "order by rating_date desc limit 1) "
-                    "order by t.id asc ";
-
-    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
-                            -1, &stmt, NULL);
-
-    if (rc != SQLITE_OK) {
-        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
-        sqlite3_finalize(stmt);
-        return error_matrix;
-    }
-
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-
-        //Write information into the vectors.
-        int team_id = sqlite3_column_int(stmt,0);
-        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
-        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
-        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
-        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4))); //does not capture whole division!!
-        float rating = sqlite3_column_double(stmt,5);
-        teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
-    }
-
+    teams = return_league_teams();
     size_t const half_size=teams.size()/2;
+
+    
+
 
     //cout << future_games << endl;
     int num_future_games = future_games.n_rows;
