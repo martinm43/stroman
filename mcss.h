@@ -45,12 +45,6 @@ public:
     float get_playoff_odds() const {return _playoff_odds;}
 };
 
-double uniformRandom_sorting() {
-  return ( (double)(rand()) + 1. )/( (double)(RAND_MAX));
-}
-
-
-
 struct teams_sort
 {
     inline bool operator()(const Team& Team1, const Team& Team2)
