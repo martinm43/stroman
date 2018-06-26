@@ -283,7 +283,7 @@ stdteamvec return_league_teams(){
 
 //The Monte Carlo "muscle." All SQL based functions are abstracted outside this loop
 //so other more "user friendly" languages can transmit information to this loop.
-mat mcss_function(mat mat_head_to_head, mat future_games){
+mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_teams){
 
     sqlite3 *db;
     int rc;
@@ -318,7 +318,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games){
      return error_matrix;
     }
 
-    teams = return_league_teams();
+    teams = list_of_teams;
     size_t const half_size=teams.size()/2;
 
     
@@ -431,18 +431,19 @@ mat mcss_function(mat mat_head_to_head, mat future_games){
     }
 
     cout << MAX_ITER << " simulations complete." << endl;
-    //cout << sim_playoff_total << endl;
+    cout << sim_playoff_total << endl;
     return sim_playoff_total;
 }
 
 //only require this instantiation as we are only using the vanilla analysis tool
 template void print_matrix<arma::mat>(arma::mat matrix);
 
-stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python){
+stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python, stdteamvec teams_list_python){
     mat head_to_head_mat = std_vec_to_HH_mat(head_to_head_list_python);
     mat future_mat = std_vec_to_future_mat(future_games_list_python);
+    stdteamvec teams = teams_list_python; 
     //cout << future_mat << endl;
-    mat sim_results = mcss_function(head_to_head_mat,future_mat);
+    mat sim_results = mcss_function(head_to_head_mat,future_mat,teams);
     return mat_to_std_vec(sim_results);
 }
 
@@ -465,8 +466,9 @@ int main()
     mat future_games;
     future_games = return_future_games();
     mat simulation_results;
-    simulation_results = mcss_function(head_to_head_results,future_games);
-
+    teams = return_league_teams();
+    simulation_results = mcss_function(head_to_head_results,future_games,teams);
+    
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
 
     rc = sqlite3_open(DatabaseName.c_str(), &db);
@@ -494,19 +496,6 @@ int main()
         return 1;
     }
 
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-
-        //Write information into the vectors.
-        int team_id = sqlite3_column_int(stmt,0);
-        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
-        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
-        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
-        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4))); //does not capture whole division!!
-        float rating = sqlite3_column_double(stmt,5);
-        teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
-    }
-
-    //assign the values
     for(int i=0;i<30;i++){
         float wild_card_odds = simulation_results.row(i)[1];
         float division_odds = simulation_results.row(i)[0];
