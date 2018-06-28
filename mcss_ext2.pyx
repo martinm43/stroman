@@ -85,6 +85,17 @@ cdef class PyTeam:
 
 # c++ interface to cython
 
-def simulations_result_vectorized(head_to_head, future_games, vector[Team] list_of_teams):
+def simulations_result_vectorized(head_to_head, future_games, list_of_teams):
     
-    return mcss_ext.simulations_result_vectorized(head_to_head, future_games,list_of_teams)
+    cpdef vector[Team] cpp_list_of_teams
+
+    for t in list_of_teams:
+        team_id = t[0]
+        mlbgames_name = t[1]
+        abbreviation = t[2]
+        division = t[3]
+        league = t[4]
+        rating = t[5]
+        cpp_list_of_teams.push_back(Team(id,mlbgames_name,abbreviation,league,rating))
+
+    return mcss_ext.simulations_result_vectorized(head_to_head, future_games,cpp_list_of_teams)
