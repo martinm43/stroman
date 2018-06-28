@@ -79,6 +79,6 @@ typedef std::vector<Team> stdteamvec;
 
 stdvecvec mat_to_std_vec(arma::mat &A);
 //Functions being passed to cython must use pass by value, not pass by reference (passed not &passed)
-stdvecvec simulations_result_vectorized(stdvecvec B, stdvecvec C);
+stdvecvec simulations_result_vectorized(stdvecvec B, stdvecvec C, stdteamvec D);
 
 #endif
