@@ -8,8 +8,8 @@ cimport mcss_ext
 from libcpp.string cimport string
 
 # c++ interface to cython
-def simulations_result_vectorized(head_to_head, future_games):
-    return mcss_ext.simulations_result_vectorized(head_to_head, future_games)
+def simulations_result_vectorized(head_to_head, future_games, list_of_teams):
+    return mcss_ext.simulations_result_vectorized(head_to_head, future_games, list_of_teams)
 
 cdef extern from "mcss.h":
 
