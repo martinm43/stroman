@@ -37,8 +37,8 @@ cdef extern from "mcss.h":
 cdef class PyTeam:
     cdef Team *thisptr # hold a C++ instance of a team object
 
-    def __cinit__(self,int id, string mlbgames_name, string...)
-        self.thisptr = new Team(...)
+    def __cinit__(self,int id, string mlbgames_name, string abbreviation, string division, string league, float rating):
+        self.thisptr = new Team(id,mlbgames_name,abbreviation,division,league,rating)
 
     def __dealloc__(self):
         del self.thisptr
@@ -66,16 +66,16 @@ cdef class PyTeam:
         return self.thisptr.get_total_wins()
 
     def set_total_wins(self,val):
-        self.thisptr.set_total_wins(int val)
+        self.thisptr.set_total_wins(val)
 
     def set_wild_card_odds(self,val):
-        self.thisptr.set_wild_card_odds(float val)
+        self.thisptr.set_wild_card_odds(val)
 
     def set_division_odds(self,val):
-        self.thisptr.set_division_odds(float val)
+        self.thisptr.set_division_odds(val)
 
     def set_playoff_odds(self,val):
-        self.thisptr.set_playoff_odds(float val)
+        self.thisptr.set_playoff_odds(val)
 
     def get_wild_card_odds(self):
         return self.thisptr.get_wild_card_odds()
