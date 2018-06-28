@@ -20,7 +20,7 @@ cdef extern from "mcss.h":
         string get_abbreviation()
         string get_division()
         string get_league()
-        float get_rating()
+        self.thisptr.get_rating()
         int get_total_wins()
 
 
@@ -47,3 +47,18 @@ cdef class PyTeam:
         return self.thisptr.get_team_id()
 
     #other defs as above
+        self.thisptr.get_mlbgames_name()
+        self.thisptr.get_abbreviation()
+        self.thisptr.get_division()
+        self.thisptr.get_league()
+        float get_rating()
+        int get_total_wins()
+
+
+        void set_total_wins(int val)
+        void set_wild_card_odds(float val)
+        void set_division_odds(float val)
+        void set_playoff_odds(float val)
+        float get_wild_card_odds()
+        float get_division_odds()
+        float get_playoff_odds()
