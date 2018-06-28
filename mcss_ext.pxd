@@ -10,25 +10,31 @@ from libcpp.string cimport string
 
 # c++ interface to cython
 cdef extern from "mcss.h":
+
+    cdef cppclass Team:
+
+        Team(int,string,string,string,string,float) except +
+
+        int get_team_id()
+        string get_mlbgames_name()
+        string get_abbreviation()
+        string get_division()
+        string get_league()
+        float get_rating()
+        int get_total_wins()
+
+
+        void set_total_wins(int val)
+        void set_wild_card_odds(float val)
+        void set_division_odds(float val)
+        void set_playoff_odds(float val)
+        float get_wild_card_odds()
+        float get_division_odds()
+        float get_playoff_odds()
+
     vector[vector[double]] simulations_result_vectorized(vector[vector[double]],vector[vector[double]])
 
-cdef cppclass Team:
+cdef class PyTeam:
+    cdef Team *thisptr # hold a C++ instance of a team object
 
-    Team(int,string,string,string,string,float) except +
-
-    int get_team_id() const {return _team_id;}
-    std::string get_mlbgames_name() const {return _mlbgames_name;}
-    std::string get_abbreviation() const {return _abbreviation;}
-    std::string get_division() const {return _division;}
-    std::string get_league() const {return _league;}
-    float get_rating() const {return _rating;}
-    int get_total_wins() const {return _total_wins;}
-
-
-    void set_total_wins(int val) {_total_wins = val;}
-    void set_wild_card_odds(float val) {_wild_card_odds = val;}
-    void set_division_odds(float val) {_division_odds = val;}
-    void set_playoff_odds(float val) {_playoff_odds = val;}
-    float get_wild_card_odds() const {return _wild_card_odds;}
-    float get_division_odds() const {return _division_odds;}
-    float get_playoff_odds() const {return _playoff_odds;}
+    def __cinit__
