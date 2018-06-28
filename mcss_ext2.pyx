@@ -6,10 +6,7 @@
 
 cimport mcss_ext
 from libcpp.string cimport string
-
-# c++ interface to cython
-def simulations_result_vectorized(head_to_head, future_games, list_of_teams):
-    return mcss_ext.simulations_result_vectorized(head_to_head, future_games, list_of_teams)
+from libcpp.vector cimport vector
 
 cdef extern from "mcss.h":
 
@@ -85,3 +82,8 @@ cdef class PyTeam:
 
     def get_playoff_odds(self):
         return self.thisptr.get_playoff_odds()
+
+# c++ interface to cython
+
+#cpdef simulations_result_vectorized(head_to_head, future_games, vector[Team] list_of_teams):
+#    return mcss_ext.simulations_result_vectorized(head_to_head, future_games,list_of_teams)
