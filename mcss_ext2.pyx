@@ -85,5 +85,6 @@ cdef class PyTeam:
 
 # c++ interface to cython
 
-#cpdef simulations_result_vectorized(head_to_head, future_games, vector[Team] list_of_teams):
-#    return mcss_ext.simulations_result_vectorized(head_to_head, future_games,list_of_teams)
+def simulations_result_vectorized(head_to_head, future_games, vector[Team] list_of_teams):
+    
+    return mcss_ext.simulations_result_vectorized(head_to_head, future_games,list_of_teams)
