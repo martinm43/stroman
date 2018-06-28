@@ -47,12 +47,18 @@ cdef class PyTeam:
         return self.thisptr.get_team_id()
 
     #other defs as above
-        self.thisptr.get_mlbgames_name()
-        self.thisptr.get_abbreviation()
-        self.thisptr.get_division()
-        self.thisptr.get_league()
-        self.thisptr.get_rating()
-        self.thisptr.get_total_wins()
+    def get_mlbgames_name(self):
+        return self.thisptr.get_mlbgames_name()
+    def get_abbreviation(self):
+        return self.thisptr.get_abbreviation()
+    def get_division(self):
+        return self.thisptr.get_division()
+    def get_league(self):
+        return self.thisptr.get_league()
+    def get_rating(self):
+        return self.thisptr.get_rating()
+    def get_total_wins(self):
+        return self.thisptr.get_total_wins()
 
 
         self.thisptr.set_total_wins(int val)
