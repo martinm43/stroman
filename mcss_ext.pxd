@@ -49,22 +49,39 @@ cdef class PyTeam:
     #other defs as above
     def get_mlbgames_name(self):
         return self.thisptr.get_mlbgames_name()
+
     def get_abbreviation(self):
         return self.thisptr.get_abbreviation()
+
     def get_division(self):
         return self.thisptr.get_division()
+
     def get_league(self):
         return self.thisptr.get_league()
+
     def get_rating(self):
         return self.thisptr.get_rating()
+
     def get_total_wins(self):
         return self.thisptr.get_total_wins()
 
-
+    def set_total_wins(self,val):
         self.thisptr.set_total_wins(int val)
+
+    def set_wild_card_odds(self,val):
         self.thisptr.set_wild_card_odds(float val)
+
+    def set_division_odds(self,val):
         self.thisptr.set_division_odds(float val)
+
+    def set_playoff_odds(self,val):
         self.thisptr.set_playoff_odds(float val)
-        self.thisptr.get_wild_card_odds()
-        self.thisptr.get_division_odds()
-        self.thisptr.get_playoff_odds()
+
+    def get_wild_card_odds(self):
+        return self.thisptr.get_wild_card_odds()
+
+    def get_division_odds(self):
+        return self.thisptr.get_division_odds()
+
+    def get_playoff_odds(self):
+        return self.thisptr.get_playoff_odds()
