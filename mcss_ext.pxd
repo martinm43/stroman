@@ -37,4 +37,13 @@ cdef extern from "mcss.h":
 cdef class PyTeam:
     cdef Team *thisptr # hold a C++ instance of a team object
 
-    def __cinit__
+    def __cinit__(self,int id, string mlbgames_name, string...)
+        self.thisptr = new Team(...)
+
+    def __dealloc__(self):
+        del self.thisptr
+
+    def get_team_id(self):
+        return self.thisptr.get_team_id()
+
+    #other defs as above
