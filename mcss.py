@@ -36,7 +36,6 @@ for q in query:
     team.append(float(q[5]))
     teams_list.append(team)
 
-pprint(teams_list)
 
 team_results = simulations_result_vectorized(games_won_list_cpp, fg_list_cpp,teams_list)
 
