@@ -27,6 +27,8 @@ public:
             _abbreviation(abbreviation), _division(division), 
             _league(league), _rating(rating) {}
 
+    Team(){_team_id=0, _mlbgames_name="Carp", _abbreviation="HC", _division="Central", _league="NPL", _rating=9001.0;}
+
     int get_team_id() const {return _team_id;}
     std::string get_mlbgames_name() const {return _mlbgames_name;}
     std::string get_abbreviation() const {return _abbreviation;}

@@ -14,6 +14,7 @@ cdef extern from "mcss.h":
     cdef cppclass Team:
 
         Team(int,string,string,string,string,float) except +
+        Team() except +
 
         int get_team_id()
         string get_mlbgames_name()
