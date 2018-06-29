@@ -92,13 +92,13 @@ def simulations_result_vectorized(head_to_head, future_games, list_of_teams):
     cpdef vector[Team] cpp_list_of_teams
 
     for t in list_of_teams:
-        team_id = t[0]
+        team_id = int(t[0])
         mlbgames_name = t[1]
         abbreviation = t[2]
         division = t[3]
         league = t[4]
         rating = t[5]
-        st = PyTeam(id,mlbgames_name,abbreviation,division,league,rating)
+        st = PyTeam(team_id,mlbgames_name,abbreviation,division,league,rating)
         st_cpp =dereference(st.thisptr)
         cpp_list_of_teams.push_back(st_cpp)
 
