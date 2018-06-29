@@ -7,6 +7,7 @@
 cimport mcss_ext
 from libcpp.string cimport string
 from libcpp.vector cimport vector
+from cython.operator import dereference
 
 cdef extern from "mcss.h":
 
@@ -96,6 +97,8 @@ def simulations_result_vectorized(head_to_head, future_games, list_of_teams):
         division = t[3]
         league = t[4]
         rating = t[5]
-        cpp_list_of_teams.push_back(Team(id,mlbgames_name,abbreviation,league,rating))
+        st = PyTeam(id,mlbgames_name,abbreviation,division,league,rating)
+        st_cpp =dereference(st.thisptr)
+        cpp_list_of_teams.push_back(st_cpp)
 
     return mcss_ext.simulations_result_vectorized(head_to_head, future_games,cpp_list_of_teams)
