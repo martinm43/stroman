@@ -23,10 +23,13 @@ from supports import games_won_to_date, future_games_list
 games_won_list_cpp = games_won_to_date(return_format="matrix").tolist()
 fg_list_cpp = future_games_list()
 
+# get the team rating data
+
+
+
 team_results = simulations_result_vectorized(games_won_list_cpp, fg_list_cpp)
 
 teams = Team.select()
-
 
 teams_dict = [
     dict(zip(['Team', 'Division'], [i.mlbgames_name, i.division])) for i in teams]
