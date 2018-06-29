@@ -1,7 +1,1 @@
-select g.away_team, ra.rating, g.home_team, rh.rating from 
-games as g inner join srs_ratings as ra on 
-ra.team_id=g.away_team inner join srs_ratings as rh on 
-rh.team_id=g.home_team where g.scheduled_date >= datetime('now') 
-yand ra.rating_date = (select max(rating_date) from srs_ratings) 
-and rh.rating_date = (select max(rating_date) from srs_ratings) 
-order by g.id asc
+select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating from teams as t inner join SRS_Ratings as s on s.team_id=t.id where s.rating <> 0 and s.rating_date = (select rating_date from SRS_ratings order by rating_date desc limit 1) order by t.id asc

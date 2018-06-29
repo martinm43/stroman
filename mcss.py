@@ -9,7 +9,7 @@ from __future__ import print_function, division
 from tabulate import tabulate
 from mcss_ext2 import simulations_result_vectorized
 from pprint import pprint
-from mlb_data_models import Team
+from mlb_data_models import Team, database
 
 # define a "percentization function":
 
@@ -24,10 +24,21 @@ games_won_list_cpp = games_won_to_date(return_format="matrix").tolist()
 fg_list_cpp = future_games_list()
 
 # get the team rating data
+query = database.execute_sql("select * from recent_ratings")
+teams_list=[]
+for q in query:
+    team=[]
+    team.append(int(q[0]))
+    team.append(q[1])
+    team.append(q[2])
+    team.append(q[3])
+    team.append(q[4])
+    team.append(float(q[5]))
+    teams_list.append(team)
 
+pprint(teams_list)
 
-
-team_results = simulations_result_vectorized(games_won_list_cpp, fg_list_cpp)
+team_results = simulations_result_vectorized(games_won_list_cpp, fg_list_cpp,teams_list)
 
 teams = Team.select()
 
