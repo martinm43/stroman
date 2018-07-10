@@ -94,11 +94,11 @@ def id_to_mlbgames_name(team_id, verbose=False):
         t = [[x.mlbgames_name, x.division] for x in t][0]
     return t
 
-def games_won_to_date():
+def games_won_to_date(return_format="list"):
 
     start_datetime = datetime(2018,03,15)
     end_datetime = datetime.today() - timedelta(days=1)
-    games_query_result = games_query(start_datetime,end_datetime)
+    games_query_result = games_query(start_datetime,end_datetime,return_format)
     return games_query_result
 
 
