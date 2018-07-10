@@ -45,7 +45,6 @@ cdef class PyTeam:
     def get_team_id(self):
         return self.thisptr.get_team_id()
 
-    #other defs as above
     def get_mlbgames_name(self):
         return self.thisptr.get_mlbgames_name()
 
@@ -84,8 +83,6 @@ cdef class PyTeam:
 
     def get_playoff_odds(self):
         return self.thisptr.get_playoff_odds()
-
-# c++ interface to cython
 
 def simulations_result_vectorized(head_to_head, future_games, list_of_teams):
     

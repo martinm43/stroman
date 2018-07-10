@@ -101,9 +101,8 @@ def games_won_to_date(return_format='list'):
     numerical list, a list of dicts, or a head to head matrix
     """
     played_games = Game.select().where(
-        Game.scheduled_date < datetime.today() -
-        timedelta(
-            days=1)).order_by(
+        Game.scheduled_date < datetime.today() - timedelta(days=1) & 
+        Game.scheduled_date > datetime(2018,03,15)).order_by(
                 Game.scheduled_date)
     played_games = [[g.away_team, g.away_runs, g.home_team, g.home_runs]
                     for g in played_games]
