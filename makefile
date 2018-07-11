@@ -5,6 +5,9 @@ DEPS = armadillo sqlite3
 main-make: mcss.cpp
 	g++ -o mcss mcss.cpp -lsqlite3 -larmadillo -I. -O3
 
+main-wall-make: mcss.cpp
+	g++ -o mcss mcss.cpp -lsqlite3 -larmadillo -I. -O3 -Wall -Wextra
+
 debug-make: mcss.cpp
 	g++ -o mcss mcss.cpp -lsqlite3 -larmadillo -I. -g
 

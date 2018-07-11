@@ -94,17 +94,24 @@ def id_to_mlbgames_name(team_id, verbose=False):
         t = [[x.mlbgames_name, x.division] for x in t][0]
     return t
 
+def games_won_to_date(return_format="list"):
 
-def games_won_to_date(return_format='list'):
+    start_datetime = datetime(2018,03,15)
+    end_datetime = datetime.today() - timedelta(days=1)
+    games_query_result = games_query(start_datetime,end_datetime,return_format)
+    return games_query_result
+
+
+
+def games_query(start_datetime,end_datetime,return_format="list"):
     """
     Returns the number of games won to date in either a straight
     numerical list, a list of dicts, or a head to head matrix
     """
     played_games = Game.select().where(
-        Game.scheduled_date < datetime.today() -
-        timedelta(
-            days=1)).order_by(
-                Game.scheduled_date)
+        Game.scheduled_date < end_datetime,
+        Game.scheduled_date > start_datetime).order_by(Game.scheduled_date)
+
     played_games = [[g.away_team, g.away_runs, g.home_team, g.home_runs]
                     for g in played_games]
     winlist = [x[0] if x[1] > x[3] else x[2] for x in played_games]
@@ -234,6 +241,18 @@ def mcss(game_dict_list):
         else:
             win_matrix[x['away_team'] - 1, x['home_team'] - 1] += 1
     return win_matrix
+
+def future_games_list():
+    # return away, home, odds (diff is home - away)
+    dict_list = future_games_dicts()
+    fg_list=[]
+    for d in dict_list:
+        fg=[]
+        fg.append(d['away_team'])
+        fg.append(d['home_team'])
+        fg.append(d['home_win_probability'])
+        fg_list.append(fg)
+    return fg_list
 
 if __name__ == '__main__':
     print('1')

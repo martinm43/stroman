@@ -16,10 +16,15 @@
 using namespace std;
 using namespace arma;
 
+//Matrix Printing Tools
+
 template<class Matrix>
 void print_matrix(Matrix matrix) {
     matrix.print(std::cout);
 }
+
+//Converting vectors from python into appropriate matrices
+//and vice versa.
 
 stdvecvec mat_to_std_vec(arma::mat &A) {
     stdvecvec V(A.n_rows);
@@ -29,11 +34,39 @@ stdvecvec mat_to_std_vec(arma::mat &A) {
     return V;
 }
 
-mat hero(){
-    mat x = zeros<mat>(2,2);
-    mat *x_p = &x;
-    return *x_p;
+mat std_vec_to_HH_mat(vector< vector<double> > std_vec_array){
+
+    vector<double> std_vec_array_flat;
+    for (size_t i = 0; i < std_vec_array.size(); i++) 
+        {
+        vector<double> el = std_vec_array[i];
+        for (size_t j=0; j < el.size(); j++) {
+            std_vec_array_flat.push_back(el[j]);
+        }
+    }
+    mat col_vec(std_vec_array_flat);
+    mat mat_from_vec_t = reshape(col_vec,30,30);
+    mat mat_from_vec = mat_from_vec_t.t();
+    return mat_from_vec;
 }
+
+mat std_vec_to_future_mat(vector< vector<double> > std_vec_array){
+
+    vector<double> std_vec_array_flat;
+    for (size_t i = 0; i < std_vec_array.size(); i++) 
+        {
+        vector<double> el = std_vec_array[i];
+        for (size_t j=0; j < el.size(); j++) {
+            std_vec_array_flat.push_back(el[j]);
+        }
+    }
+    mat col_vec(std_vec_array_flat);
+    mat mat_from_vec_t = reshape(col_vec,3,std_vec_array.size());
+    mat mat_from_vec = mat_from_vec_t.t();
+    return mat_from_vec;
+}
+
+//Crude statistical model, implemented locally.
 
 double uniformRandom() {
   return ( (double)(rand()) + 1. )/( (double)(RAND_MAX));
@@ -46,29 +79,17 @@ double SRS_regress(double rating_away, double rating_home)
     return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
 }
 
-mat mcss_function(){
+//Functions accepting void (using raw SQL written by author)
+//and returning matrices for mcss_function (the monte carlo simulation)
+
+mat return_head_to_head(){
 
     sqlite3 *db;
-    char *zErrMsg = 0;
     int rc;
-
-    //Random info
-    srand(time(NULL));
-
-    //Two vectors for holding key information to be used later
-    vector<Game> games;
-    vector<Team> teams;
-
-    // Matrix examples.
-    mat Head_To_Head = zeros<mat>(30,30);
-    mat MCSS_Head_To_Head = zeros<mat>(30,30);
-    mat Sim_Total = zeros<mat>(30,30);
-    mat debug_total = zeros<mat>(30,30);
-    mat sim_playoff_total = zeros<mat>(30,3);
-    mat error_matrix = ones<mat>(1,1);
-
-    //Name of the database
     string DatabaseName("mlb_data.sqlite");
+    mat error_matrix = ones<mat>(1,1);
+    mat Head_To_Head = zeros<mat>(30,30);
+
 
     /* S1 - GETTING LIST OF KNOWN WINS */
     string SQLStatement("SELECT away_team, away_runs, home_team, home_runs "
@@ -92,13 +113,10 @@ mat mcss_function(){
     }
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-
         int away_team_id = sqlite3_column_int(stmt,0);
         int away_runs = sqlite3_column_int(stmt,1);
         int home_team_id = sqlite3_column_int(stmt,2);
         int home_runs = sqlite3_column_int(stmt,3);
-        games.push_back(Game(away_team_id,away_runs,home_team_id,home_runs));
-
         if (home_runs > away_runs)
             Head_To_Head.row(home_team_id-1)[away_team_id-1]++;
         else
@@ -107,43 +125,20 @@ mat mcss_function(){
 
     cout << "Games successfully entered" << endl;
 
-    /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
+    return Head_To_Head;
+}
 
-    SQLStatement =  "select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating "
-                    "from teams as t "
-                    "inner join SRS_Ratings as s "
-                    "on s.team_id=t.id "
-                    "where s.rating <> 0 "
-                    "and s.rating_date = (select rating_date from SRS_ratings "
-                    "order by rating_date desc limit 1) "
-                    "order by t.id asc ";
+mat return_future_games(){
 
-    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
-                            -1, &stmt, NULL);
+    sqlite3 *db;
+    int rc;
+    string DatabaseName("mlb_data.sqlite");
+    mat error_matrix = ones<mat>(1,1);
+    mat Head_To_Head = zeros<mat>(30,30);
 
-    if (rc != SQLITE_OK) {
-        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
-        sqlite3_finalize(stmt);
-        return error_matrix;
-    }
 
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-
-        //Write information into the vectors.
-        int team_id = sqlite3_column_int(stmt,0);
-        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
-        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
-        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
-        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4))); //does not capture whole division!!
-        float rating = sqlite3_column_double(stmt,5);
-        teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
-    }
-
-    size_t const half_size=teams.size()/2;
-
-    //cout << half_size << endl;
-
-    /* S3 - GETTING THE NUMBER OF FUTURE GAMES FOR S4 */
+    /* S1 - GETTING LIST OF KNOWN WINS */
+    string SQLStatement;
 
     SQLStatement =  "select count(*) from "
                     "games as g inner join srs_ratings as ra on "
@@ -152,16 +147,24 @@ mat mcss_function(){
                     "and ra.rating_date = (select max(rating_date) from srs_ratings) "
                     "and rh.rating_date = (select max(rating_date) from srs_ratings);";
 
+    sqlite3_stmt *stmt;
+
+    rc = sqlite3_open(DatabaseName.c_str(), &db);
+    if( rc ){
+     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+     sqlite3_close(db);
+     return error_matrix;
+    }
+    
     rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
                             -1, &stmt, NULL);
-
     if (rc != SQLITE_OK) {
         cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
         sqlite3_finalize(stmt);
         return error_matrix;
     }
 
-    int num_future_games;
+    static int num_future_games;
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
 
@@ -170,14 +173,8 @@ mat mcss_function(){
 
     cout << "Number of games to predict: " << num_future_games << endl;
 
-    mat future_games = zeros<mat>(num_future_games,4);
+    mat future_games = zeros<mat>(num_future_games,3);
 
-    sqlite3_finalize(stmt);
-
-    if (rc == SQLITE_OK) {
-        cerr << "Game processing is complete." << endl;
-    }
-    /* S3 - GETTING FUTURE GAMES AND THEIR ASSOCIATED RATINGS */
 
     SQLStatement =  "select g.away_team, ra.rating, g.home_team, rh.rating from "
                     "games as g inner join srs_ratings as ra on "
@@ -202,9 +199,12 @@ mat mcss_function(){
 
          //Debug print to screen - example (away team, away rtg, home team, home rtg)
          future_games.row(future_games_row)[0] = sqlite3_column_int(stmt,0);
-         future_games.row(future_games_row)[1] = sqlite3_column_double(stmt,1);
-         future_games.row(future_games_row)[2] = sqlite3_column_int(stmt,2);
-         future_games.row(future_games_row)[3] = sqlite3_column_double(stmt,3);
+         future_games.row(future_games_row)[1] = sqlite3_column_int(stmt,2);
+
+         double away_team_rtg = sqlite3_column_double(stmt,1);
+         double home_team_rtg = sqlite3_column_double(stmt,3);
+
+         future_games.row(future_games_row)[2] = SRS_regress(away_team_rtg,home_team_rtg);
          /*
             TO DO: Add the actual calculation of the binomial win odds to the array. It may not be 
             possible within ihis loop, in order to allow for debugging against its Python counterpart.
@@ -220,7 +220,112 @@ mat mcss_function(){
         cerr << "Processing of future games' binomial win probabilities is complete." << endl;
     }
     
+    //cout << future_games << endl;
+    return future_games;
+}
 
+stdteamvec return_league_teams(){
+
+    stdteamvec list_of_teams;
+
+    stdteamvec error_team_list;
+    Team error_team(-1,"ERROR","ERROR","ERROR","ERROR",-99);
+    error_team_list.push_back(error_team);
+
+    sqlite3 *db;
+    int rc;
+    string DatabaseName("mlb_data.sqlite");
+
+    /* S1 - GETTING LIST OF KNOWN WINS */
+    string SQLStatement;
+
+    SQLStatement = "select t.id,t.mlbgames_name,t.abbreviation,t.division,t.league,s.rating "
+                    "from teams as t "
+                    "inner join SRS_Ratings as s "
+                    "on s.team_id=t.id "
+                    "where s.rating <> 0 "
+                    "and s.rating_date = (select rating_date from SRS_ratings "
+                    "order by rating_date desc limit 1) "
+                    "order by t.id asc ";
+
+    sqlite3_stmt *stmt;
+
+    rc = sqlite3_open(DatabaseName.c_str(), &db);
+    if( rc ){
+     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+     sqlite3_close(db);
+     return error_team_list;
+    }
+    
+    rc = sqlite3_prepare_v2(db, SQLStatement.c_str(),
+                            -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
+        sqlite3_finalize(stmt);
+        return error_team_list;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+
+        int team_id = sqlite3_column_int(stmt,0);
+        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
+        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
+        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
+        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4)));
+        float rating = sqlite3_column_double(stmt,5);
+        list_of_teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
+   
+    }
+
+    cout << "Games successfully entered" << endl;
+    return list_of_teams;
+}
+
+//The Monte Carlo "muscle." All SQL based functions are abstracted outside this loop
+//so other more "user friendly" languages can transmit information to this loop.
+mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_teams){
+
+    sqlite3 *db;
+    int rc;
+
+    //Random info
+    srand(time(NULL));
+
+    //Two vectors for holding key information to be used later
+    vector<Team> teams;
+
+    // Matrix examples.
+    mat Head_To_Head = zeros<mat>(30,30);
+    mat MCSS_Head_To_Head = zeros<mat>(30,30);
+    mat Sim_Total = zeros<mat>(30,30);
+    mat debug_total = zeros<mat>(30,30);
+    mat sim_playoff_total = zeros<mat>(30,3);
+    mat error_matrix = ones<mat>(1,1);
+
+    Head_To_Head = mat_head_to_head;
+    //cout << Head_To_Head << endl;
+
+    //Name of the database
+    string DatabaseName("mlb_data.sqlite");
+
+
+    /* S1 - GETTING LIST OF KNOWN WINS*/
+
+    rc = sqlite3_open(DatabaseName.c_str(), &db);
+    if( rc ){
+     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+     sqlite3_close(db);
+     return error_matrix;
+    }
+
+    teams = list_of_teams;
+    size_t const half_size=teams.size()/2;
+
+    
+
+
+    //cout << future_games << endl;
+    int num_future_games = future_games.n_rows;
     for(int x_iter=0;x_iter<MAX_ITER;x_iter++){
     /* S5 - Monte Carlo Simulation */
         //set mcss head to head matrix to zero
@@ -228,11 +333,9 @@ mat mcss_function(){
         for(int i=0;i<num_future_games;i++)
         {
             int away_team_id = future_games.row(i)[0]-1;
-            float away_team_rtg = future_games.row(i)[1];
-            int home_team_id = future_games.row(i)[2]-1;
-            float home_team_rtg = future_games.row(i)[3];
+            int home_team_id = future_games.row(i)[1]-1;
 
-            if (uniformRandom()<SRS_regress(away_team_rtg,home_team_rtg))
+            if (uniformRandom()<future_games.row(i)[2])
                 MCSS_Head_To_Head.row(home_team_id)[away_team_id]++;
             else
                 MCSS_Head_To_Head.row(away_team_id)[home_team_id]++;
@@ -241,9 +344,16 @@ mat mcss_function(){
         debug_total.zeros();
         debug_total = MCSS_Head_To_Head+Head_To_Head;
 
+        /*
+        cout << "Head to Head" << endl;
+        cout << Head_To_Head << endl;
+        cout << "MCSS Head to Head" << endl;
+        cout << MCSS_Head_To_Head << endl;
+        */
+
         //Calculate raw wins - only concerned with that now (can implement tie breaking functionality later)
         mat total_wins = sum(debug_total.t());
-        //cout << total_wins << endl;
+
         for(int i=0;i<30;i++){
             sim_playoff_total.row(i)[2] = sim_playoff_total.row(i)[2] +  total_wins[i];
             //cout << sim_playoff_total.row(i)[2] << endl;
@@ -276,7 +386,6 @@ mat mcss_function(){
         sort(amer_league_wc.begin(),amer_league_wc.end(),wins_sort());
         for(vector<Team>::iterator it = amer_league_wc.begin(); it != amer_league_wc.end(); ++it){
                 string team_name = (*it).get_mlbgames_name();
-                int team_wins = (*it).get_total_wins();
         }
 
         //National League Wildcard Teams
@@ -290,7 +399,6 @@ mat mcss_function(){
         sort(nat_league_wc.begin(),nat_league_wc.end(),wins_sort());
         for(vector<Team>::iterator it = nat_league_wc.begin(); it != nat_league_wc.end(); ++it){
                 string team_name = (*it).get_mlbgames_name();
-                int team_wins = (*it).get_total_wins();
         }
 
         for(int i=0;i<2;i++){
@@ -305,10 +413,9 @@ mat mcss_function(){
         for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_mlbgames_name();
             string team_division = sim_teams[i].get_division();
-            int team_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
 
-            if(i==0 || i==5 || i == 10 || i== 15 | i==20 | i==25){
+            if( (i == 0) || (i == 5) || (i == 10) || (i == 15) | (i == 20) | (i == 25)){
                 sim_playoff_total.row(team_id-1)[0]++;
             }
             /* need to sort the teams that aren't leaders in each league
@@ -330,27 +437,37 @@ mat mcss_function(){
 //only require this instantiation as we are only using the vanilla analysis tool
 template void print_matrix<arma::mat>(arma::mat matrix);
 
-stdvecvec simulations_result_vectorized(){
-    mat sim_results = mcss_function();
+stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python, stdteamvec teams_list_python){
+    mat head_to_head_mat = std_vec_to_HH_mat(head_to_head_list_python);
+    mat future_mat = std_vec_to_future_mat(future_games_list_python);
+    stdteamvec teams = teams_list_python; 
+    //cout << future_mat << endl;
+    mat sim_results = mcss_function(head_to_head_mat,future_mat,teams);
     return mat_to_std_vec(sim_results);
 }
 
 
+//C++ Printing and processing function.
 int main()
 {
 
     sqlite3 *db;
-    char *zErrMsg = 0;
     int rc;
     string SQLStatement;
     string DatabaseName("mlb_data.sqlite");
     sqlite3_stmt *stmt;
 
     cout << "running main" << endl;
-    vector<Team> teams;
-    mat simulation_results;
-    simulation_results = mcss_function();
+    stdteamvec teams;
 
+    mat head_to_head_results;
+    head_to_head_results = return_head_to_head();
+    mat future_games;
+    future_games = return_future_games();
+    mat simulation_results;
+    teams = return_league_teams();
+    simulation_results = mcss_function(head_to_head_results,future_games,teams);
+    
     /* S2 - GETTING THE TEAMS AND THEIR MOST RECENT RATINGS */
 
     rc = sqlite3_open(DatabaseName.c_str(), &db);
@@ -378,22 +495,6 @@ int main()
         return 1;
     }
 
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-
-        //Write information into the vectors.
-        int team_id = sqlite3_column_int(stmt,0);
-        string mlbgames_name = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,1)));
-        string abbreviation = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,2)));
-        string division = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,3)));
-        string league = string(reinterpret_cast<const char *>(sqlite3_column_text(stmt,4))); //does not capture whole division!!
-        float rating = sqlite3_column_double(stmt,5);
-        teams.push_back(Team(team_id,mlbgames_name,abbreviation,division,league,rating));
-    }
-
-    size_t const half_size=teams.size()/2;
-
-
-    //assign the values
     for(int i=0;i<30;i++){
         float wild_card_odds = simulation_results.row(i)[1];
         float division_odds = simulation_results.row(i)[0];
@@ -420,7 +521,7 @@ int main()
 
     //Enumerating teams.
     for(int i=0;i<30;i++){
-            if(i==0 || i==5 || i == 10 || i== 15 | i==20 | i==25){
+            if( (i == 0) || (i == 5) || (i == 10) || (i == 15) | (i == 20) | (i == 25)){
                 for(int i=0;i<header_length;i++){
                 cout<<"*";
                 }

@@ -4,24 +4,6 @@
 #include<armadillo>
 #include<iostream>
 
-class Game{
-private:
-
-   int _away_team_id;
-   int _away_runs;
-   int _home_team_id;
-   int _home_runs;
-
-public:
-   Game(int away_team_id, int away_runs, int home_team_id, int home_runs): 
-     _away_team_id(away_team_id), _away_runs(away_runs), _home_team_id(home_team_id), _home_runs(home_runs) {}
-
-   int get_away_team_id() const {return _away_team_id;}
-   int get_away_runs() const {return _away_runs;}
-   int get_home_team_id() const {return _home_team_id;}
-   int get_home_runs() const {return _home_runs;}
-};
-
 class Team{
 private:
 
@@ -45,6 +27,8 @@ public:
             _abbreviation(abbreviation), _division(division), 
             _league(league), _rating(rating) {}
 
+    Team(){_team_id=0, _mlbgames_name="Carp", _abbreviation="HC", _division="Central", _league="NPL", _rating=9001.0;}
+
     int get_team_id() const {return _team_id;}
     std::string get_mlbgames_name() const {return _mlbgames_name;}
     std::string get_abbreviation() const {return _abbreviation;}
@@ -62,7 +46,6 @@ public:
     float get_division_odds() const {return _division_odds;}
     float get_playoff_odds() const {return _playoff_odds;}
 };
-
 
 struct teams_sort
 {
@@ -93,8 +76,11 @@ struct wins_sort
 
 typedef std::vector<double> stdvec;
 typedef std::vector< std::vector<double> > stdvecvec;
+typedef std::vector<Team> stdteamvec;
+
 
 stdvecvec mat_to_std_vec(arma::mat &A);
-stdvecvec simulations_result_vectorized();
+//Functions being passed to cython must use pass by value, not pass by reference (passed not &passed)
+stdvecvec simulations_result_vectorized(stdvecvec B, stdvecvec C, stdteamvec D);
 
 #endif
