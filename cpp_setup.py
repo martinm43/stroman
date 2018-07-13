@@ -1,6 +1,9 @@
 # Cython compile instructions
-
-from distutils.core import setup, Extension
+try:
+    from setuptools import setup
+    from setuptools import Extension
+except:
+    from distutils.core import setup, Extension
 from Cython.Build import cythonize
 
 # Use python setup.py build_ext --inplace
