@@ -17,9 +17,8 @@ import os
 import numpy as np
 from tabulate import tabulate
 
-from supports import id_to_mlbgames_name, list_to_csv, mlbgames_name_to_id
+from supports import id_to_mlbgames_name, list_to_csv, mlbgames_name_to_id, burke_calc
 from mlb_data_models import Game, SRSRating, database
-from analytics.burke_solver import burke_calc
 
 
 # Define constant for pythagorean wins (the pythagorean win exponent)
