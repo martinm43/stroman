@@ -2,10 +2,11 @@
 /* Testing out SO code for CPP */
 /* Reading values from the sqlite api into an array*/
 
+#include "stdafx.cpp"
 #include <iomanip>
 #include <iostream>
 #include <vector>
-#include <sqlite3.h>
+#include <sqlite3>
 #include <string>
 #include <math.h>
 #include <armadillo>
