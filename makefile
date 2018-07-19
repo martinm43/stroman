@@ -3,10 +3,10 @@ CFLAGS=-O3 -I.
 DEPS = armadillo sqlite3
 
 main-make: mcss.cpp
-	g++ -o mcss mcss.cpp -lsqlite3 -larmadillo -I. -O3
+	g++ -o mcss mcss.cpp -lsqlite3 -larmadillo -I. -Ofast
 
 main-wall-make: mcss.cpp
-	g++ -o mcss mcss.cpp -lsqlite3 -larmadillo -I. -Wall -Wextra -Wpedantic -g -GLIBCXX_FORCE_NEW
+	g++ -o mcss mcss.cpp -lsqlite3 -larmadillo -I. -Wall -Wextra -Wpedantic -g 
 
 debug-make: mcss.cpp
 	g++ -o mcss mcss.cpp -lsqlite3 -larmadillo -I. -g
