@@ -12,7 +12,7 @@
 #include <armadillo>
 #include "mcss.h"
 
-#define MAX_ITER 1
+#define MAX_ITER 50000
 
 using namespace std;
 using namespace arma;
@@ -296,14 +296,13 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
     vector<Team> teams;
 
     // Matrix examples.
-    mat Head_To_Head = zeros<mat>(30,30);
     mat MCSS_Head_To_Head = zeros<mat>(30,30);
     mat Sim_Total = zeros<mat>(30,30);
     mat debug_total = zeros<mat>(30,30);
     mat sim_playoff_total = zeros<mat>(30,3);
     mat error_matrix = ones<mat>(1,1);
 
-    Head_To_Head = mat_head_to_head;
+    mat Head_To_Head = mat_head_to_head;
     //cout << Head_To_Head << endl;
 
     //Name of the database
