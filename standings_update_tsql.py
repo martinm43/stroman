@@ -64,32 +64,36 @@ for i in range(1, MAX_DAYS_BACK + 1):
 
 print('Processing complete. Adding games into database')
 
-pprint(game_list)
-
 #Connect to the server.
 cnxn = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};"
                       "Server=Owner-PC;"
-                      "Database=MS_lcbo_db;"
+                      "Database=MS_mlb_data;"
                       "Trusted_Connection=yes;")
 
 crsr = cnxn.cursor()
 
 #Begin UPDATE OR INSERT process with the data obtained.
 
-""" for g in game_list:
-    p_id = p['id'] #get id
-    p.pop('id') #remove id
-    print p.keys()
-    params = p.values()
-    params.append(p_id)
-    params = ["" if x == None else x for x in params]
-    print params
+for g in game_list:
+
+    away_runs=g['away_runs']
+    home_runs=g['home_runs']
+    scheduled_date=g['scheduled_date']
+    away_team=g['away_team']
+    home_team=g['home_team']
+    #Update type statement.
+    sql_update = "UPDATE [games] SET away_runs = " + str(away_runs) +","\
+                             "home_runs = " + str(home_runs) +\
+                             " WHERE scheduled_date = '"+ str(scheduled_date) +"'"+\
+                             " AND away_team = " + str(away_team) +\
+                             " and home_team = " + str(home_team)
+
+    print(sql_update)
+
+
     
-    print sql_update.format(params)
-    crsr.execute(sql_update, params)
-    if crsr.rowcount > 0:
-        print('Existing row updated.')
-    else:
-        crsr.execute(sql_insert, params)
-        print('New row inserted.')
-    crsr.commit()  """
+    
+    crsr.execute(sql_update)
+    crsr.commit() 
+
+print("Update complete!")
