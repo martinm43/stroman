@@ -62,7 +62,7 @@ for i in range(1, MAX_DAYS_BACK + 1):
         g['home_team'] = teams_index_matcher(
             teams_index, g['mlbgame_home_team_name'])
 
-print('Processing complete. Adding games into database')
+    print('Processing complete. Adding games into database')
 
 #Connect to the server.
 cnxn = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};"
@@ -89,10 +89,7 @@ for g in game_list:
                              " and home_team = " + str(home_team)
 
     print(sql_update)
-
-
-    
-    
+  
     crsr.execute(sql_update)
     crsr.commit() 
 
