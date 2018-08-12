@@ -10,7 +10,7 @@
 #include <string>
 #include <math.h>
 #include <armadillo>
-#include "mcss.h"
+#include "mcss.hpp"
 
 #define MAX_ITER 50000
 
