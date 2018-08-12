@@ -10,7 +10,7 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 
 # c++ interface to cython
-cdef extern from "mcss.h":
+cdef extern from "mcss.hpp":
 
     cdef cppclass Team:
 
