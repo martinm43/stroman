@@ -3,8 +3,8 @@
 #Obtain the data required.
 from __future__ import print_function
 
-import pyodbc 
 import sys
+import pyodbc
 from datetime import datetime, timedelta
 import mlbgame
 from supports import teams_index_matcher
@@ -17,7 +17,15 @@ except IndexError:
     print('Insufficient variables provided, assuming number of days is 1')
     MAX_DAYS_BACK = 1
 
-for i in range(1, MAX_DAYS_BACK + 1):
+#Connect to the server.
+cnxn = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};"
+                      "Server=Owner-PC;"
+                      "Database=MS_mlb_data;"
+                      "Trusted_Connection=yes;")
+
+crsr = cnxn.cursor()
+
+for i in range(1, MAX_DAYS_BACK+1):
     game_d = datetime.today() - timedelta(days=i)
 
     print("Getting games from " + game_d.strftime("%Y-%m-%d"))
@@ -64,33 +72,25 @@ for i in range(1, MAX_DAYS_BACK + 1):
 
     print('Processing complete. Adding games into database')
 
-#Connect to the server.
-cnxn = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};"
-                      "Server=Owner-PC;"
-                      "Database=MS_mlb_data;"
-                      "Trusted_Connection=yes;")
-
-crsr = cnxn.cursor()
-
 #Begin UPDATE OR INSERT process with the data obtained.
 
-for g in game_list:
+    for g in game_list:
 
-    away_runs=g['away_runs']
-    home_runs=g['home_runs']
-    scheduled_date=g['scheduled_date']
-    away_team=g['away_team']
-    home_team=g['home_team']
-    #Update type statement.
-    sql_update = "UPDATE [games] SET away_runs = " + str(away_runs) +","\
+        away_runs=g['away_runs']
+        home_runs=g['home_runs']
+        scheduled_date=g['scheduled_date']
+        away_team=g['away_team']
+        home_team=g['home_team']
+        #Update type statement.
+        sql_update = "UPDATE [games] SET away_runs = " + str(away_runs) +","\
                              "home_runs = " + str(home_runs) +\
                              " WHERE scheduled_date = '"+ str(scheduled_date) +"'"+\
                              " AND away_team = " + str(away_team) +\
                              " and home_team = " + str(home_team)
 
-    print(sql_update)
+        print(sql_update)
   
-    crsr.execute(sql_update)
-    crsr.commit() 
+        crsr.execute(sql_update)
+        crsr.commit() 
 
 print("Update complete!")
