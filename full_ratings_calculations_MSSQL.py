@@ -34,12 +34,12 @@ analysis_end_date = datetime.now()
 max_MOV = 100.0  # Maximum margin of victory set far above what is possible
 home_team_adv = 0.0
 
+analysis_start_date_str = analysis_start_date.strftime("%Y-%m-%d")
+analysis_end_date_str = analysis_end_date.strftime("%Y-%m-%d")
+
 ##################
 # DATA SELECTION #
 ##################
-
-#games = Game.select().where(Game.scheduled_date >= analysis_start_date,
-#                            Game.scheduled_date <= analysis_end_date - timedelta(days=1))
 
 #SQL Server Edition:
 cnxn = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};"
@@ -48,10 +48,13 @@ cnxn = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};"
                       "Trusted_Connection=yes;")
 
 querystring = "select away_team, away_runs, home_team, home_runs from games "+\
-                "where scheduled_date >="+str(analysis_start_date)+" AND "
-                "scheduled_date <="+str(analysis_end_date)
+                "where scheduled_date >='"+analysis_start_date_str+"' AND "+\
+                "scheduled_date <=dateadd(day, -1,'"+analysis_end_date_str+"')"
 
-games = [[g.away_team, g.away_runs, g.home_team, g.home_runs] for g in games]
+crsr = cnxn.cursor()
+crsr.execute(querystring)
+
+games = [[g.away_team, g.away_runs, g.home_team, g.home_runs] for g in crsr]
 
 #############
 # ANALYTICS #
@@ -234,9 +237,28 @@ print(
         second=0,
         microsecond=0).strftime('%Y-%m-%d'))
 
-SRSRating.insert_many(database_ratings).execute()
+""" SRSRating.insert_many(database_ratings).execute()
 
 # Deletes duplicate entries in table. Theoretically should be able to use some
 # sort of SQL in order to avoid this issue. But this works well too.
 database.execute_sql('delete from SRS_ratings where rowid\
                      not in (select max(rowid) from SRS_ratings group by team_id)')
+ """
+for r in database_ratings:
+    r_rating_date=str("'"+r['rating_date'].strftime("%Y-%m-%d")+"'")
+    r_team_id=str(r['team_id'])
+    r_rating=str(r['rating']) #need to format precision correctly!
+    querystring = "INSERT INTO [SRS_Ratings] (rating_date, team_id, rating) VALUES "+\
+                    "("+r_rating_date+","+r_team_id+","+r_rating+")"
+    print querystring
+    crsr.execute(querystring)
+    crsr.commit()
+
+#Clean duplicate entries in ratings should they exist.
+querystring = "Delete SRS_ratings "+\
+                "where id < ("+\
+                "select max(id) from SRS_ratings S2 where s2.rating = SRS_ratings.rating "\
+                "and s2.rating_date = SRS_ratings.rating_date "+\
+                "and s2.team_id = SRS_ratings.team_id)"
+crsr.execute(querystring)
+crsr.commit()
