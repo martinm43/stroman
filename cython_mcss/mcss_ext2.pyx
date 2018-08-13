@@ -9,7 +9,7 @@ from libcpp.string cimport string
 from libcpp.vector cimport vector
 from cython.operator import dereference
 
-cdef extern from "mcss.h":
+cdef extern from "mcss.hpp":
 
     cdef cppclass Team:
 

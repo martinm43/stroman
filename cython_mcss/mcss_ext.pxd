@@ -10,7 +10,7 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 
 # c++ interface to cython
-cdef extern from "mcss.h":
+cdef extern from "mcss.hpp":
 
     cdef cppclass Team:
 
@@ -33,6 +33,6 @@ cdef extern from "mcss.h":
         float get_division_odds()
         float get_playoff_odds()
 
-cdef extern from "mcss.h":
+cdef extern from "mcss.hpp":
     vector[vector[double]] simulations_result_vectorized(vector[vector[double]], vector[vector[double]], vector[Team])
 
