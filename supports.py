@@ -10,6 +10,7 @@ import numpy as np
 
 from pprint import pprint
 
+from james import SRS_regress
 from mlb_data_models import Team, Game, SRSRating, database
 
 def big_inserter(
@@ -153,7 +154,6 @@ def future_games_dicts():
     #
     # retrieve ratings for current day
 
-    from games import SRS_regress
     query_result = database.execute_sql("select t.id, s.rating from teams as t \
                              inner join SRS_Ratings as s \
                              on s.team_id=t.id \
