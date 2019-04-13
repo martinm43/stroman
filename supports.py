@@ -32,8 +32,12 @@ def teams_index_matcher(teams_index, namestr):
     """
     Returns the mlbgames name from a dict into a numerical id
     """
-    team_ind = [t['team_id']
+    try:
+        team_ind = [t['team_id']
                 for t in teams_index if t['mlbgames_name'] == namestr][0]
+    except IndexError:
+        team_ind = -1
+
     return team_ind
 
 
