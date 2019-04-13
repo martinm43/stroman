@@ -5,7 +5,7 @@ and then updates the existing db entries
 Need to doublecheck/tune algo
 """
 
-from __future__ import print_function
+
 
 import sys
 from datetime import datetime, timedelta
@@ -21,7 +21,9 @@ except IndexError:
     MAX_DAYS_BACK = 1
 
 for i in range(1, MAX_DAYS_BACK + 1):
-    game_d = datetime.today() - timedelta(days=i)
+    #game_d = datetime.today() - timedelta(days=i)
+    #for testing
+    game_d = datetime(2015,10,14)
 
     print("Getting games from " + game_d.strftime("%Y-%m-%d"))
 

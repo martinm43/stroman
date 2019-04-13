@@ -104,3 +104,7 @@ Timing Statistics (all one time):
 "python mcss.py" (after being compiled with cython - 100k iterations) - 8.882s
 
 ^^ latter two are 0.0788s for mcss and 1.317s for mcss cython
+
+
+NOTE: 2019 games do not work yet due to change in xml format.
+see: https://github.com/panzarino/mlbgame/commit/0a2d10540de793fdc3b8476aa18f5cf3b53d0b54
