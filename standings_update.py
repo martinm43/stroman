@@ -14,14 +14,12 @@ import mlbgame
 from supports import teams_index_matcher
 from mlb_data_models import Game, Team
 
-try:
-    MAX_DAYS_BACK = int(sys.argv[1])
-except IndexError:
-    print('Insufficient variables provided, assuming number of days is 1')
-    MAX_DAYS_BACK = 1
+start_date = datetime(2018,8,1) #start date
+end_date = datetime(2018,8,31) #end date
 
-for i in range(1, MAX_DAYS_BACK + 1):
-    game_d = datetime.today() - timedelta(days=i)
+game_d = start_date
+
+while game_d <= end_date:
 
     print("Getting games from " + game_d.strftime("%Y-%m-%d"))
 
@@ -77,3 +75,5 @@ for i in range(1, MAX_DAYS_BACK + 1):
                 Game.is_postphoned == 0,
                 Game.away_team == g['away_team'],
                 Game.home_team == g['home_team']).execute()
+
+    game_d = game_d + timedelta(days=1)
