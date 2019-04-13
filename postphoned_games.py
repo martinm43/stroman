@@ -4,7 +4,7 @@ Using the python library developed using C++ to rapidly speed up how standings a
 and allow for integration with more 'modern' interfaces -think flask or Django
 """
 
-from __future__ import print_function, division
+
 
 from mlb_data_models import Team, database
 

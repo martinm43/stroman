@@ -5,7 +5,7 @@ and then updates the existing db entries
 Need to doublecheck/tune algo
 """
 
-from __future__ import print_function
+
 
 import sys
 from datetime import datetime, timedelta

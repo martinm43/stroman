@@ -215,12 +215,12 @@ database_ratings = [
         'team_id':mlbgames_name_to_id(
             i['Team'])} for i in ratings_list]
 
-print(
+print((
     datetime.now().replace(
         hour=0,
         minute=0,
         second=0,
-        microsecond=0).strftime('%Y-%m-%d'))
+        microsecond=0).strftime('%Y-%m-%d')))
 
 SRSRating.insert_many(database_ratings).execute()
 

@@ -230,12 +230,12 @@ database_ratings = [
         'team_id':mlbgames_name_to_id(
             i['Team'])} for i in ratings_list]
 
-print(
+print((
     datetime.now().replace(
         hour=0,
         minute=0,
         second=0,
-        microsecond=0).strftime('%Y-%m-%d'))
+        microsecond=0).strftime('%Y-%m-%d')))
 
 """ SRSRating.insert_many(database_ratings).execute()
 
@@ -250,7 +250,7 @@ for r in database_ratings:
     r_rating=str(r['rating']) #need to format precision correctly!
     querystring = "INSERT INTO [SRS_Ratings] (rating_date, team_id, rating) VALUES "+\
                     "("+r_rating_date+","+r_team_id+","+r_rating+")"
-    print querystring
+    print(querystring)
     crsr.execute(querystring)
     crsr.commit()
 

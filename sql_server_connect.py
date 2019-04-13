@@ -10,5 +10,5 @@ querystring = "select count(*) from postphoned_games_local"
 crsr = cnxn.cursor()
 crsr.execute(querystring)
 for row in crsr:
-    print('Number of games missing from MSSQL Database: '+str(row[0]))
+    print(('Number of games missing from MSSQL Database: '+str(row[0])))
 crsr.commit()

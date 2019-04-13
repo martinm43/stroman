@@ -1,7 +1,7 @@
 #Updating the SQL Server, using upsert functionality taken from:
 #https://stackoverflow.com/questions/43899189/access-database-upsert-with-pyodbc
 #Obtain the data required.
-from __future__ import print_function
+
 
 import sys
 import pyodbc

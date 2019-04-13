@@ -4,7 +4,7 @@ Using the python library developed using C++ to rapidly speed up how standings a
 and allow for integration with more 'modern' interfaces -think flask or Django
 """
 
-from __future__ import print_function, division
+
 
 from tabulate import tabulate
 from mcss_ext2 import simulations_result_vectorized
@@ -42,7 +42,7 @@ team_results = simulations_result_vectorized(games_won_list_cpp, fg_list_cpp,tea
 teams = Team.select()
 
 teams_dict = [
-    dict(zip(['Team', 'Division'], [i.mlbgames_name, i.division])) for i in teams]
+    dict(list(zip(['Team', 'Division'], [i.mlbgames_name, i.division]))) for i in teams]
 for i, d in enumerate(teams_dict):
     d['Win Division'] = round(team_results[i][0] * 100.0, 1)
     d['Win Wild Card'] = round(team_results[i][1] * 100.0, 1)
