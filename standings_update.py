@@ -15,7 +15,7 @@ from supports import teams_index_matcher
 from mlb_data_models import Game, Team
 
 start_date = datetime(2017,7,10) #start date
-end_date = datetime(2017,7,11) #end date
+end_date = datetime(2017,11,1) #end date
 
 game_d = start_date
 
