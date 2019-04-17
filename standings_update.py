@@ -14,8 +14,8 @@ import mlbgame
 from supports import teams_index_matcher
 from mlb_data_models import Game, Team
 
-start_date = datetime(2019,9,1) #start date
-end_date = datetime(2019,9,2) #end date
+start_date = datetime(2019,4,1) #start date
+end_date = datetime(2019,4,2) #end date
 
 game_d = start_date
 
@@ -68,6 +68,7 @@ while game_d <= end_date:
     for g in game_list:
         game_scheduled_date = datetime.strptime(
             g['scheduled_date'], '%Y-%m-%d')
+        game_season_year = game_scheduled_date.year
         #Game.update(
         #    away_runs=g['away_runs'],
         #    home_runs=g['home_runs']).where(
@@ -80,7 +81,8 @@ while game_d <= end_date:
             home_runs = g['home_runs'],
             scheduled_date = game_scheduled_date,
             away_team = g['away_team'],
-            home_team = g['home_team']).execute() 
+            home_team = g['home_team'],
+            season_year = game_season_year).execute() 
         # "replace" is the upsert functionality of peewee  
 
     game_d = game_d + timedelta(days=1)
