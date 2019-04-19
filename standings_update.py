@@ -15,8 +15,8 @@ from supports import teams_index_matcher
 from mlb_data_models import Game, Team
 from pprint import pprint
 
-start_date = datetime(2017,4,1) #start date
-end_date = datetime(2017,4,1) #end date
+start_date = datetime(2013,9,1) #start date (sometime in March)
+end_date = datetime(2013,10,1) #end date (end of season typically oct 1)
 
 game_d = start_date
 
@@ -74,10 +74,15 @@ while game_d <= end_date:
         #not duplicate it
         existing_query = Game.select().where(Game.away_team == g['away_team'],
                             Game.home_team == g['home_team'],
-                            Game.scheduled_date == game_scheduled_date)
+                            Game.scheduled_date == game_scheduled_date,
+                            Game.away_runs == g['away_runs'],
+                            Game.home_runs == g['home_runs'])
         existing_query_results_sample = [g for g in existing_query]
         #print(len(existing_query_results_sample)) - debug print
         if len(existing_query_results_sample) > 0: #entry already exists
+            print('Entry for '+g['mlbgame_away_team_name']+\
+                    ' at '+g['mlbgame_home_team_name']+' on '+\
+                    g['scheduled_date']+' exists in database, updating entry')
             Game.update(
                 away_runs=g['away_runs'],
                 home_runs=g['home_runs']).where(
