@@ -76,7 +76,7 @@ while game_d <= end_date:
                             Game.home_team == g['home_team'],
                             Game.scheduled_date == game_scheduled_date)
         existing_query_results_sample = [g for g in existing_query]
-        print(len(existing_query_results_sample))
+        #print(len(existing_query_results_sample)) - debug print
         if len(existing_query_results_sample) > 0: #entry already exists
             Game.update(
                 away_runs=g['away_runs'],
