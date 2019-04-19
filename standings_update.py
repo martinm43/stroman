@@ -13,9 +13,10 @@ from datetime import datetime, timedelta
 import mlbgame
 from supports import teams_index_matcher
 from mlb_data_models import Game, Team
+from pprint import pprint
 
-start_date = datetime(2019,4,1) #start date
-end_date = datetime(2019,4,2) #end date
+start_date = datetime(2017,4,1) #start date
+end_date = datetime(2017,4,1) #end date
 
 game_d = start_date
 
@@ -69,20 +70,32 @@ while game_d <= end_date:
         game_scheduled_date = datetime.strptime(
             g['scheduled_date'], '%Y-%m-%d')
         game_season_year = game_scheduled_date.year
-        #Game.update(
-        #    away_runs=g['away_runs'],
-        #    home_runs=g['home_runs']).where(
-        #        Game.scheduled_date == game_scheduled_date,
-        #        Game.is_postphoned == 0,
-        #        Game.away_team == g['away_team'],
-        #        Game.home_team == g['home_team']).execute() 
-        Game.replace(
-            away_runs = g['away_runs'],
-            home_runs = g['home_runs'],
-            scheduled_date = game_scheduled_date,
-            away_team = g['away_team'],
-            home_team = g['home_team'],
-            season_year = game_season_year).execute() 
+        #Code to determine if the data entered already exists in database and 
+        #not duplicate it
+        existing_query = Game.select().where(Game.away_team == g['away_team'],
+                            Game.home_team == g['home_team'],
+                            Game.scheduled_date == game_scheduled_date)
+        existing_query_results_sample = [g for g in existing_query]
+        print(len(existing_query_results_sample))
+        if len(existing_query_results_sample) > 0: #entry already exists
+            Game.update(
+                away_runs=g['away_runs'],
+                home_runs=g['home_runs']).where(
+                    Game.scheduled_date == game_scheduled_date,
+                    Game.is_postphoned == 0,
+                Game.away_team == g['away_team'],
+                Game.home_team == g['home_team']).execute() 
+        else:
+            Game.replace(
+                away_runs = g['away_runs'],
+                home_runs = g['home_runs'],
+                scheduled_date = game_scheduled_date,
+                away_team = g['away_team'],
+                away_team_name = g['mlbgame_away_team_name'],
+                home_team = g['home_team'],
+                home_team_name = g['mlbgame_home_team_name'],
+                season_year = game_season_year).execute() 
+
         # "replace" is the upsert functionality of peewee  
 
     game_d = game_d + timedelta(days=1)
