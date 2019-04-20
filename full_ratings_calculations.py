@@ -27,9 +27,8 @@ pythag_factor = 1.83
 wkdir = os.path.join(os.path.dirname(__file__))
 
 #Times and constants
-analysis_start_date = datetime.strptime(
-    '2018-03-29', '%Y-%m-%d')  # N weeks*days*seconds
-analysis_end_date = datetime.now()
+analysis_start_date = datetime(2012,3,28)
+analysis_end_date = datetime(2012,10,3)
 max_MOV = 100.0  # Maximum margin of victory set far above what is possible
 home_team_adv = 0.0
 
@@ -59,6 +58,7 @@ games = [[g.away_team, g.away_runs, g.home_team, g.home_runs] for g in games]
 # 10. "PYTHAGOREAN_WINS"
 # 11. "ADJUSTED RATING"
 # 12. "WIN PERCENTAGE"
+# 13. "TOTAL GAMES PLAYED" - new.
 
 analytics_headers = [
     "Wins",
@@ -72,11 +72,12 @@ analytics_headers = [
     "Run Delta",
     "Pythag. Wins",
     "Adj. Rtg.",
-    "Win Pct."]
+    "Win Pct.",
+    "Total Games Played"]
 
 # then prepend the team names and division names to the list for sorting
 
-diff_matrix = np.zeros((30, 12))
+diff_matrix = np.zeros((30, 13))
 for g in games:
     # two operations required, to increase the net wins and losses for both teams in
     # each pass. Like if "away runs" greater than home runs then away team
@@ -106,6 +107,7 @@ for i in range(0, len(diff_matrix)):
     # Adding in win percentage, as this should probably be displayed/calculated
     diff_matrix[i, 11] = diff_matrix[i, 0] / \
         (diff_matrix[i, 0] + diff_matrix[i, 1])
+    diff_matrix[i, 12] = diff_matrix[i,0] + diff_matrix[i,1]
 
 # Adjusted Rating Calculations (Burke - after Brian Burke - ratings)
 burke_data = [[g[2], g[0], g[3], g[1]] for g in games]
@@ -159,7 +161,8 @@ table_list = [
      i['Run Delta'],
      i['Pythag. Wins'],
      i['Avg. Run Delta'],
-     i['Adj. Rtg.']) for i in ratings_list]
+     i['Adj. Rtg.'],
+     i['Total Games Played']) for i in ratings_list]
 
 ratings_table = tabulate(
     table_list,
@@ -172,7 +175,8 @@ ratings_table = tabulate(
         'Run Delta',
         'Pythag. Wins',
         'Avg. Run Delta',
-        'Adj. Rtg.'],
+        'Adj. Rtg.',
+        'Total Games Played'],
     tablefmt='rst')
 
 print(ratings_table)
@@ -204,27 +208,27 @@ print("Writing to file completed successfully.")
 ###############################
 # Writing Ratings to Database #
 ###############################
-database_ratings = [
-    {
-        'rating_date': analysis_end_date.replace(
-            hour=0,
-            minute=0,
-            second=0,
-            microsecond=0),
-        'rating': i['Adj. Rtg.'],
-        'team_id':mlbgames_name_to_id(
-            i['Team'])} for i in ratings_list]
+#database_ratings = [
+#    {
+#        'rating_date': analysis_end_date.replace(
+#            hour=0,
+#            minute=0,
+#            second=0,
+#            microsecond=0),
+#        'rating': i['Adj. Rtg.'],
+#        'team_id':mlbgames_name_to_id(
+#            i['Team'])} for i in ratings_list]
 
-print((
-    datetime.now().replace(
-        hour=0,
-        minute=0,
-        second=0,
-        microsecond=0).strftime('%Y-%m-%d')))
+#print((
+#    datetime.now().replace(
+#        hour=0,
+#        minute=0,
+#        second=0,
+#        microsecond=0).strftime('%Y-%m-%d')))
 
-SRSRating.insert_many(database_ratings).execute()
+# SRSRating.insert_many(database_ratings).execute()
 
 # Deletes duplicate entries in table. Theoretically should be able to use some
 # sort of SQL in order to avoid this issue. But this works well too.
-database.execute_sql('delete from SRS_ratings where rowid\
-                     not in (select max(rowid) from SRS_ratings group by team_id)')
+# database.execute_sql('delete from SRS_ratings where rowid\
+ #                    not in (select max(rowid) from SRS_ratings group by team_id)')

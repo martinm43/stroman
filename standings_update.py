@@ -15,8 +15,8 @@ from supports import teams_index_matcher
 from mlb_data_models import Game, Team
 from pprint import pprint
 
-start_date = datetime(2013,9,1) #start date (sometime in March)
-end_date = datetime(2013,10,1) #end date (end of season typically oct 1)
+start_date = datetime(2012,3,28) #start date (sometime in March)
+end_date = datetime(2012,10,28) #end date (end of season typically oct 1)
 
 game_d = start_date
 
