@@ -7,7 +7,7 @@ and allow for integration with more 'modern' interfaces -think flask or Django
 
 
 from tabulate import tabulate
-from mcss_ext2 import simulations_result_vectorized
+from cython_mcss.mcss_ext2 import simulations_result_vectorized
 from pprint import pprint
 from mlb_data_models import Team, database
 
@@ -27,6 +27,7 @@ fg_list_cpp = future_games_list()
 query = database.execute_sql("select * from recent_ratings")
 teams_list=[]
 for q in query:
+    print(q)
     team=[]
     team.append(int(q[0]))
     team.append(q[1])
@@ -34,6 +35,9 @@ for q in query:
     team.append(q[3])
     team.append(q[4])
     team.append(float(q[5]))
+    for j in range(1,5): #"all strings"
+        team[j] = team[j].encode('utf-8')
+    print(team)
     teams_list.append(team)
 
 

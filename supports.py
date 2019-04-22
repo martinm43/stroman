@@ -148,7 +148,7 @@ def future_games_dicts():
     """
     Returns a list of dicts of future games (used in all the mcss files)
     """
-    from james import SRS_regress
+    from cython_mcss.james import SRS_regress
     # dummy variable to represent the query (retrieve ratings for current day)
     #x = SRSRating.select().where(
     #    SRSRating.rating_date == datetime.now(). replace(
