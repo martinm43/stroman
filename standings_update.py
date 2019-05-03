@@ -15,8 +15,8 @@ from supports import teams_index_matcher
 from mlb_data_models import Game, Team
 from pprint import pprint
 
-start_date = datetime(2012,3,28) #start date (sometime in March)
-end_date = datetime(2012,10,28) #end date (end of season typically oct 1)
+start_date = datetime(2012,4,1) #start date (sometime in March)
+end_date = datetime(2012,4,1) #end date (end of season typically oct 1)
 
 game_d = start_date
 
@@ -37,16 +37,15 @@ while game_d <= end_date:
 
     for game in games:
         try:
-            stats = mlbgame.team_stats(game.game_id)
             home_team = game.home_team
             away_team = game.away_team
             print('Processing {0} ({1}) at {2} ({3})'.
-                  format(away_team, stats.away_batting.r, #pylint:disable=no-member
-                         home_team, stats.home_batting.r)) #pylint:disable=no-member
+                  format(away_team, game.away_team_runs, #pylint:disable=no-member
+                         home_team, game.home_team_runs)) #pylint:disable=no-member
             game_dict = {'mlbgame_away_team_name': away_team,
-                         'away_runs': stats.away_batting.r, #pylint:disable=no-member
+                         'away_runs': game.away_team_runs, #pylint:disable=no-member
                          'mlbgame_home_team_name': home_team,
-                         'home_runs': stats.home_batting.r, #pylint:disable=no-member
+                         'home_runs': game.home_team_runs, #pylint:disable=no-member
                          'mlbgame_id_str': game.game_id,
                          'scheduled_date': game_d.strftime('%Y-%m-%d')}
             game_list.append(game_dict)
