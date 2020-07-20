@@ -21,11 +21,12 @@ for g in game_list:
     game_dict.update({'Date': g[0]})
     print(g[2].find('@'))
     if g[2].find('@') == 0:
-        game_dict.update({'Home_Team': g[2][1:4]})
-        game_dict.update({'Away_Team': g[1]})
+        game_dict.update({'home_team_name': g[2][1:4]})
+        game_dict.update({'away_team_name': g[1]})
     else:
-        game_dict.update({'Home_Team': g[1]})
-        game_dict.update({'Away_Team': g[2]})
+        game_dict.update({'home_team_name': g[1]})
+        game_dict.update({'away_team_name': g[2]})
+    game_dict.update({'season_year':2020})
     game_dict_list.append(game_dict)
 
 pprint(game_dict_list)
