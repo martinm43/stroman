@@ -92,10 +92,9 @@ mat return_head_to_head(){
 
 
     /* S1 - GETTING LIST OF KNOWN WINS */
-    //string SQLStatement("SELECT away_team, away_runs, home_team, home_runs "
-    //                   "FROM games WHERE scheduled_date <= datetime('now','-1 day');");
+    //Initialization.
     string SQLStatement("SELECT away_team, away_runs, home_team, home_runs "
-                       "FROM games WHERE scheduled_date <= datetime('2018-06-01') AND scheduled_date > datetime('2018-03-01');");
+                       "FROM games WHERE scheduled_date <= datetime('2020-07-01') AND scheduled_date > datetime('2020-07-01');");
 
     sqlite3_stmt *stmt;
 
@@ -145,7 +144,7 @@ mat return_future_games(){
     SQLStatement =  "select count(*) from "
                     "games as g inner join srs_ratings as ra on "
                     "ra.team_id=g.away_team inner join srs_ratings as rh on "
-                    "rh.team_id=g.home_team where (g.scheduled_date >= datetime('2018-06-01') AND g.scheduled_date < datetime('2018-10-01')) "
+                    "rh.team_id=g.home_team where (g.scheduled_date >= datetime('2020-07-01') AND g.scheduled_date < datetime('2020-12-01')) "
                     "and ra.rating_date = (select max(rating_date) from srs_ratings) "
                     "and rh.rating_date = (select max(rating_date) from srs_ratings);";
 
@@ -181,7 +180,7 @@ mat return_future_games(){
     SQLStatement =  "select g.away_team, ra.rating, g.home_team, rh.rating from "
                     "games as g inner join srs_ratings as ra on "
                     "ra.team_id=g.away_team inner join srs_ratings as rh on "
-                    "rh.team_id=g.home_team where g.scheduled_date >= datetime('2018-06-01') and g.scheduled_date < datetime('2018-10-01') "
+                    "rh.team_id=g.home_team where g.scheduled_date >= datetime('2020-07-01') and g.scheduled_date < datetime('2020-10-01') "
                     "and ra.rating_date = (select max(rating_date) from srs_ratings) "
                     "and rh.rating_date = (select max(rating_date) from srs_ratings) "
                     "order by g.id asc";
