@@ -74,8 +74,8 @@ double uniformRandom() {
 
 double SRS_regress(double rating_away, double rating_home)
 {
-    float m=0.15;
-    float b=-0.15;
+    float m=0.1;
+    float b=-0.5;
     return (double) 1.0/(1.0 + exp(-1*(m*(rating_home-rating_away)+b)));
 }
 
