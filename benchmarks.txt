@@ -1,0 +1,2 @@
+WSL2 Debian: approximately 3 seconds
+Windows 10 (Powershell): approximately 5 seconds
