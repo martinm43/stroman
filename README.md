@@ -27,6 +27,8 @@ A C++ program to simulate a baseball season. Very much a work in progress. Yes, 
 
 **Linux:**  `make`
 
+(mlb_data.sqlite must be in the same folder as the executable)
+
 ## <u>To Do</u>
 
 Improve model; figure out how to import data from MLB stats api; complete this section
