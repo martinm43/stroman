@@ -2,8 +2,9 @@ from peewee import *
 
 database = SqliteDatabase('mlb_data.sqlite')
 
-class TextField(object):
-    def __init__(self, *_, **__): pass
+# class TextField(object):
+#     def __init__(self, *_, **__): 
+#         pass
 
 class BaseModel(Model):
     class Meta:
