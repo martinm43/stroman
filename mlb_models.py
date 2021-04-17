@@ -50,3 +50,14 @@ class Teams(BaseModel):
     class Meta:
         table_name = 'teams'
 
+class MlbTeamEloData(BaseModel):
+    current_abbreviation = TextField(null=True)
+    datetime = FloatField(null=True)
+    elo_rating = FloatField(null=True)
+    season_year = IntegerField(null=True)
+    team_abbreviation = TextField(null=True)
+    team_id = IntegerField(null=True)
+
+    class Meta:
+        table_name = 'mlb_team_elo_data'
+
