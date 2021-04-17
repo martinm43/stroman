@@ -12,8 +12,8 @@ Outputs:
 
 
 """
-from nba_database.queries import season_query, prettytime, team_abbreviation
-from mlb_models import database, Games, NbaTeamEloData
+from queries import season_query, prettytime, team_abbreviation
+from mlb_models import database, Games, MlbTeamEloData
 from pprint import pprint
 from math import exp
 from random import randint

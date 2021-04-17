@@ -20,4 +20,7 @@ create table games(
 	home_streak str, 
 	orig_scheduled float, 
 	home_game bool,
-	year int)
+	year int,
+	epochtime float,
+	home_team_id int,
+	away_team_id int);

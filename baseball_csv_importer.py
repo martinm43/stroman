@@ -10,10 +10,11 @@ import pandas as pd
 from datetime import datetime
 
 from mlb_models import Games, database
+from queries import abbrev_to_id
 
 SQLITE_MAX_VARIABLE_NUMBER = 100
 
-for season_year_start in range(2021,1976,-1):
+for season_year_start in range(1997,1976,-1):
 
     df = pd.read_csv("data/"+str(season_year_start)+"Games.csv")
     df = df.rename(columns={"R":"HomeTeamRuns","RA":"AwayTeamRuns","Unnamed: 2":"dummy"})
@@ -22,9 +23,13 @@ for season_year_start in range(2021,1976,-1):
     df["Date"] = df["Date"].astype(str)
     df["Date"] = df["Date"].map(lambda x: str(x)[:-1])
     df["Date"] = pd.to_datetime(df["Date"],format='%Y%m%d', errors='ignore')
+    #Create the epochtime and then convert the date
+    df["epochtime"] = df["Date"].astype('int64')//1e9
     df["Date"] = df["Date"].apply(lambda x: x.strftime("%Y-%m-%d"))
     #Create unique index
     df["id"] = df["Index"]+df["year"]*10000
+    df["away_team_id"] = df["AwayTeam"].apply(lambda x: abbrev_to_id(x))
+    df["home_team_id"] = df["HomeTeam"].apply(lambda x: abbrev_to_id(x))
     #Renamings to match peewee
     df["home_team"]=df["HomeTeam"]
     df["away_team"]=df["AwayTeam"]

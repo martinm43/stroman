@@ -32,6 +32,9 @@ class Games(BaseModel):
     w_l = TextField(null=True)
     win = TextField(null=True)  # str
     year = IntegerField(null=True)
+    epochtime = FloatField(null=True)
+    away_team_id = IntegerField(null=True)
+    home_team_id = IntegerField(null=True)
 
     class Meta:
         table_name = 'games'
