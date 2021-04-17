@@ -43,7 +43,7 @@ def team_abbreviation(team_alphabetical_id):
     from mlb_models import Teams
 
     s_query = Teams.select(Teams.abbreviation).where(
-        ProApiTeams.team_id == team_alphabetical_id
+        Teams.team_id == team_alphabetical_id
     )
     s_result = s_query[0]
     return s_result.abbreviation
@@ -162,7 +162,7 @@ def season_query(season_year):
             g.home_team_id,
             g.home_team_runs,
             g.epochtime,
-            year,
+            season_year,
         ]
         for g in played_games
     ]

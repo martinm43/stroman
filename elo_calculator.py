@@ -73,11 +73,12 @@ def season_elo_calc(_analysis_list, previous_ratings=None, new_season=True):
     """
 
     default_rating = DEFAULT_RATING  # 1 gives good results.
-    rating_scaling = 10  # 10 gives good spread
+    rating_scaling = 1000  # 10 gives good spread x 100 for scoring diff
+    
     default_K = default_rating / rating_scaling
 
     if new_season == True:
-        season_elo_ratings_list = default_rating * np.ones((30, 1))
+        season_elo_ratings_list = default_rating * np.ones((31, 1))
     else:
         season_elo_ratings_list = previous_ratings
 
@@ -91,7 +92,7 @@ def season_elo_calc(_analysis_list, previous_ratings=None, new_season=True):
         rd["team_abbreviation"] = team_abbreviation(rd["team_id"])
         rd["elo_rating"] = z[0] * 100000
         rd["datetime"] = initial_date
-        rd["year"] = year
+        rd["season_year"] = year
         list_of_ratings.append(rd)
 
     for g in _analysis_list:
@@ -118,7 +119,7 @@ def season_elo_calc(_analysis_list, previous_ratings=None, new_season=True):
                 "team_id": g[0],
                 "elo_rating": season_elo_ratings_list[g[0] - 1][0] * 100000,
                 "datetime": cur_date,
-                "year": year,
+                "season_year": year,
                 "team_abbreviation": team_abbreviation(g[0]),
             }
         )
@@ -127,7 +128,7 @@ def season_elo_calc(_analysis_list, previous_ratings=None, new_season=True):
                 "team_id": g[2],
                 "elo_rating": season_elo_ratings_list[g[2] - 1][0] * 100000,
                 "datetime": cur_date,
-                "year": year,
+                "season_year": year,
                 "team_abbreviation": team_abbreviation(g[2]),
             }
         )
@@ -170,7 +171,7 @@ def year_to_year_ratings(
     # print(previous_ratings)
     new_ratings = previous_ratings * (
         1 - reset_factor
-    ) + reset_factor * reset_value * np.ones((30, 1))
+    ) + reset_factor * reset_value * np.ones((31, 1))
     new_ratings.tolist()
     new_ratings = [r for r in new_ratings]
     return new_ratings
@@ -202,7 +203,7 @@ def results_summary(season_elo_ratings_list, scaling=100000):
 
     print_list = sorted(print_list, key=lambda x: -x[0])
     top_list = print_list[0:10]
-    bottom_list = print_list[21:30]
+    bottom_list = print_list[22:31]
     print("Top 10 teams for the season ending in " + str(year) + ":")
     for t in top_list:
         rating = "%.1f" % t[0]
@@ -224,6 +225,7 @@ if __name__ == "__main__":
     start_year = x.year
     x = Games.select().order_by(Games.year.desc()).get()
     end_year = x.year + 1
+
 
     # master_results - capture all ratings over all seasons.
     master_results = []
@@ -248,6 +250,6 @@ if __name__ == "__main__":
         master_results.append(ratings)
 
     with database.atomic():
-        NbaTeamEloData.delete().execute()  # clear previous table
+        MlbTeamEloData.delete().execute()  # clear previous table
         for dl in master_results:
-            NbaTeamEloData.insert_many(dl).execute()
+            MlbTeamEloData.insert_many(dl).execute()
