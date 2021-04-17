@@ -267,32 +267,32 @@ def season_query(season_year):
 # #############################################
 # # Getting ratings for a given team
 # #############################################
-# def team_elo_rating(team_id, epochtime):
-#     """
-#     Get the most recent Elo rating for a team given a date and the team_id
+def team_elo_rating(team_id, epochtime):
+    """
+    Get the most recent Elo rating for a team given a date and the team_id
 
-#     Parameters
-#     ----------
-#     team_id : integer team ID 1-30
-#     epochtime : Unix time in seconds since epoch
+    Parameters
+    ----------
+    team_id : integer team ID 1-30
+    epochtime : Unix time in seconds since epoch
 
-#     Returns
-#     -------
-#     rtg : most recent Elo rating
+    Returns
+    -------
+    rtg : most recent Elo rating
 
-#     """
+    """
 
-#     from .nba_data_models import NbaTeamEloData
+    from mlb_models import MlbTeamEloData
 
-#     rtg_iterable = (
-#         NbaTeamEloData.select()
-#         .where(NbaTeamEloData.team_id == team_id, NbaTeamEloData.datetime <= epochtime)
-#         .order_by(NbaTeamEloData.datetime.desc())
-#         .limit(1)
-#     )
-#     rtg = [x.elo_rating for x in rtg_iterable]
-#     rtg = rtg[0]
-#     return rtg
+    rtg_iterable = (
+        MlbTeamEloData.select()
+        .where(MlbTeamEloData.team_id == team_id, MlbTeamEloData.datetime<= epochtime)
+        .order_by(MlbTeamEloData.datetime.desc())
+        .limit(1)
+    )
+    rtg = [x.elo_rating for x in rtg_iterable]
+    rtg = rtg[0]
+    return rtg
 
 
 # def elo_ratings_list(epochtime):

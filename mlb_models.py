@@ -49,6 +49,7 @@ class Teams(BaseModel):
     state = BareField(null=True)
     team_id = IntegerField(null=True)
     team_name = TextField(null=True)
+    primary_color = TextField(null=True)
 
     class Meta:
         table_name = 'teams'
