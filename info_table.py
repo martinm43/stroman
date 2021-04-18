@@ -33,9 +33,9 @@ from analytics.pythag import league_pythagorean_wins
 from analytics.wins_script import get_wins
 
 # Query Testing
-season_year = 2020
-start_datetime = datetime(2020, 7, 20)
-end_datetime = datetime(2020,11,30)
+season_year = 2011
+start_datetime = datetime(2011, 3, 20)
+end_datetime = datetime(2011,11,30)
 
 games_list = games_query(start_datetime, end_datetime)
 
@@ -46,8 +46,10 @@ max_MOV = 100  # no real max MOV
 home_team_adv = 0
 win_floor = 0
 
+teams_constant = 31
+
 wins_dict_list = [
-    get_wins(i, season_year, start_datetime, end_datetime) for i in range(1, 31)
+    get_wins(i, season_year, start_datetime, end_datetime) for i in range(1, teams_constant)
 ]
 wins_list = [[x["away_record"], x["home_record"], x["record"]] for x in wins_dict_list]
 
@@ -64,7 +66,7 @@ srs_list = SRS(
 
 elo_list = elo_ratings_list(epochtime(end_datetime))
 
-form_list = [form_query(i) for i in range(1, 31)]
+form_list = [form_query(i) for i in range(1, teams_constant)]
 
 lpw_results.sort(key=lambda x: x[0])
 

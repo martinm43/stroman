@@ -1,4 +1,4 @@
-def SRS(game, printing=False, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0):
+def SRS(game, printing=False, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,numTeams = 30):
     """
 
     Inputs:
@@ -28,7 +28,7 @@ def SRS(game, printing=False, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0):
     game = [[g[2], g[0], g[3], g[1]] for g in game]
     # list of game,home,away,homescore,awayscore
     numGames = len(game)
-    numTeams = 30
+    #numTeams = 30
 
     # Now, we have the NFL teams for 2002 and data on all games played.
     # From this, we wish to forecast the score of future games.
