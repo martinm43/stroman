@@ -28,14 +28,15 @@ from mlb_database.mlb_models import Games
 # Analytics imports
 from analytics.SRS import SRS
 from analytics.pythag import league_pythagorean_wins
+from random import randint
 
 # Wins script import
 from analytics.wins_script import get_wins
 
 # Query Testing
-season_year = 2011
-start_datetime = datetime(2011, 3, 20)
-end_datetime = datetime(2011,11,30)
+season_year = randint(1977,2021)
+start_datetime = datetime(season_year, 3, 20)
+end_datetime = datetime(season_year,11,30)
 
 games_list = games_query(start_datetime, end_datetime)
 

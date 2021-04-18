@@ -12,7 +12,7 @@ Outputs:
 
 
 """
-from queries import season_query, prettytime, team_abbreviation
+from mlb_database.queries import season_query, prettytime, team_abbreviation
 from mlb_database.mlb_models import database, Games, MlbTeamEloData
 from pprint import pprint
 from math import exp
@@ -226,7 +226,7 @@ if __name__ == "__main__":
     # x = Games.select().order_by(Games.year.desc()).get()
     # end_year = x.year + 1
     start_year = 1977
-    end_year = 1978
+    end_year = 2022
 
 
     # master_results - capture all ratings over all seasons.

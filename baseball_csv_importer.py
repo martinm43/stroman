@@ -10,13 +10,14 @@ import pandas as pd
 from datetime import datetime
 
 from mlb_database.mlb_models import Games, database
-from queries import abbrev_to_id
+from mlb_database.queries import abbrev_to_id
 
 SQLITE_MAX_VARIABLE_NUMBER = 100
 
 
-start_year = 1997
-end_year = 1996
+start_year = 2021
+end_year = 1976
+season_dict_list=[]
 for season_year_start in range(start_year,end_year,-1):
 
     df = pd.read_csv("data/"+str(season_year_start)+"Games.csv")
@@ -69,21 +70,21 @@ for season_year_start in range(start_year,end_year,-1):
     # q.execute()
     # print("Entries cleared, restoring entries.")
     
-    season_dict_list=[]
+    
     for key,value in season_dicts.items():
         season_dict_list.append(value)
     
-    print("Sample dict to be entered:")
-    pprint(season_dict_list[0])
+    print("Year "+str(season_year_start)+" is now complete")
     
     #Games.insert_many(season_dict_list).on_conflict_replace().execute()
     
-    with database.atomic() as txn:
-        size = (SQLITE_MAX_VARIABLE_NUMBER // len(season_dict_list[0])) - 1
-        # remove one to avoid issue if peewee adds some variable
-        for i in range(0, len(season_dict_list), size):
-            Games.insert_many(
-                season_dict_list[i : i + size]
-            ).on_conflict_replace().execute()
+with database.atomic() as txn:
+    size = (SQLITE_MAX_VARIABLE_NUMBER // len(season_dict_list[0])) - 1
+    # remove one to avoid issue if peewee adds some variable
+    for i in range(0, len(season_dict_list), size):
+        Games.insert_many(
+            season_dict_list[i : i + size]
+        ).on_conflict_replace().execute()
 
-    #Need to "delete from games where home_team_runs = "Game Preview, and Matchups"
+#Need to "delete from games where home_team_runs = "Game Preview, and Matchups"
+Games.delete().where(Games.home_team_runs=="Game Preview, and Matchups").execute()
