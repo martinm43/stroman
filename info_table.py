@@ -34,7 +34,7 @@ from random import randint
 from analytics.wins_script import get_wins
 
 # Query Testing
-season_year = randint(1977,2021)
+season_year = randint(1977,2011)
 start_datetime = datetime(season_year, 3, 20)
 end_datetime = datetime(season_year,11,30)
 
