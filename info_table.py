@@ -39,6 +39,8 @@ end_datetime = datetime(2020,11,30)
 
 games_list = games_query(start_datetime, end_datetime)
 
+print(len(games_list))
+
 # Custom SRS calculation options
 max_MOV = 100  # no real max MOV
 home_team_adv = 0

@@ -132,7 +132,7 @@ def games_query(start_datetime, end_datetime):
         .where(
             Games.epochtime < end_epochtime,
             Games.epochtime > start_epochtime,
-            Games.away_team_runs > 0,
+            ((Games.away_team_runs > 0)|(Games.home_team_runs > 0)),
         )
         .order_by(Games.epochtime)
     )
@@ -151,7 +151,7 @@ def season_query(season_year):
 
     played_games = (
         Games.select()
-        .where(Games.year == season_year, Games.away_team_runs > 0)
+        .where(Games.year == season_year, ((Games.away_team_runs > 0)|(Games.home_team_runs > 0)))
         .order_by(Games.epochtime)
     )
 
@@ -245,12 +245,12 @@ def form_query(team_id):
     }
     q = Games.select().where(
         ((Games.away_team_id == team_id) | (Games.home_team_id == team_id))
-        & Games.away_team_runs
-        > 0
+        & ((Games.away_team_runs > 0)|(Games.home_team_runs > 0))
     )
     x = [[z.away_team_id, z.away_team_runs, z.home_team_id, z.home_team_runs] for z in q[-5:]]
     winstring = ""
     for g in x:
+        #print(g)
         if g[1] > g[3]:
             if g[0] == team_id:
                 winstring += COLOR["GREEN"] + "W" + COLOR["ENDC"]

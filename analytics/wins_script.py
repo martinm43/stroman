@@ -22,7 +22,7 @@ def get_wins(team_id, season_year, start_datetime, end_datetime):
     away_query = Games.select().where(
         Games.year == season_year,
         Games.away_team_id == team_id,
-        Games.away_team_runs > 0,
+        ((Games.away_team_runs > 0)|(Games.home_team_runs > 0)),
         Games.epochtime >= epochtime(start_datetime),
         Games.epochtime <= epochtime(end_datetime),
     )
@@ -33,7 +33,7 @@ def get_wins(team_id, season_year, start_datetime, end_datetime):
     home_query = Games.select().where(
         Games.year == season_year,
         Games.home_team_id == team_id,
-        Games.away_team_runs > 0,
+        ((Games.away_team_runs > 0)|(Games.home_team_runs > 0)),
         Games.epochtime >= epochtime(start_datetime),
         Games.epochtime <= epochtime(end_datetime),
     )

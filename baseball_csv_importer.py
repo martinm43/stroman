@@ -85,3 +85,5 @@ for season_year_start in range(start_year,end_year,-1):
             Games.insert_many(
                 season_dict_list[i : i + size]
             ).on_conflict_replace().execute()
+
+    #Need to "delete from games where home_team_runs = "Game Preview, and Matchups"
