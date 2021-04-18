@@ -13,7 +13,7 @@ import pandas as pd
 import sqlite3
 import time
 
-from queries import team_abbreviation
+from mlb_database.queries import team_abbreviation
 
 for team_id in range(1, 32):
     conn = sqlite3.connect("mlb_data.sqlite")

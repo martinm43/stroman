@@ -42,42 +42,42 @@ def pythagorean_wins(
 
     """
     team_id = str(team_id_num)
-    pts = Game.select(Game.away_pts).where(
+    pts = Game.select(Game.away_team_runs).where(
         Game.away_team_id == team_id,
-        Game.datetime >= mincalcdatetime,
-        Game.datetime <= maxcalcdatetime,
+        Game.epochtime >= mincalcdatetime,
+        Game.epochtime <= maxcalcdatetime,
     )
-    team_away_pts = sum([p.away_pts if p.away_pts is not None else 0 for p in pts])
-    pts = Game.select(Game.home_pts).where(
+    team_away_team_runs = sum([p.away_team_runs if p.away_team_runs is not None else 0 for p in pts])
+    pts = Game.select(Game.home_team_runs).where(
         Game.home_team_id == team_id,
-        Game.datetime >= mincalcdatetime,
-        Game.datetime <= maxcalcdatetime,
+        Game.epochtime >= mincalcdatetime,
+        Game.epochtime <= maxcalcdatetime,
     )
-    team_home_pts = sum([p.home_pts if p.home_pts is not None else 0 for p in pts])
-    team_pts_for = team_away_pts + team_home_pts
-    team_pts_against_home = Game.select(Game.away_pts).where(
+    team_home_team_runs = sum([p.home_team_runs if p.home_team_runs is not None else 0 for p in pts])
+    team_team_runs_for = team_away_team_runs + team_home_team_runs
+    team_team_runs_against_home = Game.select(Game.away_team_runs).where(
         Game.home_team_id == team_id,
-        Game.datetime >= mincalcdatetime,
-        Game.datetime <= maxcalcdatetime,
+        Game.epochtime >= mincalcdatetime,
+        Game.epochtime <= maxcalcdatetime,
     )
-    team_pts_against_away = Game.select(Game.home_pts).where(
+    team_team_runs_against_away = Game.select(Game.home_team_runs).where(
         Game.away_team_id == team_id,
-        Game.datetime >= mincalcdatetime,
-        Game.datetime <= maxcalcdatetime,
+        Game.epochtime >= mincalcdatetime,
+        Game.epochtime <= maxcalcdatetime,
     )
-    team_pts_against_home = sum(
-        [p.away_pts if p.away_pts is not None else 0 for p in team_pts_against_home]
+    team_team_runs_against_home = sum(
+        [p.away_team_runs if p.away_team_runs is not None else 0 for p in team_team_runs_against_home]
     )
-    team_pts_against_away = sum(
-        [p.home_pts if p.home_pts is not None else 0 for p in team_pts_against_away]
+    team_team_runs_against_away = sum(
+        [p.home_team_runs if p.home_team_runs is not None else 0 for p in team_team_runs_against_away]
     )
-    team_pts_against = team_pts_against_away + team_pts_against_home
+    team_team_runs_against = team_team_runs_against_away + team_team_runs_against_home
 
-    if team_pts_against > 0 and team_pts_for > 0:
+    if team_team_runs_against > 0 and team_team_runs_for > 0:
         return (
             numgames
-            * team_pts_for ** win_exp
-            / (team_pts_for ** win_exp + team_pts_against ** win_exp)
+            * team_team_runs_for ** win_exp
+            / (team_team_runs_for ** win_exp + team_team_runs_against ** win_exp)
         )
     else:
         return 0

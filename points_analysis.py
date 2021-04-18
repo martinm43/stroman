@@ -18,7 +18,7 @@ from scipy import stats
 
 # from sklearn.preprocessing import StandardScaler
 
-from mlb_models import Games
+from mlb_database.mlb_models import Games
 
 # Get minimum and maximum years for the distribution fitting
 x = Games.select().order_by(Games.year.asc()).get()

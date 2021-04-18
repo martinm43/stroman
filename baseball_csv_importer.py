@@ -9,12 +9,15 @@ from pprint import pprint
 import pandas as pd
 from datetime import datetime
 
-from mlb_models import Games, database
+from mlb_database.mlb_models import Games, database
 from queries import abbrev_to_id
 
 SQLITE_MAX_VARIABLE_NUMBER = 100
 
-for season_year_start in range(1997,1976,-1):
+
+start_year = 1997
+end_year = 1996
+for season_year_start in range(start_year,end_year,-1):
 
     df = pd.read_csv("data/"+str(season_year_start)+"Games.csv")
     df = df.rename(columns={"R":"HomeTeamRuns","RA":"AwayTeamRuns","Unnamed: 2":"dummy"})

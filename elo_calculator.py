@@ -13,7 +13,7 @@ Outputs:
 
 """
 from queries import season_query, prettytime, team_abbreviation
-from mlb_models import database, Games, MlbTeamEloData
+from mlb_database.mlb_models import database, Games, MlbTeamEloData
 from pprint import pprint
 from math import exp
 from random import randint
@@ -221,16 +221,18 @@ def results_summary(season_elo_ratings_list, scaling=100000):
 
 if __name__ == "__main__":
 
-    x = Games.select().order_by(Games.year.asc()).get()
-    start_year = x.year
-    x = Games.select().order_by(Games.year.desc()).get()
-    end_year = x.year + 1
+    # x = Games.select().order_by(Games.year.asc()).get()
+    # start_year = x.year
+    # x = Games.select().order_by(Games.year.desc()).get()
+    # end_year = x.year + 1
+    start_year = 1977
+    end_year = 1978
 
 
     # master_results - capture all ratings over all seasons.
     master_results = []
 
-    reset_factor = 0.25  # 1: every season is new. #0: every season is a continuation
+    reset_factor = 0.5  # 1: every season is new. #0: every season is a continuation
     reset_value = DEFAULT_RATING  # identical to default value
     for year in range(start_year, end_year):
 
