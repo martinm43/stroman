@@ -20,7 +20,7 @@ end_year = 1976
 season_dict_list=[]
 for season_year_start in range(start_year,end_year,-1):
 
-    df = pd.read_csv("data/"+str(season_year_start)+"Games.csv")
+    df = pd.read_csv("data/"+str(season_year_start)+"Games.csv", thousands=',')
     df = df.rename(columns={"R":"HomeTeamRuns","RA":"AwayTeamRuns","Unnamed: 2":"dummy"})
     df = df.drop(columns=["Gm#","dummy"])
     # Convert date into standard date object
