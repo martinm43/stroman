@@ -62,6 +62,14 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
         for x in teams_list
     ]
 
+    # Quick dirty fix for Houston in the NL
+    for x in teams_list:
+        if x[0] == 13 and season_year <= 2012: #Houston
+            x[4] = "NL"
+            x[3] = "NL Central"
+            
+    #pprint(teams_list)
+
     # Get future games (away_team, home_team, home_team_win_probability)
 
     future_games_list = future_games_query(predict_date, predict_season_year)
@@ -106,7 +114,7 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
     return team_results
 
 
-def playoff_odds_print(team_results):
+def playoff_odds_print(team_results,season_year=9999):
     """
     Prints table based on alphabetically ordered team results matrix.
     Team results are the output of playoff_odds_calc.
@@ -125,7 +133,15 @@ def playoff_odds_print(team_results):
         for i in teams
     ]
 
+    
+
     for i, d in enumerate(teams_dict):
+    
+        if d["Team"] == "Hou" and season_year <= 2012:
+            d["Conference"] = "NL"
+        
+        print(d)
+
         d["Hist. Playoff %"] = round(team_results[i][0], 1)
         d["Avg. Wins"] = round(team_results[i][1], 1)
         d["Playoff %"] = round(team_results[i][2], 1)
@@ -170,7 +186,8 @@ def playoff_odds_print(team_results):
 
 if __name__ == "__main__":
 
-    season_year = 2015  # year in which season ends
+    from random import randint
+    season_year = randint(1998,2012)  # year in which season ends
     start_datetime = datetime(season_year, 3, 22)  # start of season
     end_datetime = datetime(season_year,10,1) # a few weeks or months in
     # in-season option: end_datetime = datetime.today()-timedelta(days=1)
@@ -179,7 +196,9 @@ if __name__ == "__main__":
     results = playoff_odds_calc(
         start_datetime, end_datetime, season_year, ratings_mode=ratings_mode
     )
-    results_table = playoff_odds_print(results)
+
+    pprint(results)
+    results_table = playoff_odds_print(results,season_year=season_year)
 
     print(
         "Playoff odds for the "
@@ -187,14 +206,4 @@ if __name__ == "__main__":
         + " season as of "
         + end_datetime.strftime("%b %d %Y")
     )
-    print("Method used: " + ratings_mode)
     print(results_table)
-    print(
-        "Note that in 2014 and earlier, division winners were automatically given a top-four seed\n"
-        + "and home court advantage for the first round. That logic has not yet been implemented in this progam"
-    )
-
-    print(
-        "For 2020 please note that:\n"
-        + "* League is releasing schedule in two halves; first half has 37 games"
-    )
