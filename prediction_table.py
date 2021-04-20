@@ -129,7 +129,7 @@ def playoff_odds_print(team_results,season_year=9999):
     teams = Teams.select().order_by(Teams.team_id)
 
     teams_dict = [
-        dict(list(zip(["Team", "Conference"], [i.abbreviation, i.league])))
+        dict(list(zip(["Team", "Division"], [i.abbreviation, i.division])))
         for i in teams
     ]
 
@@ -138,7 +138,7 @@ def playoff_odds_print(team_results,season_year=9999):
     for i, d in enumerate(teams_dict):
     
         if d["Team"] == "HOU" and season_year <= 2012:
-            d["Conference"] = "NL"
+            d["Division"] = "NL Central"
         
         print(d)
 
@@ -154,11 +154,11 @@ def playoff_odds_print(team_results,season_year=9999):
 
     pprint(teams_dict)
 
-    teams_dict.sort(key=lambda x: (x["Conference"], -x["Avg. Wins"]))
+    teams_dict.sort(key=lambda x: (x["Division"], -x["Avg. Wins"]))
 
     team_tuples = [
         (
-            d["Conference"],
+            d["Division"],
             d["Team"],
             d["Avg. Wins"],
             d["Hist. Playoff %"],
@@ -171,7 +171,7 @@ def playoff_odds_print(team_results,season_year=9999):
     results_table = tabulate(
         team_tuples,
         headers=[
-            "League",
+            "Division",
             "Team",
             "Avg. Wins",
             "Division Win Odds",
