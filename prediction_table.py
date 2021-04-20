@@ -137,7 +137,7 @@ def playoff_odds_print(team_results,season_year=9999):
 
     for i, d in enumerate(teams_dict):
     
-        if d["Team"] == "Hou" and season_year <= 2012:
+        if d["Team"] == "HOU" and season_year <= 2012:
             d["Conference"] = "NL"
         
         print(d)
@@ -151,6 +151,8 @@ def playoff_odds_print(team_results,season_year=9999):
         d["Hist. Playoff %"] = format_percent(d["Hist. Playoff %"])
         d["Playoff %"] = format_percent(d["Playoff %"])
         d["PIT %"] = format_percent(d["PIT %"])
+
+    pprint(teams_dict)
 
     teams_dict.sort(key=lambda x: (x["Conference"], -x["Avg. Wins"]))
 
@@ -169,12 +171,12 @@ def playoff_odds_print(team_results,season_year=9999):
     results_table = tabulate(
         team_tuples,
         headers=[
-            "Conference",
+            "League",
             "Team",
             "Avg. Wins",
-            "Legacy Playoff Odds",
-            "PIT Odds",
-            "Post-2020 Playoff Odds",
+            "Division Win Odds",
+            "Wild Card Odds",
+            "Unused",
         ],
         tablefmt="rst",
         numalign="left",
@@ -187,9 +189,9 @@ def playoff_odds_print(team_results,season_year=9999):
 if __name__ == "__main__":
 
     from random import randint
-    season_year = randint(1993,1999)  # year in which season ends
+    season_year = 2005 #randint(1993,2011)  # year in which season ends
     start_datetime = datetime(season_year, 3, 22)  # start of season
-    end_datetime = datetime(season_year,10,1) # a few weeks or months in
+    end_datetime = datetime(season_year,11,1) # a few weeks or months in
     # in-season option: end_datetime = datetime.today()-timedelta(days=1)
 
     ratings_mode = "SRS"
