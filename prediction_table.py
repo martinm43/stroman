@@ -187,7 +187,7 @@ def playoff_odds_print(team_results,season_year=9999):
 if __name__ == "__main__":
 
     from random import randint
-    season_year = randint(1998,2012)  # year in which season ends
+    season_year = randint(1993,1999)  # year in which season ends
     start_datetime = datetime(season_year, 3, 22)  # start of season
     end_datetime = datetime(season_year,10,1) # a few weeks or months in
     # in-season option: end_datetime = datetime.today()-timedelta(days=1)
