@@ -172,54 +172,54 @@ def season_query(season_year):
     return played_games
 
 
-# def games_won_query(played_games, return_format="list"):
-#     """
-#     Input: [away_team, away_team_runs, home_team, home_team_runs] list
-#     Output: a list of lists, a list, or a matrix
-#     """
-#     winlist = [x[0] if x[1] > x[3] else x[2] for x in played_games]
-#     winrows = []
-#     if return_format == "list_of_lists":
-#         winlist = [x[0] if x[1] > x[3] else x[2] for x in played_games]
-#         winrows = []
-#         for i in range(1, 31):
-#             winrows.append([winlist.count(i)])
-#         return_value = winrows
-#     elif return_format == "list":
-#         winlist = [x[0] if x[1] > x[3] else x[2] for x in played_games]
-#         winrows = []
-#         for i in range(1, 31):
-#             winrows.append(winlist.count(i))
-#         return_value = winrows
-#     elif return_format == "matrix":
-#         win_matrix = np.zeros((30, 30))
-#         for x in played_games:
-#             if x[1] > x[3]:
-#                 win_matrix[x[0] - 1, x[2] - 1] += 1
-#             elif x[3] > x[1]:
-#                 win_matrix[x[2] - 1, x[0] - 1] += 1
-#         return win_matrix
-#     else:
-#         print("invalid option")
-#         return_value = 0
-#     return return_value
+def games_won_query(played_games, return_format="list"):
+    """
+    Input: [away_team, away_team_runs, home_team, home_team_runs] list
+    Output: a list of lists, a list, or a matrix
+    """
+    winlist = [x[0] if x[1] > x[3] else x[2] for x in played_games]
+    winrows = []
+    if return_format == "list_of_lists":
+        winlist = [x[0] if x[1] > x[3] else x[2] for x in played_games]
+        winrows = []
+        for i in range(1, 31):
+            winrows.append([winlist.count(i)])
+        return_value = winrows
+    elif return_format == "list":
+        winlist = [x[0] if x[1] > x[3] else x[2] for x in played_games]
+        winrows = []
+        for i in range(1, 31):
+            winrows.append(winlist.count(i))
+        return_value = winrows
+    elif return_format == "matrix":
+        win_matrix = np.zeros((30, 30))
+        for x in played_games:
+            if x[1] > x[3]:
+                win_matrix[x[0] - 1, x[2] - 1] += 1
+            elif x[3] > x[1]:
+                win_matrix[x[2] - 1, x[0] - 1] += 1
+        return win_matrix
+    else:
+        print("invalid option")
+        return_value = 0
+    return return_value
 
 
-# def future_games_query(season_datetime, season_year):
-#     """
-#     Returns all games past a given datetime for a given season
-#     including games on that date.
-#     Inputs: season_datetime, a datetime object
-#         season_year, the year the season ends in
-#     Outputs: pending games past that date as a list of away team,
-#     home team pairs
-#     """
-#     season_epochtime = epochtime(season_datetime)
-#     query = Game.select().where(
-#         Game.epochtime >= season_epochtime, Game.season_year == season_year
-#     )
-#     matches = [[x.away_team_id, x.home_team_id] for x in query]
-#     return matches
+def future_games_query(season_datetime, season_year):
+    """
+    Returns all games past a given datetime for a given season
+    including games on that date.
+    Inputs: season_datetime, a datetime object
+        season_year, the year the season ends in
+    Outputs: pending games past that date as a list of away team,
+    home team pairs
+    """
+    season_epochtime = epochtime(season_datetime)
+    query = Games.select().where(
+        Games.epochtime >= season_epochtime, Games.year == season_year
+    )
+    matches = [[x.away_team_id, x.home_team_id] for x in query]
+    return matches
 
 
 def form_query(team_id):
