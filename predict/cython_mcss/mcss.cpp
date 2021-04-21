@@ -220,7 +220,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
     
         //Format for 1994-1997 inclusive
        //iterate through list of teams to determine division winners.
-        for(int i=0;i<30;i++){
+        /*for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
             int print_total_wins = sim_teams[i].get_total_wins();
@@ -247,7 +247,21 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         al_wild_card.push_back(sim_teams[12]); //West 1	
         sort(al_wild_card.begin(),al_wild_card.end(),wins_sort());        
         int al_wc1 = al_wild_card[0].get_team_id();
-        sim_playoff_total.row(al_wc1-1)[3]++;  
+        sim_playoff_total.row(al_wc1-1)[3]++;*/
+
+        //Format for 1977-1993 inclusive
+       //iterate through list of teams to determine division winners.
+        for(int i=0;i<30;i++){
+            string team_name = sim_teams[i].get_full_team_name();
+            string team_division = sim_teams[i].get_division();
+            int print_total_wins = sim_teams[i].get_total_wins();
+            int team_id = sim_teams[i].get_team_id();
+            cout << i << ":" << team_name << ":" << team_division << ":" << print_total_wins << endl;
+            if((i == 0) || (i==8)||(i==15)||(i==22)){
+                sim_playoff_total.row(team_id-1)[0]++; //Division Winners Only
+            }
+        }
+ 
     }
 	
     for(int i=0;i<30;i++){

@@ -79,6 +79,17 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
             x[1] = "Montreal Expos"
             x[2] = "MON"
 
+        if season_year <= 1993:
+            if x[0] in [9,11,16]: #to AL East
+                x[3] = "AL East"
+            if x[0] in [7,14,17]: #to AL West
+                x[3] = "AL West"
+            if x[0] in [26,6,22]: #to NL East
+                x[3] = "NL East"
+            if x[0] in [13,8,3]: #to NL West
+                x[3] = "NL West"    
+
+
     #pprint(teams_list)
 
     # Get future games (away_team, home_team, home_team_win_probability)
@@ -150,10 +161,27 @@ def playoff_odds_print(team_results,season_year=9999):
     
         if d["Team"] == "HOU" and season_year <= 2012:
             d["Division"] = "NL Central"
+
+        if d["Team"] == "MIL" and season_year <= 1997:
+            d["Division"] = "AL Central"
+
+        if d["Team"] == "DET" and season_year <= 1997:
+            d["Division"] = "AL East"
         
         if d["Team"] == "WSN" and season_year <= 2004:
             d["Team"] = "MON"
         
+        #1977-1993 fix.
+        if season_year <= 1993:
+            if d["Team"] in ["DET","CLE","MIL"]: #to AL East
+                d["Division"] = "AL East"
+            if d["Team"] in ["CHW","KCR","MIN"]: #to AL West
+                d["Division"] = "AL West"
+            if d["Team"] in ["STL","CHC","PIT"]: #to NL East
+                d["Division"] = "NL East"
+            if d["Team"] in ["ATL","CIN","HOU"]: #to NL West
+                d["Division"] = "NL West"   
+
         #print(d)
 
         d["Hist. Playoff %"] = round(team_results[i][0], 1)
@@ -203,7 +231,7 @@ def playoff_odds_print(team_results,season_year=9999):
 if __name__ == "__main__":
 
     from random import randint
-    season_year = randint(1994,1997)  # year in which season ends
+    season_year = randint(1977,1993)  # year in which season ends
     start_datetime = datetime(season_year, 3, 22)  # start of season
     end_datetime = datetime(season_year,11,1) # a few weeks or months in
     # in-season option: end_datetime = datetime.today()-timedelta(days=1)
