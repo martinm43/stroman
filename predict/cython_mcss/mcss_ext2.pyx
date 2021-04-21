@@ -86,7 +86,7 @@ cdef class PyTeam:
     def get_playoff_odds(self):
         return self.thisptr.get_playoff_odds()
 
-def simulations_result_vectorized(head_to_head, future_games, list_of_teams):
+def simulations_result_vectorized(head_to_head, future_games, list_of_teams, int year):
     """
     
     Wrapper to the C++ main function simulations_result_vectorized
@@ -102,6 +102,8 @@ def simulations_result_vectorized(head_to_head, future_games, list_of_teams):
         [team_id,team short name,team abbreviation,
          team division,team conference,team_rating]
         [1, b'Hawks', b'ATL', b'Southeast', b'E', 998.7491657887414]
+
+    year: required for choosing which method of playoff 
 
     Returns
     -------
@@ -124,4 +126,4 @@ def simulations_result_vectorized(head_to_head, future_games, list_of_teams):
         st_cpp =dereference(st.thisptr)
         cpp_list_of_teams.push_back(st_cpp)
 
-    return mcss_ext.simulations_result_vectorized(head_to_head, future_games,cpp_list_of_teams)
+    return mcss_ext.simulations_result_vectorized(head_to_head, future_games,cpp_list_of_teams,year)

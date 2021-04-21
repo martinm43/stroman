@@ -10,7 +10,7 @@
 #include <armadillo>
 #include "mcss.hpp"
 
-#define MAX_ITER 1
+#define MAX_ITER 10000
 
 using namespace std;
 using namespace arma;
@@ -73,7 +73,7 @@ double uniformRandom() {
 
 //The Monte Carlo "muscle." All SQL based functions are abstracted outside this loop
 //so other more "user friendly" languages can transmit information to this loop.
-mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_teams){
+mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_teams, int year){
 
     //Random info
     srand(time(NULL));
@@ -147,13 +147,15 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         vector<Team> west_conf(mid+1,last); //When you split, you need to start one more entry over.
 
        //Format for 2013-2019,2021
+       if(((year >= 2013)&&(year<=2019)) || (year > 2020))
+       {
        //iterate through list of teams to determine division winners.
-/*         for(int i=0;i<30;i++){
+            for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
             int print_total_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
-            cout << team_name << ":" << team_division << ":" << print_total_wins << endl;
+            //cout << team_name << ":" << team_division << ":" << print_total_wins << endl;
             if((i == 0) || (i==5)||(i==10)||(i==15)||(i==20)||(i==25)){
                 sim_playoff_total.row(team_id-1)[0]++; //Division Winner
             }
@@ -185,20 +187,17 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         int al_wc1 = al_wild_card[0].get_team_id();
         int al_wc2 = al_wild_card[1].get_team_id();
         sim_playoff_total.row(al_wc1-1)[3]++; 
-        sim_playoff_total.row(al_wc2-1)[3]++;  */
-
-
-
-
+        sim_playoff_total.row(al_wc2-1)[3]++;  
+        }
 
        //Format for 2020. CORONAVIRUS, IT'S GETTING REAL
-       //iterate through list of teams to determine division winners.
+       if(year==2020){
          for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
             int print_total_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
-            cout << team_name << ":" << team_division << ":" << print_total_wins << endl;
+            //cout << team_name << ":" << team_division << ":" << print_total_wins << endl;
             if((i == 0) || (i==5)||(i==10)||(i==15)||(i==20)||(i==25)){
                 sim_playoff_total.row(team_id-1)[0]++; //Division Winner
             }
@@ -234,11 +233,11 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         int al_wc2 = al_wild_card[1].get_team_id();
         sim_playoff_total.row(al_wc1-1)[3]++; 
         sim_playoff_total.row(al_wc2-1)[3]++;  
+       }
 
-
-       //Format for 2012
-       //iterate through list of teams to determine division winners.
-        /*for(int i=0;i<30;i++){
+        //Format for 2012
+        if(year == 2012){
+        for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
             int print_total_wins = sim_teams[i].get_total_wins();
@@ -275,12 +274,14 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         int al_wc1 = al_wild_card[0].get_team_id();
         int al_wc2 = al_wild_card[1].get_team_id();
         sim_playoff_total.row(al_wc1-1)[3]++; 
-        sim_playoff_total.row(al_wc2-1)[3]++;*/
-
+        sim_playoff_total.row(al_wc2-1)[3]++;
+       }
 
         //Format for 1998-2011 inclusive
+
+        if((year >= 1998)&&(year<=2011)){
        //iterate through list of teams to determine division winners.
-       /*for(int i=0;i<30;i++){
+       for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
             int print_total_wins = sim_teams[i].get_total_wins();
@@ -307,16 +308,18 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         al_wild_card.push_back(sim_teams[11]); //West 1	
         sort(al_wild_card.begin(),al_wild_card.end(),wins_sort());        
         int al_wc1 = al_wild_card[0].get_team_id();
-        sim_playoff_total.row(al_wc1-1)[3]++;*/  
-    
+        sim_playoff_total.row(al_wc1-1)[3]++; 
+        }
+
         //Format for 1994-1997 inclusive
+        if((year >= 1994)&&(year<=1997)){
        //iterate through list of teams to determine division winners.
-        /*for(int i=0;i<30;i++){
+        for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
             int print_total_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
-            cout << i << ":" << team_name << ":" << team_division << ":" << print_total_wins << endl;
+            //cout << i << ":" << team_name << ":" << team_division << ":" << print_total_wins << endl;
             if((i == 0) || (i==5)||(i==11)||(i==15)||(i==20)||(i==25)){
                 sim_playoff_total.row(team_id-1)[0]++; //Division Winner
             }
@@ -338,20 +341,22 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         al_wild_card.push_back(sim_teams[12]); //West 1	
         sort(al_wild_card.begin(),al_wild_card.end(),wins_sort());        
         int al_wc1 = al_wild_card[0].get_team_id();
-        sim_playoff_total.row(al_wc1-1)[3]++;*/
+        sim_playoff_total.row(al_wc1-1)[3]++;
+        }
 
         //Format for 1977-1993 inclusive
-       //iterate through list of teams to determine division winners.
-        /*for(int i=0;i<30;i++){
+       if((year >= 1977)&&(year<=1993)){
+        for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
             int print_total_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
-            cout << i << ":" << team_name << ":" << team_division << ":" << print_total_wins << endl;
+            //cout << i << ":" << team_name << ":" << team_division << ":" << print_total_wins << endl;
             if((i == 0) || (i==8)||(i==15)||(i==22)){
                 sim_playoff_total.row(team_id-1)[0]++; //Division Winners Only
             }
-        }*/
+        }
+       }
  
     }
 	
@@ -362,19 +367,19 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         sim_playoff_total.row(i)[3] = sim_playoff_total.row(i)[3]/MAX_ITER;
     }
 
-    cout << MAX_ITER << " simulations complete." << endl; //--not necessary.
+    //cout << MAX_ITER << " simulations complete." << endl; //--not necessary.
     return sim_playoff_total;
 }
 
 //only require this instantiation as we are only using the vanilla analysis tool
 template void print_matrix<arma::mat>(arma::mat matrix);
 
-stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python, stdteamvec teams_list_python){
+stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python, stdteamvec teams_list_python, int year){
     mat head_to_head_mat = std_vec_to_HH_mat(head_to_head_list_python);
     mat future_mat = std_vec_to_future_mat(future_games_list_python);
     stdteamvec teams = teams_list_python; 
     //cout << future_mat << endl;
-    mat sim_results = mcss_function(head_to_head_mat,future_mat,teams);
+    mat sim_results = mcss_function(head_to_head_mat,future_mat,teams,year);
     return mat_to_std_vec(sim_results);
 }
 

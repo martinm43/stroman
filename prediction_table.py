@@ -127,11 +127,11 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
             x.append(Elo_regress(Elo_diff))
 
     team_results = simulations_result_vectorized(
-        games_won_list_cpp, future_games_list, teams_list
+        games_won_list_cpp, future_games_list, teams_list,season_year
     )
     # Return (top 8 odds, average wins, top 6 odds, and play in tournament odds).
     team_results = [
-        [x[0] * 100.0, x[1], x[2] * 100.0, x[3] * 100.0] for x in team_results
+        [x[0] * 100.0, x[1], x[2] * 100.0, x[3] * 100.0, 100.0*(x[0]+x[2]+x[3])] for x in team_results
     ]
     return team_results
 
@@ -186,13 +186,15 @@ def playoff_odds_print(team_results,season_year=9999):
 
         d["Hist. Playoff %"] = round(team_results[i][0], 1)
         d["Avg. Wins"] = round(team_results[i][1], 1)
-        d["Playoff %"] = round(team_results[i][2], 1)
-        d["PIT %"] = round(team_results[i][3], 1)
+        d["Div 2nd %"] = round(team_results[i][2], 1)
+        d["WC %"] = round(team_results[i][3], 1)
+        d["Total %"] = round(team_results[i][4], 1)
 
         # Convert into percentages for printing
         d["Hist. Playoff %"] = format_percent(d["Hist. Playoff %"])
-        d["Playoff %"] = format_percent(d["Playoff %"])
-        d["PIT %"] = format_percent(d["PIT %"])
+        d["Div 2nd %"] = format_percent(d["Div 2nd %"])
+        d["WC %"] = format_percent(d["WC %"])
+        d["Total %"] = format_percent(d["Total %"])
 
     #pprint(teams_dict)
 
@@ -204,8 +206,9 @@ def playoff_odds_print(team_results,season_year=9999):
             d["Team"],
             d["Avg. Wins"],
             d["Hist. Playoff %"],
-            d["PIT %"],
-            d["Playoff %"],
+            d["WC %"],
+            d["Div 2nd %"],
+            d["Total %"]
         )
         for d in teams_dict
     ]
@@ -216,9 +219,10 @@ def playoff_odds_print(team_results,season_year=9999):
             "Division",
             "Team",
             "Avg. Wins",
-            "Division Win Odds",
-            "Wild Card Odds",
-            "Unused",
+            "Div. %",
+            "WC %",
+            "Div. 2nd %\n(2020 only)",
+            "TOTAL"
         ],
         tablefmt="rst",
         numalign="left",
@@ -231,15 +235,14 @@ def playoff_odds_print(team_results,season_year=9999):
 if __name__ == "__main__":
 
     from random import randint
-    season_year = 2020 #randint(1977,1993)  # year in which season ends
+    season_year = randint(1977,2020)  # year in which season ends
     start_datetime = datetime(season_year, 3, 22)  # start of season
-    end_datetime = datetime(season_year,11,1) # a few weeks or months in
+    end_datetime = datetime(season_year,8,1) # a few weeks or months in
     # in-season option: end_datetime = datetime.today()-timedelta(days=1)
 
     ratings_mode = "SRS"
     results = playoff_odds_calc(
-        start_datetime, end_datetime, season_year, ratings_mode=ratings_mode
-    )
+        start_datetime, end_datetime, season_year, ratings_mode=ratings_mode)
 
     results_table = playoff_odds_print(results,season_year=season_year)
 
@@ -250,3 +253,7 @@ if __name__ == "__main__":
         + end_datetime.strftime("%b %d %Y")
     )
     print(results_table)
+    print("Notes:")
+    print("* No tiebreakers (e.g. division record) are considered")
+    print("* For the 1981 season, the 'split season' is not implemented, nor will it ever be implemented")
+    
