@@ -10,7 +10,7 @@
 #include <armadillo>
 #include "mcss.hpp"
 
-#define MAX_ITER 10000
+#define MAX_ITER 1
 
 using namespace std;
 using namespace arma;
@@ -189,7 +189,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
 
         //Format for 1998-2011 inclusive
        //iterate through list of teams to determine division winners.
-        for(int i=0;i<30;i++){
+       /*for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
             int print_total_wins = sim_teams[i].get_total_wins();
@@ -216,8 +216,40 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         al_wild_card.push_back(sim_teams[11]); //West 1	
         sort(al_wild_card.begin(),al_wild_card.end(),wins_sort());        
         int al_wc1 = al_wild_card[0].get_team_id();
+        sim_playoff_total.row(al_wc1-1)[3]++;*/  
+    
+        //Format for 1994-1997 inclusive
+       //iterate through list of teams to determine division winners.
+        for(int i=0;i<30;i++){
+            string team_name = sim_teams[i].get_full_team_name();
+            string team_division = sim_teams[i].get_division();
+            int print_total_wins = sim_teams[i].get_total_wins();
+            int team_id = sim_teams[i].get_team_id();
+            cout << i << ":" << team_name << ":" << team_division << ":" << print_total_wins << endl;
+            if((i == 0) || (i==5)||(i==11)||(i==15)||(i==20)||(i==25)){
+                sim_playoff_total.row(team_id-1)[0]++; //Division Winner
+            }
+        }
+
+        //NL Wild Card (singluar)
+        vector<Team> nl_wild_card;
+        nl_wild_card.push_back(sim_teams[16]); //Cent 1	
+        nl_wild_card.push_back(sim_teams[21]); //East 1	
+        nl_wild_card.push_back(sim_teams[26]); //West 1	
+        sort(nl_wild_card.begin(),nl_wild_card.end(),wins_sort());        
+        int nl_wc1 = nl_wild_card[0].get_team_id();
+        sim_playoff_total.row(nl_wc1-1)[3]++; 
+        
+        //AL Wild Cards
+        vector<Team> al_wild_card;
+        al_wild_card.push_back(sim_teams[1]); //Cent 1	
+        al_wild_card.push_back(sim_teams[6]); //East 1	
+        al_wild_card.push_back(sim_teams[12]); //West 1	
+        sort(al_wild_card.begin(),al_wild_card.end(),wins_sort());        
+        int al_wc1 = al_wild_card[0].get_team_id();
         sim_playoff_total.row(al_wc1-1)[3]++;  
     }
+	
     for(int i=0;i<30;i++){
         sim_playoff_total.row(i)[0] = sim_playoff_total.row(i)[0]/MAX_ITER;
         sim_playoff_total.row(i)[1] = sim_playoff_total.row(i)[1]/MAX_ITER;

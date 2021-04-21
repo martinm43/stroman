@@ -62,12 +62,23 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
         for x in teams_list
     ]
 
-    # Quick dirty fix for Houston in the NL
+    # Team Name/Division Fixes
     for x in teams_list:
         if x[0] == 13 and season_year <= 2012: #Houston
             x[4] = "NL"
             x[3] = "NL Central"
             
+        if x[0] == 16 and season_year <= 1997: #Milwaukee
+            x[4] = "AL"
+            x[3] = "AL Central"
+        
+        if x[0] == 11 and season_year <= 1997: #Detroit
+            x[3] = "AL East"
+        
+        if x[0] == 30 and season_year <= 2004: #The Expos should never have left
+            x[1] = "Montreal Expos"
+            x[2] = "MON"
+
     #pprint(teams_list)
 
     # Get future games (away_team, home_team, home_team_win_probability)
@@ -140,7 +151,10 @@ def playoff_odds_print(team_results,season_year=9999):
         if d["Team"] == "HOU" and season_year <= 2012:
             d["Division"] = "NL Central"
         
-        print(d)
+        if d["Team"] == "WSN" and season_year <= 2004:
+            d["Team"] = "MON"
+        
+        #print(d)
 
         d["Hist. Playoff %"] = round(team_results[i][0], 1)
         d["Avg. Wins"] = round(team_results[i][1], 1)
@@ -152,7 +166,7 @@ def playoff_odds_print(team_results,season_year=9999):
         d["Playoff %"] = format_percent(d["Playoff %"])
         d["PIT %"] = format_percent(d["PIT %"])
 
-    pprint(teams_dict)
+    #pprint(teams_dict)
 
     teams_dict.sort(key=lambda x: (x["Division"], -x["Avg. Wins"]))
 
@@ -189,9 +203,9 @@ def playoff_odds_print(team_results,season_year=9999):
 if __name__ == "__main__":
 
     from random import randint
-    season_year = randint(1993,2011)  # year in which season ends
+    season_year = randint(1994,1997)  # year in which season ends
     start_datetime = datetime(season_year, 3, 22)  # start of season
-    end_datetime = datetime(season_year,8,1) # a few weeks or months in
+    end_datetime = datetime(season_year,11,1) # a few weeks or months in
     # in-season option: end_datetime = datetime.today()-timedelta(days=1)
 
     ratings_mode = "SRS"
@@ -199,7 +213,6 @@ if __name__ == "__main__":
         start_datetime, end_datetime, season_year, ratings_mode=ratings_mode
     )
 
-    pprint(results)
     results_table = playoff_odds_print(results,season_year=season_year)
 
     print(
