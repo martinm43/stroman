@@ -200,6 +200,9 @@ def playoff_odds_print(team_results,season_year=9999):
 
     teams_dict.sort(key=lambda x: (x["Division"], -x["Avg. Wins"]))
 
+    #Remove zero entries.
+    teams_dict = [x for x in teams_dict if x["Avg. Wins"] != 0]
+
     team_tuples = [
         (
             d["Division"],
@@ -255,6 +258,6 @@ if __name__ == "__main__":
     print(results_table)
     print("Notes:")
     print("* No tiebreakers (e.g. division record) are considered")
-    print("* For the 1981 season, the 'split season' is not implemented, nor will it ever be implemented")
+    print("* For the 1981 season, the 'split season' model is not yet implemented.\nDiscussion of the Split Season schedule can be found at https://www.baseball-reference.com/bullpen/1981_Split_Season_Schedule")
     print("* No playoff occured in 1994 due to a players' strike")
     

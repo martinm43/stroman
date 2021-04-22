@@ -34,7 +34,7 @@ from random import randint
 from analytics.wins_script import get_wins
 
 # Query Testing
-season_year = 2015
+season_year = randint(1977,2020)
 start_datetime = datetime(season_year, 3, 20)
 end_datetime = datetime(season_year,11,30)
 
@@ -77,8 +77,8 @@ results = [
     [x[0][0], x[0][1], x[1], x[2][0], x[2][1], x[2][2], x[3], x[4]] for x in results
 ]
 
-results_tuples = [
-    (
+results_print_list = [
+    [
         team_abbreviation(x[0]),
         round(x[1], 0),
         round(x[2] * 100.0 / 100.0, 3),
@@ -87,14 +87,24 @@ results_tuples = [
         x[4],
         x[5],
         x[7],
-    )
+        ]
     for x in results
 ]
 
-results_tuples.sort(key=lambda x: -x[2])
+#Team name change
+for x in results_print_list:
+    if x[0] == "WSN" and season_year <= 2004:
+        x[0] = "MON"
+
+#Remove zero entries
+results_print_list = [x for x in results_print_list if x[1] > 0]
+
+results_print_list.sort(key=lambda x: -x[2])
+
+
 
 results_table = tabulate(
-    results_tuples,
+    results_print_list,
     headers=[
         "Team",
         "Pythag. Wins",
