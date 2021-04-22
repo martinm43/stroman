@@ -1,6 +1,7 @@
 # Stroman
 
-A C++ program to simulate a baseball season. Very much a work in progress. Yes, it's named after the very cool ex-Jays pitcher. 
+A Python/C++ program to calculate basic statistics about baseball seasons and to determine the playoff 
+picture at any given time since 1977.
 
 ## <u>**Dependencies**</u>
 
@@ -23,15 +24,12 @@ A C++ program to simulate a baseball season. Very much a work in progress. Yes, 
 
 ## **<u>Build Instructions</u>**
 
-**Windows, Visual Studio:** Select Release and x64 configuration and "Rebuild Solution"
-
-**Linux:**  `make`
-
-(mlb_data.sqlite must be in the same folder as the executable)
+Only thing requiring building is the Cython C++ simulation module, using ext_build.sh.
+- Note: issues have been encountered with compilation when using GCC 11
 
 ## <u>To Do</u>
-
-Improve model; figure out how to import data from MLB stats api; complete this section
-
+- Complete readme with brief descriptions of files
+- Apply the corrections made in the prediction_table file to team names to the info_table file
+- Get the plotting file to work
 
 

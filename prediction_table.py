@@ -256,4 +256,5 @@ if __name__ == "__main__":
     print("Notes:")
     print("* No tiebreakers (e.g. division record) are considered")
     print("* For the 1981 season, the 'split season' is not implemented, nor will it ever be implemented")
+    print("* No playoff occured in 1994 due to a players' strike")
     
