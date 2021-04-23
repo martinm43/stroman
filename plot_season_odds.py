@@ -27,13 +27,17 @@ from prediction_table import playoff_odds_calc
 from mlb_database.queries import team_abbreviation
 from mlb_database.mlb_models import Teams
 
-season_year = 2007 #random.randint(2012,2019)
+season_year = random.randint(2012,2019)
 division_name = "NL East" #["AL East", "AL Central", "AL West", "NL East", "NL Central", "NL West"]
 
 
 a = datetime(season_year, 3, 20)
-b = datetime(season_year, 10, 15)
+b = datetime(season_year, 11, 1)
 end = min(datetime(season_year, 10, 15), datetime.today() - timedelta(days=1))
+
+if b >= end:
+    print("Error in script, check first calc and end date")
+    sys.exit(1)
 
 
 # Python Moving Average, taken by:
@@ -84,6 +88,8 @@ odds_array = np.asarray(odds_list)
 
 plt.figure(figsize=(6, 6))
 plt.ylim(-5, 105)  # so 100 shows up on the graph, and 0 (thanks V.)
+
+print(division_team_id_list)
 
 # Get team data
 for team_id_db in division_team_id_list:
