@@ -27,12 +27,42 @@ from prediction_table import playoff_odds_calc
 from mlb_database.queries import team_abbreviation
 from mlb_database.mlb_models import Teams
 
-season_year = random.randint(2012,2019)
-division_name = "NL East" #["AL East", "AL Central", "AL West", "NL East", "NL Central", "NL West"]
+season_year = 1995#random.randint(1977,1998)
+
+#Select a division
+if season_year >= 1994:
+    mode_dict={1:"AL Central",
+    2:"AL East",
+    3:"AL West",
+    4:"NL Central",
+    5:"NL East",
+    6:"NL West"}
+    print("Divisions in "+str(season_year)+" are as follows: ")
+    print(" 1: AL Central \n 2: AL East \n 3: AL West \n 4: NL Central \n 5: NL East \n 6: NL West")
+    #dn = input("Please select a division: ")
+    dn = 1 #randomization
+else:
+    mode_dict={1:"AL East",
+    2:"AL West",
+    3:"NL East",
+    4:"NL West"}
+    print("Divisions in "+str(season_year)+" are as follows: ")
+    print(" 1: AL East \n 2: AL West \n 3: NL East \n 4: NL West")
+    #dn = input("Please select a division: ")
+    dn = 4 #randomization
+
+try:
+    division_name = mode_dict[int(dn)]
+    print(division_name)
+except KeyError:
+    print("Invalid division key provided, quitting")
+    sys.exit(1)
+
+
 
 
 a = datetime(season_year, 3, 20)
-b = datetime(season_year, 11, 1)
+b = datetime(season_year, 6, 1)
 end = min(datetime(season_year, 10, 15), datetime.today() - timedelta(days=1))
 
 if b >= end:
@@ -48,10 +78,28 @@ def running_mean(x, N):
     return (cumsum[N:] - cumsum[:-N]) / N
 
 
-team_labels = [team_abbreviation(i) for i in range(1, 30)]
+team_labels = [team_abbreviation(i) for i in range(1, 31)]
 
-query = Teams.select().where(Teams.division == division_name)
-division_team_id_list = [i.team_id for i in query]
+
+
+#Choosing appropriate divisions
+if season_year >= 2013:
+    print("ONE")
+    query = Teams.select().where(Teams.division == division_name)
+    division_team_id_list = [i.team_id for i in query]
+if season_year >= 1998 and season_year <= 2012:
+    print("TWO")
+    query = Teams.select().where(Teams.legacy_divisions_1 == division_name)
+    division_team_id_list = [i.team_id for i in query]
+if season_year >= 1994 and season_year <= 1997:
+    print("THREE")
+    query = Teams.select().where(Teams.legacy_divisions_2 == division_name)
+    division_team_id_list = [i.team_id for i in query]
+elif season_year <= 1993:
+    print("FOUR")
+    query = Teams.select().where(Teams.legacy_divisions_3 == division_name)
+    division_team_id_list = [i.team_id for i in query]
+
 
 
 # Odds calculations
@@ -79,7 +127,7 @@ while b < end:
     odds_list.append(x_odds)
     dates_list.append(b)
     print("Finished processing "+b.strftime("%m %d %Y"))
-    b = b + timedelta(days=1) #1
+    b = b + timedelta(days=3) #1
 
 
 
@@ -100,12 +148,15 @@ for team_id_db in division_team_id_list:
     average_team_data = running_mean(team_data, average_count)
     average_dates_list = dates_list[average_count - 1 :]
     # plt.plot(dates_list,team_data)
+    label_str = label=team_abbreviation(team_id + 1)
+    if label_str == "WSN" and season_year <= 2004:
+        label_str = "MON" #Expos correction.
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
     plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=14))
     plt.plot(
         average_dates_list,
         average_team_data,
-        label=team_abbreviation(team_id + 1),
+        label=label_str,
         alpha=0.6,
     )
 
@@ -113,11 +164,9 @@ plt.xlabel("Date")
 plt.ylabel("Team Playoff Odds")
 plt.title(
     division_name
-    + " Division Playoff Odds "
-+ str(season_year - 1)
-+ "-"
+    + " Playoff Odds, "
 + str(season_year)
-+ "\n (teams in division may not be accurate before 2004)"
++ "\n (includes wild card(s) if applicable. Invalid for 1994, 1981)"
 )
 plt.legend()
 plt.xticks(rotation=15)
