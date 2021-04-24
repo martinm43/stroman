@@ -10,10 +10,11 @@ try:
 except:
     from distutils.core import setup, Extension
 from Cython.Build import cythonize
-
+import os
 # Use python setup.py build_ext --inplace
 # to compile
 
+os.environ["CC"]="clang++"
 ext = Extension(
     "mcss_ext2",
     sources=["mcss_ext2.pyx", "mcss.cpp"],
