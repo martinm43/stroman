@@ -27,7 +27,7 @@ from prediction_table import playoff_odds_calc
 from mlb_database.queries import team_abbreviation
 from mlb_database.mlb_models import Teams
 
-season_year = 1995#random.randint(1977,1998)
+season_year = random.randint(1977,2021)
 
 #Select a division
 if season_year >= 1994:
@@ -40,7 +40,7 @@ if season_year >= 1994:
     print("Divisions in "+str(season_year)+" are as follows: ")
     print(" 1: AL Central \n 2: AL East \n 3: AL West \n 4: NL Central \n 5: NL East \n 6: NL West")
     #dn = input("Please select a division: ")
-    dn = 1 #randomization
+    dn = random.randint(1,6)
 else:
     mode_dict={1:"AL East",
     2:"AL West",
@@ -49,7 +49,7 @@ else:
     print("Divisions in "+str(season_year)+" are as follows: ")
     print(" 1: AL East \n 2: AL West \n 3: NL East \n 4: NL West")
     #dn = input("Please select a division: ")
-    dn = 4 #randomization
+    dn = random.randint(1,4)
 
 try:
     division_name = mode_dict[int(dn)]
@@ -63,7 +63,7 @@ except KeyError:
 
 a = datetime(season_year, 3, 20)
 b = datetime(season_year, 6, 1)
-end = min(datetime(season_year, 10, 15), datetime.today() - timedelta(days=1))
+end = min(datetime(season_year, 11, 1), datetime.today() - timedelta(days=1))
 
 if b >= end:
     print("Error in script, check first calc and end date")
@@ -136,8 +136,6 @@ odds_array = np.asarray(odds_list)
 
 plt.figure(figsize=(6, 6))
 plt.ylim(-5, 105)  # so 100 shows up on the graph, and 0 (thanks V.)
-
-print(division_team_id_list)
 
 # Get team data
 for team_id_db in division_team_id_list:
