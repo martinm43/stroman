@@ -27,7 +27,7 @@ from prediction_table import playoff_odds_calc
 from mlb_database.queries import team_abbreviation
 from mlb_database.mlb_models import Teams
 
-season_year = random.randint(1977,2021)
+season_year = random.randint(1977,2020)
 
 #Select a division
 if season_year >= 1994:
@@ -37,8 +37,8 @@ if season_year >= 1994:
     4:"NL Central",
     5:"NL East",
     6:"NL West"}
-    print("Divisions in "+str(season_year)+" are as follows: ")
-    print(" 1: AL Central \n 2: AL East \n 3: AL West \n 4: NL Central \n 5: NL East \n 6: NL West")
+    #print("Divisions in "+str(season_year)+" are as follows: ")
+    #print(" 1: AL Central \n 2: AL East \n 3: AL West \n 4: NL Central \n 5: NL East \n 6: NL West")
     #dn = input("Please select a division: ")
     dn = random.randint(1,6)
 else:
@@ -46,8 +46,8 @@ else:
     2:"AL West",
     3:"NL East",
     4:"NL West"}
-    print("Divisions in "+str(season_year)+" are as follows: ")
-    print(" 1: AL East \n 2: AL West \n 3: NL East \n 4: NL West")
+    #print("Divisions in "+str(season_year)+" are as follows: ")
+    #print(" 1: AL East \n 2: AL West \n 3: NL East \n 4: NL West")
     #dn = input("Please select a division: ")
     dn = random.randint(1,4)
 
@@ -127,7 +127,7 @@ while b < end:
     odds_list.append(x_odds)
     dates_list.append(b)
     print("Finished processing "+b.strftime("%m %d %Y"))
-    b = b + timedelta(days=3) #1
+    b = b + timedelta(days=1) #1
 
 
 
@@ -142,7 +142,7 @@ for team_id_db in division_team_id_list:
     team_id = team_id_db - 1
     team_data = odds_array[:, team_id]
     N = len(team_data)
-    average_count = 5
+    average_count = 10
     average_team_data = running_mean(team_data, average_count)
     average_dates_list = dates_list[average_count - 1 :]
     # plt.plot(dates_list,team_data)
