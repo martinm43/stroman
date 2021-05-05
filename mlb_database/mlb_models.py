@@ -50,6 +50,9 @@ class Teams(BaseModel):
     team_id = IntegerField(null=True)
     team_name = TextField(null=True)
     primary_color = TextField(null=True)
+    legacy_divisions_1 = TextField(null=True) #1998 to 2012
+    legacy_divisions_2 = TextField(null=True) #1994 to 1997
+    legacy_divisions_3 = TextField(null=True) #1977 to 1993
 
     class Meta:
         table_name = 'teams'
