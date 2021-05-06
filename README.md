@@ -28,8 +28,10 @@ Only thing requiring building is the Cython C++ simulation module, using ext_bui
 - Note: issues have been encountered with compilation when using GCC 11
 
 ## <u>To Do</u>
-- Complete readme with brief descriptions of files
-- Apply the corrections made in the prediction_table file to team names to the info_table file
-- Get the plotting file to work
+- Get compilation of Cython on Windows to work
+- Update the dependencies
+- General update of readme
+
+
 
 
