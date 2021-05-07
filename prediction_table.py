@@ -7,7 +7,7 @@ and allow for integration with more 'modern' interfaces -think flask or Django
 
 # Future import first
 
-
+#from predict.cython_mcss.mcss_ext2 import simulations_result_vectorized
 from mlb_database.mlb_models import Teams
 from mlb_database.queries import elo_ratings_list, epochtime
 from datetime import datetime, timedelta
@@ -239,8 +239,9 @@ if __name__ == "__main__":
 
     from random import randint
     season_year = randint(1977,2020)  # year in which season ends
+    print("Testing year: "+str(season_year))
     start_datetime = datetime(season_year, 3, 22)  # start of season
-    end_datetime = datetime(season_year,11,1) # a few weeks or months in
+    end_datetime = datetime(season_year,8,1) # a few weeks or months in
     # in-season option: end_datetime = datetime.today()-timedelta(days=1)
 
     ratings_mode = "SRS"
