@@ -67,19 +67,30 @@ The specific places in the array used to choose the winners and wild-cards
 
 ## <u>**Dependencies and Requirements/Caveats**</u>
 
-**Windows-specific**
+Python requirements:  
+the nba_py library (only for update_nba_api)  
+peewee (version 3.11+)
+numpy, scipy, and cython  
 
-Coming soon!
+C++ requirements for compiling Monte Carlo cython extension (on Linux):  
+libarmadillo-dev   
+libsqlite3-dev  
 
-**Linux-specific**
+Note that gcc-11 and clang-12 are not yet tested.
 
-I have not been able to get the Cython extension to compile under clang-12 or 
-gcc-11+. Older compilers between gcc-7 and gcc-10 should work, however.
+On Windows in order to build the Monte Carlo simulation extension, you will require:
 
-I'd greatly appreciate any assistance with this issue!
+Microsoft Visual C++ as described in the .vsconfig file (tested with VC.141.x86.64)
+Armadillo libraries have been included for this purpose (see below Attribution)  
+Note that the program runs much slower under Windows:
+
+info_table: about 3 seconds on Linux, about 9 seconds on Windows  
+prediction_table: about 0.7 seconds on Linux, about 2.1 seconds on Windows  
+plot_season_odds: about 1.2 on Linux, about 4.2 seconds on Windows  
+
+Windows users with access to WSL or WSL2 should consider running the program under those virtualization options as it will most likely run much faster.  
 
 ## <u>To Do</u>
-- Get compilation of Cython on Windows to work
 - Update the dependencies
 - Final (?) update of readme
 

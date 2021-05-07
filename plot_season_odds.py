@@ -127,7 +127,7 @@ while b < end:
     odds_list.append(x_odds)
     dates_list.append(b)
     print("Finished processing "+b.strftime("%m %d %Y"))
-    b = b + timedelta(days=1) #1
+    b = b + timedelta(days=3) #1
 
 
 
