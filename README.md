@@ -67,32 +67,50 @@ The specific places in the array used to choose the winners and wild-cards
 
 ## <u>**Dependencies and Requirements/Caveats**</u>
 
-Python requirements:  
+**Python requirements:** 
+
 peewee (version 3.11+), tabulate
+
 numpy, scipy, matplotlib, and cython - but these can be obtained from Anaconda.  
 
-C++ requirements for compiling Monte Carlo cython extension (on Linux):  
-libarmadillo-dev   
-libsqlite3-dev  
+**C++ requirements:**
 
-Note that gcc-11 and clang-12 are not yet tested.
+**(All)** Newer compilers (mid-2020 onwards) may not work due to an issue with how memory is allocated. In particular, gcc-11 
+does not appear to work as of May 2021. 
 
-On Windows in order to build the Monte Carlo simulation extension, you will require:
+**Apple** LLVM 10 has been tested successfully.
 
-Microsoft Visual C++ as described in the .vsconfig file (tested with VC.141.x86.64)
-Armadillo libraries have been included for this purpose (see below Attribution)  
-Note that the program runs much slower under Windows:
+On **Windows** in order to build the Monte Carlo simulation extension, you will require Microsoft Visual C++ as described in the .vsconfig file (tested with VC.141.x86.64)
 
-info_table: about 3 seconds on Linux, about 9 seconds on Windows  
-prediction_table: about 0.7 seconds on Linux, about 2.1 seconds on Windows  
-plot_season_odds: about 1.2 on Linux, about 4.2 seconds on Windows  
+Armadillo libraries have been included for portability - accessing and integrating these libraries might be particularly difficult for non-root users or
+as any user on Windows.  
+
+Note that the program runs much slower under Windows.
 
 Windows users with access to WSL or WSL2 should consider running the program under those virtualization options as it will most likely run much faster.  
 
 ## <u>To Do</u>
-- Update the dependencies
 - Final (?) update of readme
 
+## Attributions
+This project incorporates source from the Armadillo C++ Linear Algebra Library.
+As such, the attributions of Armadillo will be included in this project in accordance with their wishes:
+
+Copyright 2008-2018 Conrad Sanderson (http://conradsanderson.id.au)
+
+Copyright 2008-2016 National ICT Australia (NICTA)
+
+Copyright 2017-2018 Arroyo Consortium
+
+Copyright 2017-2018 Data61, CSIRO
+
+This product includes software developed by Conrad Sanderson (http://conradsanderson.id.au)
+
+This product includes software developed at National ICT Australia (NICTA)
+
+This product includes software developed at Arroyo Consortium
+
+This product includes software developed at Data61, CSIRO
 
 
 
