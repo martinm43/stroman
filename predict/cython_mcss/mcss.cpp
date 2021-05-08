@@ -153,7 +153,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
             for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
-            int print_total_wins = sim_teams[i].get_total_wins();
+            //int print_total_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
             //cout << team_name << ":" << team_division << ":" << print_total_wins << endl;
             if((i == 0) || (i==5)||(i==10)||(i==15)||(i==20)||(i==25)){
@@ -195,7 +195,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
          for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
-            int print_total_wins = sim_teams[i].get_total_wins();
+            //int print_total_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
             //cout << team_name << ":" << team_division << ":" << print_total_wins << endl;
             if((i == 0) || (i==5)||(i==10)||(i==15)||(i==20)||(i==25)){
@@ -240,7 +240,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
-            int print_total_wins = sim_teams[i].get_total_wins();
+            //int print_total_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
             //cout << team_name << ":" << team_division << ":" << print_total_wins << endl;
             if((i == 0) || (i==5)||(i==10)||(i==14)||(i==20)||(i==25)){
@@ -284,7 +284,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
        for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
-            int print_total_wins = sim_teams[i].get_total_wins();
+            //int print_total_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
             //cout << team_name << ":" << team_division << ":" << print_total_wins << endl;
             if((i == 0) || (i==5)||(i==10)||(i==14)||(i==20)||(i==25)){
@@ -317,7 +317,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
-            int print_total_wins = sim_teams[i].get_total_wins();
+            //int print_total_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
             //cout << i << ":" << team_name << ":" << team_division << ":" << print_total_wins << endl;
             if((i == 0) || (i==5)||(i==11)||(i==15)||(i==20)||(i==25)){
@@ -349,7 +349,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         for(int i=0;i<30;i++){
             string team_name = sim_teams[i].get_full_team_name();
             string team_division = sim_teams[i].get_division();
-            int print_total_wins = sim_teams[i].get_total_wins();
+            //int print_total_wins = sim_teams[i].get_total_wins();
             int team_id = sim_teams[i].get_team_id();
             //cout << i << ":" << team_name << ":" << team_division << ":" << print_total_wins << endl;
             if((i == 0) || (i==8)||(i==15)||(i==22)){
