@@ -68,9 +68,8 @@ The specific places in the array used to choose the winners and wild-cards
 ## <u>**Dependencies and Requirements/Caveats**</u>
 
 Python requirements:  
-the nba_py library (only for update_nba_api)  
-peewee (version 3.11+)
-numpy, scipy, and cython  
+peewee (version 3.11+), tabulate
+numpy, scipy, matplotlib, and cython - but these can be obtained from Anaconda.  
 
 C++ requirements for compiling Monte Carlo cython extension (on Linux):  
 libarmadillo-dev   
