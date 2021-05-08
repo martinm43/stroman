@@ -62,8 +62,8 @@ struct teams_sort
             return (Team1.get_division() < Team2.get_division());
 	else if (Team1.get_total_wins() != Team2.get_total_wins())
 	    return (Team1.get_total_wins() > Team2.get_total_wins());
-	//else              -- These two lines are 
-	//    return true;  -- required for the executable to work on Windows/MSVC, but do not work in POSIX
+	else              
+	    return false;  //CANNOT be return true. Must investigate further.
     } 
 };
 
