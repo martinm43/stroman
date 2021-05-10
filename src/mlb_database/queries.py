@@ -41,7 +41,7 @@ def team_abbreviation(team_alphabetical_id):
     Converts team numerical ids into team names.
     """
     from .mlb_models import Teams
-
+    #print(team_alphabetical_id)
     s_query = Teams.select(Teams.abbreviation).where(
         Teams.team_id == team_alphabetical_id
     )

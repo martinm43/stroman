@@ -78,7 +78,7 @@ def season_elo_calc(_analysis_list, previous_ratings=None, new_season=True):
     default_K = default_rating / rating_scaling
 
     if new_season == True:
-        season_elo_ratings_list = default_rating * np.ones((31, 1))
+        season_elo_ratings_list = default_rating * np.ones((30, 1))
     else:
         season_elo_ratings_list = previous_ratings
 
@@ -112,6 +112,9 @@ def season_elo_calc(_analysis_list, previous_ratings=None, new_season=True):
         season_elo_ratings_list[g[2] - 1] = (
             season_elo_ratings_list[g[2] - 1] - change_factor
         )
+
+
+
         # add the date and then add the new ratings to the list of ratings
         cur_date = g[4]
         list_of_ratings.append(
@@ -171,7 +174,7 @@ def year_to_year_ratings(
     # print(previous_ratings)
     new_ratings = previous_ratings * (
         1 - reset_factor
-    ) + reset_factor * reset_value * np.ones((31, 1))
+    ) + reset_factor * reset_value * np.ones((30, 1))
     new_ratings.tolist()
     new_ratings = [r for r in new_ratings]
     return new_ratings
@@ -203,7 +206,7 @@ def results_summary(season_elo_ratings_list, scaling=100000):
 
     print_list = sorted(print_list, key=lambda x: -x[0])
     top_list = print_list[0:10]
-    bottom_list = print_list[22:31]
+    bottom_list = print_list[22:30]
     print("Top 10 teams for the season ending in " + str(year) + ":")
     for t in top_list:
         rating = "%.1f" % t[0]
