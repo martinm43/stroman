@@ -17,7 +17,7 @@ import os
 # Use python setup.py build_ext --inplace
 # to compile
 
-#os.environ["CC"] = "/usr/bin/gcc"
+os.environ["CC"] = "/usr/bin/gcc"
 
 ext = Extension(
     "mcss_ext2",

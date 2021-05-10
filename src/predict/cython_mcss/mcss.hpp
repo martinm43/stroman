@@ -52,7 +52,6 @@ public:
     float get_division_odds() const {return _division_odds;}
     float get_playoff_odds() const {return _playoff_odds;}
 };
-/*
 //the following are structures passed to std::sort for sorting custom items.
 struct teams_sort
 {
@@ -82,7 +81,6 @@ typedef std::vector<double> stdvec;
 typedef std::vector< std::vector<double> > stdvecvec;
 typedef std::vector<Team> stdteamvec;
 
-*/
 stdvecvec mat_to_std_vec(arma::mat &A);
 //Functions being passed to cython must use pass by value, not pass by reference (passed not &passed)
 int simulations_result_vectorized(stdvecvec B, stdvecvec C, stdteamvec D, int year);
