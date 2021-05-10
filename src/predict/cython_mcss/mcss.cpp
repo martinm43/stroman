@@ -24,7 +24,7 @@ void print_matrix(Matrix matrix) {
 
 //Converting vectors from python into appropriate matrices
 //and vice versa.
-
+/*
 stdvecvec mat_to_std_vec(arma::mat &A) {
     stdvecvec V(A.n_rows);
     for (size_t i = 0; i < A.n_rows; ++i) {
@@ -32,7 +32,8 @@ stdvecvec mat_to_std_vec(arma::mat &A) {
     };
     return V;
 }
-
+*/
+/*
 mat std_vec_to_HH_mat(vector< vector<double> > std_vec_array){
 
     vector<double> std_vec_array_flat;
@@ -70,7 +71,7 @@ mat std_vec_to_future_mat(vector< vector<double> > std_vec_array){
 double uniformRandom() {
   return ( (double)(rand()) + 1. )/( (double)(RAND_MAX));
 }
-
+*/
 //The Monte Carlo "muscle." All SQL based functions are abstracted outside this loop
 //so other more "user friendly" languages can transmit information to this loop.
 
@@ -85,13 +86,14 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
 //only require this instantiation as we are only using the vanilla analysis tool
 template void print_matrix<arma::mat>(arma::mat matrix);
 
-stdvecvec simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python, stdteamvec teams_list_python, int year){
-    mat head_to_head_mat = std_vec_to_HH_mat(head_to_head_list_python);
-    mat future_mat = std_vec_to_future_mat(future_games_list_python);
-    stdteamvec teams = teams_list_python; 
+int simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python, stdteamvec teams_list_python, int year){ //stdvecvec
+    //mat head_to_head_mat = std_vec_to_HH_mat(head_to_head_list_python);
+    //mat future_mat = std_vec_to_future_mat(future_games_list_python);
+    //stdteamvec teams = teams_list_python; 
     //cout << future_mat << endl;
-    mat sim_results = mcss_function(head_to_head_mat,future_mat,teams,year);
-    return mat_to_std_vec(sim_results);
+    //mat sim_results = mcss_function(head_to_head_mat,future_mat,teams,year);
+    //mat sim_playoff_total = zeros<mat>(30,4); // [Division Win, Division Runner Up, Wildcard, Unused]  
+    return 0;
 }
 
 
