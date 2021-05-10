@@ -86,5 +86,6 @@ with database.atomic() as txn:
             season_dict_list[i : i + size]
         ).on_conflict_replace().execute()
 
-#Need to "delete from games where home_team_runs = "Game Preview, and Matchups"
-Games.delete().where(Games.home_team_runs=="Game Preview, and Matchups").execute()
+#For games not yet played, set home runs and away runs equal to 0
+Games.update(away_team_runs=0).where(Games.home_team_runs=="Game Preview, and Matchups").execute()
+Games.update(home_team_runs=0).where(Games.home_team_runs=="Game Preview, and Matchups").execute()

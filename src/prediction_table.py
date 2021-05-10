@@ -238,10 +238,10 @@ def playoff_odds_print(team_results,season_year=9999):
 if __name__ == "__main__":
 
     from random import randint
-    season_year = randint(1977,2020)  # year in which season ends
+    season_year = 2021 # year in which season ends
     print("Testing year: "+str(season_year))
     start_datetime = datetime(season_year, 3, 22)  # start of season
-    end_datetime = datetime(season_year,8,1) # a few weeks or months in
+    end_datetime = datetime.today()-timedelta(days=1) # a few weeks or months in
     # in-season option: end_datetime = datetime.today()-timedelta(days=1)
 
     ratings_mode = "SRS"
