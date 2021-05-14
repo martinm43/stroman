@@ -86,7 +86,8 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
 //only require this instantiation as we are only using the vanilla analysis tool
 template void print_matrix<arma::mat>(arma::mat matrix);
 
-int simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python, stdteamvec teams_list_python, int year){ //stdvecvec
+//int simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python, stdteamvec teams_list_python, int year){ //stdvecvec
+int simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python, int year){ 
     //mat head_to_head_mat = std_vec_to_HH_mat(head_to_head_list_python);
     //mat future_mat = std_vec_to_future_mat(future_games_list_python);
     //stdteamvec teams = teams_list_python; 

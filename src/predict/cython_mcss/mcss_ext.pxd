@@ -38,5 +38,7 @@ cdef extern from "mcss.hpp":
         float get_playoff_odds()
 
 cdef extern from "mcss.hpp":
-    int simulations_result_vectorized(vector[vector[double]], vector[vector[double]], vector[Team],int)
+    #int simulations_result_vectorized(vector[vector[double]], vector[vector[double]], vector[Team],int)
+    int simulations_result_vectorized(vector[vector[double]], vector[vector[double]], int)
+
 

@@ -113,17 +113,17 @@ def simulations_result_vectorized(head_to_head, future_games, list_of_teams, int
     """
     #Convert Python list of teams to a list of C++ team objects
     
-    cpdef vector[Team] cpp_list_of_teams
+    # cpdef vector[Team] cpp_list_of_teams
 
-    for t in list_of_teams:
-        team_id = int(t[0])
-        full_team_name = t[1]
-        abbreviation = t[2]
-        division = t[3]
-        league = t[4]
-        rating = t[5]
-        st = PyTeam(team_id,full_team_name,abbreviation,division,league,rating)
-        st_cpp =dereference(st.thisptr)
-        cpp_list_of_teams.push_back(st_cpp)
-
-    return mcss_ext.simulations_result_vectorized(head_to_head, future_games,cpp_list_of_teams,year)
+    # for t in list_of_teams:
+    #     team_id = int(t[0])
+    #     full_team_name = t[1]
+    #     abbreviation = t[2]
+    #     division = t[3]
+    #     league = t[4]
+    #     rating = t[5]
+    #     st = PyTeam(team_id,full_team_name,abbreviation,division,league,rating)
+    #     st_cpp = dereference(st.thisptr)
+    #     cpp_list_of_teams.push_back(st_cpp)
+    #return mcss_ext.simulations_result_vectorized(head_to_head, future_games,cpp_list_of_teams,year)
+    return mcss_ext.simulations_result_vectorized(head_to_head, future_games,year)
