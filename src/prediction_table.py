@@ -37,7 +37,7 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
 
     """
 
-    from predict.cython_mcss.mcss_ext2 import simulations_result_vectorized
+    #from predict.cython_mcss.mcss_ext2 import simulations_result_vectorized
     from analytics.SRS import SRS
     from analytics.morey import SRS_regress, Elo_regress
 
@@ -126,15 +126,17 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
             Elo_diff = home_team_rating - away_team_rating
             x.append(Elo_regress(Elo_diff))
 
+    print(type(games_won_list_cpp))
+    print(type(future_games_list))
 
-    team_results = simulations_result_vectorized(
-        games_won_list_cpp, future_games_list, teams_list,season_year
-    )
+    # team_results = simulations_result_vectorized(
+    #     games_won_list_cpp, future_games_list, teams_list,season_year
+    # )
     # Return (top 8 odds, average wins, top 6 odds, and play in tournament odds).
-    team_results = [
-        [x[0] * 100.0, x[1], x[2] * 100.0, x[3] * 100.0, 100.0*(x[0]+x[2]+x[3])] for x in team_results
-    ]
-    return team_results
+    # team_results = [
+    #     [x[0] * 100.0, x[1], x[2] * 100.0, x[3] * 100.0, 100.0*(x[0]+x[2]+x[3])] for x in team_results
+    # ]
+    return 1 #team_results
 
 
 def playoff_odds_print(team_results,season_year=9999):

@@ -1,6 +1,6 @@
 # distutils: language = c++
 # distutils: sources = mcss.cpp
-
+# cython: boundscheck=False
 """
 Cython interface file for wrapping the objects in the pxd file
 
@@ -126,4 +126,4 @@ def simulations_result_vectorized(head_to_head, future_games, list_of_teams, int
     #     st_cpp = dereference(st.thisptr)
     #     cpp_list_of_teams.push_back(st_cpp)
     #return mcss_ext.simulations_result_vectorized(head_to_head, future_games,cpp_list_of_teams,year)
-    return 1 #mcss_ext.simulations_result_vectorized(head_to_head, future_games,year)
+    return mcss_ext.simulations_result_vectorized(head_to_head, future_games,year)

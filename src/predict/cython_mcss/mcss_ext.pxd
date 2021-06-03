@@ -1,6 +1,6 @@
 # distutils: language = c++
 # distutils: sources = mcss.cpp
-
+# cython: boundscheck=False
 """
 Cython interface file for declaring the necessary objects required out
 of the mcss.hpp header file (the Team object, and the linking function to 
