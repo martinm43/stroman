@@ -81,7 +81,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
     //vector<Team> teams;
     //teams = list_of_teams;
     //cout << teams[0].get_full_team_name() << endl;
-    //cout << "debug print" << endl;
+    cout << "debug print" << endl;
     mat sim_playoff_total = zeros<mat>(30,4); // [Division Win, Division Runner Up, Wildcard, Unused]  
     return sim_playoff_total;
 }
@@ -91,11 +91,11 @@ template void print_matrix<arma::mat>(arma::mat matrix);
 
 //int simulations_result_vectorized(stdvecvec head_to_head_list_python, stdvecvec future_games_list_python, stdteamvec teams_list_python, int year){ //stdvecvec
 int simulations_result_vectorized(int year){ 
-    //mat head_to_head_mat = zeros<mat>(30,4); //std_vec_to_HH_mat(head_to_head_list_python);
-    //mat future_mat = zeros<mat>(30,4); //std_vec_to_future_mat(future_games_list_python);
-    //stdteamvec teams; 
+    mat head_to_head_mat = zeros<mat>(30,4); //std_vec_to_HH_mat(head_to_head_list_python);
+    mat future_mat = zeros<mat>(30,4); //std_vec_to_future_mat(future_games_list_python);
+    stdteamvec teams; 
     //cout << future_mat << endl;
-    //mat sim_results = mcss_function(head_to_head_mat,future_mat,teams,year);
+    mat sim_results = mcss_function(head_to_head_mat,future_mat,teams,year);
     //mat sim_playoff_total = zeros<mat>(30,4); // [Division Win, Division Runner Up, Wildcard, Unused]  
     return year;
 }
