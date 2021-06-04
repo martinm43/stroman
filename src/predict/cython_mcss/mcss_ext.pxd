@@ -1,6 +1,5 @@
 # distutils: language = c++
 # distutils: sources = mcss.cpp
-# cython: boundscheck=False
 """
 Cython interface file for declaring the necessary objects required out
 of the mcss.hpp header file (the Team object, and the linking function to 
@@ -39,6 +38,6 @@ cdef extern from "mcss.hpp":
 
 cdef extern from "mcss.hpp":
     #int simulations_result_vectorized(vector[vector[double]], vector[vector[double]], vector[Team],int)
-    int simulations_result_vectorized(vector[vector[double]], vector[vector[double]], int)
+    int simulations_result_vectorized(int)
 
 

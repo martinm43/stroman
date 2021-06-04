@@ -7,7 +7,7 @@ and allow for integration with more 'modern' interfaces -think flask or Django
 
 # Future import first
 
-#from predict.cython_mcss.mcss_ext2 import simulations_result_vectorized
+from predict.cython_mcss.mcss_ext2 import simulations_result_vectorized
 from mlb_database.mlb_models import Teams
 from mlb_database.queries import elo_ratings_list, epochtime
 from datetime import datetime, timedelta
@@ -129,114 +129,13 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
     print(type(games_won_list_cpp))
     print(type(future_games_list))
 
-    # team_results = simulations_result_vectorized(
-    #     games_won_list_cpp, future_games_list, teams_list,season_year
-    # )
+    team_results = simulations_result_vectorized(games_won_list_cpp, future_games_list, teams_list,season_year)
     # Return (top 8 odds, average wins, top 6 odds, and play in tournament odds).
     # team_results = [
     #     [x[0] * 100.0, x[1], x[2] * 100.0, x[3] * 100.0, 100.0*(x[0]+x[2]+x[3])] for x in team_results
     # ]
     return 1 #team_results
 
-
-def playoff_odds_print(team_results,season_year=9999):
-    """
-    Prints table based on alphabetically ordered team results matrix.
-    Team results are the output of playoff_odds_calc.
-    """
-    # Custom local function for formatting
-    from tabulate import tabulate
-
-    def format_percent(percent_float):
-        return str(percent_float) + "%"
-
-    # Format the results into a table
-    teams = Teams.select().order_by(Teams.team_id)
-
-    teams_dict = [
-        dict(list(zip(["Team", "Division"], [i.abbreviation, i.division])))
-        for i in teams
-    ]
-
-    
-
-    for i, d in enumerate(teams_dict):
-    
-        if d["Team"] == "HOU" and season_year <= 2012:
-            d["Division"] = "NL Central"
-
-        if d["Team"] == "MIL" and season_year <= 1997:
-            d["Division"] = "AL Central"
-
-        if d["Team"] == "DET" and season_year <= 1997:
-            d["Division"] = "AL East"
-        
-        if d["Team"] == "WSN" and season_year <= 2004:
-            d["Team"] = "MON"
-        
-        #1977-1993 fix.
-        if season_year <= 1993:
-            if d["Team"] in ["DET","CLE","MIL"]: #to AL East
-                d["Division"] = "AL East"
-            if d["Team"] in ["CHW","KCR","MIN"]: #to AL West
-                d["Division"] = "AL West"
-            if d["Team"] in ["STL","CHC","PIT"]: #to NL East
-                d["Division"] = "NL East"
-            if d["Team"] in ["ATL","CIN","HOU"]: #to NL West
-                d["Division"] = "NL West"   
-
-        #print(d)
-
-        d["Hist. Playoff %"] = round(team_results[i][0], 1)
-        d["Avg. Wins"] = round(team_results[i][1], 1)
-        d["Div 2nd %"] = round(team_results[i][2], 1)
-        d["WC %"] = round(team_results[i][3], 1)
-        d["Total %"] = round(team_results[i][4], 1)
-
-        # Convert into percentages for printing
-        d["Hist. Playoff %"] = format_percent(d["Hist. Playoff %"])
-        d["Div 2nd %"] = format_percent(d["Div 2nd %"])
-        d["WC %"] = format_percent(d["WC %"])
-        d["Total %"] = format_percent(d["Total %"])
-
-    #pprint(teams_dict)
-
-    teams_dict.sort(key=lambda x: (x["Division"], -x["Avg. Wins"]))
-
-    #Remove zero entries.
-    teams_dict = [x for x in teams_dict if x["Avg. Wins"] != 0]
-
-    team_tuples = [
-        (
-            d["Division"],
-            d["Team"],
-            d["Avg. Wins"],
-            d["Hist. Playoff %"],
-            d["WC %"],
-            d["Div 2nd %"],
-            d["Total %"]
-        )
-        for d in teams_dict
-    ]
-
-    results_table = tabulate(
-        team_tuples,
-        headers=[
-            "Division",
-            "Team",
-            "Avg. Wins",
-            "Div. %",
-            "WC %",
-            "Div. 2nd %\n(2020 only)",
-            "TOTAL"
-        ],
-        tablefmt="rst",
-        numalign="left",
-    )
-    return results_table
-
-
-# Print your results:
 
 if __name__ == "__main__":
 
@@ -250,18 +149,7 @@ if __name__ == "__main__":
     ratings_mode = "SRS"
     results = playoff_odds_calc(
         start_datetime, end_datetime, season_year, ratings_mode=ratings_mode)
-
-#    results_table = playoff_odds_print(results,season_year=season_year)
-
-#    print(
-#        "Playoff odds for the "
-#        + str(season_year)
-#        + " season as of "
-#        + end_datetime.strftime("%b %d %Y")
-#    )
-#    print(results_table)
-#    print("Notes:")
-#    print("* No tiebreakers (e.g. division record) are considered")
-#    print("* For the 1981 season, the 'split season' model is not yet implemented.\nDiscussion of the Split Season schedule can be found at https://www.baseball-reference.com/bullpen/1981_Split_Season_Schedule")
-#    print("* No playoff occured in 1994 due to a players' strike")
-    
+    if results == 1:
+        print("program success")
+    else:
+        print("program fail")
