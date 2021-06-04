@@ -129,12 +129,13 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
     print(type(games_won_list_cpp))
     print(type(future_games_list))
 
-    team_results = simulations_result_vectorized(games_won_list_cpp, future_games_list, teams_list,season_year)
+    #team_results = simulations_result_vectorized(games_won_list_cpp, future_games_list, teams_list,season_year)
+    team_results = simulations_result_vectorized(season_year)
     # Return (top 8 odds, average wins, top 6 odds, and play in tournament odds).
     # team_results = [
     #     [x[0] * 100.0, x[1], x[2] * 100.0, x[3] * 100.0, 100.0*(x[0]+x[2]+x[3])] for x in team_results
     # ]
-    return 1 #team_results
+    return team_results #team_results
 
 
 if __name__ == "__main__":
@@ -149,7 +150,4 @@ if __name__ == "__main__":
     ratings_mode = "SRS"
     results = playoff_odds_calc(
         start_datetime, end_datetime, season_year, ratings_mode=ratings_mode)
-    if results == 1:
-        print("program success")
-    else:
-        print("program fail")
+    print(results)

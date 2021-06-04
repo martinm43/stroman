@@ -78,8 +78,8 @@ double uniformRandom() {
 //Debugging efforts appear to have cleared this function - removing all of it except "return empty matrix" does nothing.
 mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_teams, int year){
 
-    vector<Team> teams;
-    teams = list_of_teams;
+    //vector<Team> teams;
+    //teams = list_of_teams;
     //cout << teams[0].get_full_team_name() << endl;
     //cout << "debug print" << endl;
     mat sim_playoff_total = zeros<mat>(30,4); // [Division Win, Division Runner Up, Wildcard, Unused]  
@@ -97,7 +97,7 @@ int simulations_result_vectorized(int year){
     //cout << future_mat << endl;
     //mat sim_results = mcss_function(head_to_head_mat,future_mat,teams,year);
     //mat sim_playoff_total = zeros<mat>(30,4); // [Division Win, Division Runner Up, Wildcard, Unused]  
-    return 0;
+    return year;
 }
 
 
