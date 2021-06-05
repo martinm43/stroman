@@ -358,6 +358,10 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         }
        }
  
+
+	//Debug print.
+	vector<int> htoh_print = sim_teams[0].get_htoh();
+	cout << htoh_print[1] << endl;
     }
 	
     for(int i=0;i<30;i++){
