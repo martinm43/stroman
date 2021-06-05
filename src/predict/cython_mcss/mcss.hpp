@@ -22,18 +22,19 @@ private:
     float _wild_card_odds;
     float _division_odds;
     float _playoff_odds;
-
+    std::vector<int> _htoh;
 public:
 
     Team(int team_id, std::string full_team_name, 
             std::string abbreviation, std::string division, std::string league, 
-            float rating):
+            float rating,std::vector<int> htoh):
         _team_id(team_id), _full_team_name(full_team_name), 
             _abbreviation(abbreviation), _division(division), 
-            _league(league), _rating(rating) {}
+            _league(league), _rating(rating),_htoh(htoh) {}
 
     //Sample team definition, blank definition.
-    Team(){_team_id=0, _full_team_name="Carp", _abbreviation="HC", _division="Central", _league="NPL", _rating=9001.0;}
+    Team(){_team_id=0, _full_team_name="Carp", _abbreviation="HC", _division="Central", _league="NPL", _rating=9001.0, _htoh;}
+
 
     int get_team_id() const {return _team_id;}
     std::string get_full_team_name() const {return _full_team_name;}
@@ -42,7 +43,7 @@ public:
     std::string get_league() const {return _league;}
     float get_rating() const {return _rating;}
     int get_total_wins() const {return _total_wins;}
-
+    std::vector<int> get_htoh() const{return _htoh;}
 
     void set_total_wins(int val) {_total_wins = val;}
     void set_wild_card_odds(float val) {_wild_card_odds = val;}
@@ -51,6 +52,7 @@ public:
     float get_wild_card_odds() const {return _wild_card_odds;}
     float get_division_odds() const {return _division_odds;}
     float get_playoff_odds() const {return _playoff_odds;}
+    void set_htoh(std::vector<int> val) {_htoh = val;}
 };
 
 //the following are structures passed to std::sort for sorting custom items.
