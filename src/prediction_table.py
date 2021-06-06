@@ -9,7 +9,7 @@ and allow for integration with more 'modern' interfaces -think flask or Django
 
 #from predict.cython_mcss.mcss_ext2 import simulations_result_vectorized
 from mlb_database.mlb_models import Teams
-from mlb_database.queries import elo_ratings_list, epochtime
+from mlb_database.queries import elo_ratings_list, epochtime, team_abbreviation
 from datetime import datetime, timedelta
 #import inspect #spyder debug
 from pprint import pprint
@@ -128,7 +128,10 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
             Elo_diff = home_team_rating - away_team_rating
             x.append(Elo_regress(Elo_diff))
 
-    print(games_won_list_cpp[28])
+    test_num = 10
+    print(test_num-1)
+    print(team_abbreviation(test_num))
+    print(games_won_list_cpp[test_num-1])
     team_results = simulations_result_vectorized(
         games_won_list_cpp, future_games_list, teams_list,season_year
     )

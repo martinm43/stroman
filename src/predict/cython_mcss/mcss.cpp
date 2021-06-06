@@ -114,6 +114,14 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         debug_total.zeros();
         debug_total = MCSS_Head_To_Head+Head_To_Head;
 
+
+	stdvecvec htoh_records = mat_to_std_vec(debug_total);
+        vector<double> records = htoh_records[0];
+	for(int i=0;i<30;i++){
+        cout << records[i] << " " ;
+        }
+        cout << endl;
+
         /*
         cout << "Head to Head" << endl;
         cout << Head_To_Head << endl;
@@ -123,18 +131,21 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
 
         //Calculate raw wins - only concerned with that now (can implement tie breaking functionality later)
         mat total_wins = sum(debug_total.t());
-
+	cout << "total wins matrix" << endl;
+	cout <<total_wins << endl;
         for(int i=0;i<30;i++){
             sim_playoff_total.row(i)[1] = sim_playoff_total.row(i)[1] +  total_wins[i];
             //cout << sim_playoff_total.row(i)[2] << endl;
         }
         //Create a copy of the teams list, only defined in the scope of this loop
         vector<Team> sim_teams = teams;
-
+	
         //Round all wins
         for(int i=0;i<30;i++){
             sim_teams[i].set_total_wins(round(total_wins[i]));
-        }
+	    
+            //sim_teams[i].set_htoh();
+	}
 
         random_shuffle(sim_teams.begin(),sim_teams.end());
 	    sort(sim_teams.begin(),sim_teams.end(),teams_sort());
@@ -360,8 +371,9 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
  
 
 	//Debug print
-	vector<int> htoh_print = sim_teams[8].get_htoh();
-	cout << sim_teams[8].get_team_id() << " " << sim_teams[8].get_full_team_name() << endl;
+	int tm_index = 29;
+	vector<int> htoh_print = sim_teams[tm_index].get_htoh();
+	cout << sim_teams[tm_index].get_team_id() << " " << sim_teams[tm_index].get_full_team_name() << endl;
 	for(int i=0;i<30;i++){
 	cout << htoh_print[i] << " " ;
 	}
