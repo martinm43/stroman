@@ -125,14 +125,14 @@ def simulations_result_vectorized(head_to_head, future_games, list_of_teams, int
     
     cpdef vector[Team] cpp_list_of_teams
 
-    for t in list_of_teams:
+    for i,t in enumerate(list_of_teams):
         team_id = int(t[0])
         full_team_name = t[1]
         abbreviation = t[2]
         division = t[3]
         league = t[4]
         rating = t[5]
-        htoh = [3,3]
+        htoh = head_to_head[i]
         st = PyTeam(team_id,full_team_name,abbreviation,division,league,rating,htoh)
         st_cpp =dereference(st.thisptr)
         cpp_list_of_teams.push_back(st_cpp)

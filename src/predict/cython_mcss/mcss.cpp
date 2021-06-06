@@ -10,7 +10,7 @@
 #include <armadillo>
 #include "mcss.hpp"
 
-#define MAX_ITER 5000
+#define MAX_ITER 1
 
 using namespace std;
 using namespace arma;
@@ -359,9 +359,13 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
        }
  
 
-	//Debug print.
-	vector<int> htoh_print = sim_teams[0].get_htoh();
-	cout << htoh_print[1] << endl;
+	//Debug print
+	vector<int> htoh_print = sim_teams[8].get_htoh();
+	cout << sim_teams[8].get_team_id() << " " << sim_teams[8].get_full_team_name() << endl;
+	for(int i=0;i<30;i++){
+	cout << htoh_print[i] << " " ;
+	}
+	cout << endl;
     }
 	
     for(int i=0;i<30;i++){

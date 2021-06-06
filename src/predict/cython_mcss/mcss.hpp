@@ -33,7 +33,8 @@ public:
             _league(league), _rating(rating),_htoh(htoh) {}
 
     //Sample team definition, blank definition.
-    Team(){_team_id=0, _full_team_name="Carp", _abbreviation="HC", _division="Central", _league="NPL", _rating=9001.0, _htoh;}
+    //Team()
+    Team(){_team_id=0, _full_team_name="Carp", _abbreviation="HC", _division="Central", _league="NPL", _rating=9001.0, _htoh={0,0,0};}
 
 
     int get_team_id() const {return _team_id;}
