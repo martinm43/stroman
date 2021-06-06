@@ -363,13 +363,13 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
  
 
 	//Debug print
-	//int tm_index = 29;
-	//vector<double> htoh_print = sim_teams[tm_index].get_htoh();
-	//cout << sim_teams[tm_index].get_team_id() << " " << sim_teams[tm_index].get_full_team_name() << endl;
-	//for(int i=0;i<30;i++){
-	//cout << htoh_print[i] << " " ;
-	//}
-	//cout << endl;
+	/*int tm_index = 29;
+	vector<double> htoh_print = sim_teams[tm_index].get_htoh();
+	cout << sim_teams[tm_index].get_team_id() << " " << sim_teams[tm_index].get_full_team_name() << endl;
+	for(int i=0;i<30;i++){
+	cout << htoh_print[i] << " " ;
+	}
+	cout << endl;*/
     }
 	
     for(int i=0;i<30;i++){
