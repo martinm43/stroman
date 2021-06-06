@@ -143,8 +143,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         //Round all wins
         for(int i=0;i<30;i++){
             sim_teams[i].set_total_wins(round(total_wins[i]));
-	    
-            //sim_teams[i].set_htoh();
+	    //sim_teams[i].set_htoh(htoh_records[i]); - need to fix how data is stored (int? double? should be int...)
 	}
 
         random_shuffle(sim_teams.begin(),sim_teams.end());
