@@ -17,7 +17,7 @@ cdef extern from "mcss.hpp":
 
     cdef cppclass Team:
 
-        Team(int,string,string,string,string,float,vector[int]) except +
+        Team(int,string,string,string,string,float,vector[double]) except +
         Team() except +
 
         int get_team_id()
@@ -27,13 +27,13 @@ cdef extern from "mcss.hpp":
         string get_league()
         float get_rating()
         int get_total_wins()
-        vector[int] get_htoh()
+        vector[double] get_htoh()
 
         void set_total_wins(int val)
         void set_wild_card_odds(float val)
         void set_division_odds(float val)
         void set_playoff_odds(float val)
-        void set_htoh(vector[int] val)
+        void set_htoh(vector[double] val)
         float get_wild_card_odds()
         float get_division_odds()
         float get_playoff_odds()
@@ -42,7 +42,7 @@ cdef extern from "mcss.hpp":
 cdef class PyTeam:
     cdef Team *thisptr # hold a C++ instance of a team object
 
-    def __cinit__(self,int id, string full_team_name, string abbreviation, string division, string league, float rating, vector[int] htoh):
+    def __cinit__(self,int id, string full_team_name, string abbreviation, string division, string league, float rating, vector[double] htoh):
         self.thisptr = new Team(id,full_team_name,abbreviation,division,league,rating,htoh)
 
     def __dealloc__(self):

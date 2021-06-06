@@ -128,10 +128,6 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
             Elo_diff = home_team_rating - away_team_rating
             x.append(Elo_regress(Elo_diff))
 
-    test_num = 10
-    print(test_num-1)
-    print(team_abbreviation(test_num))
-    print(games_won_list_cpp[test_num-1])
     team_results = simulations_result_vectorized(
         games_won_list_cpp, future_games_list, teams_list,season_year
     )

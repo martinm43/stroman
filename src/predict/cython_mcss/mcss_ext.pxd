@@ -27,7 +27,7 @@ cdef extern from "mcss.hpp":
         string get_league()
         float get_rating()
         int get_total_wins()
-        vector[int] get_htoh()
+        vector[double] get_htoh()
 
         void set_total_wins(int val)
         void set_wild_card_odds(float val)

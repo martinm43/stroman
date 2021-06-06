@@ -10,7 +10,7 @@
 #include <armadillo>
 #include "mcss.hpp"
 
-#define MAX_ITER 1
+#define MAX_ITER 10000
 
 using namespace std;
 using namespace arma;
@@ -116,11 +116,6 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
 
 
 	stdvecvec htoh_records = mat_to_std_vec(debug_total);
-        vector<double> records = htoh_records[0];
-	for(int i=0;i<30;i++){
-        cout << records[i] << " " ;
-        }
-        cout << endl;
 
         /*
         cout << "Head to Head" << endl;
@@ -131,8 +126,6 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
 
         //Calculate raw wins - only concerned with that now (can implement tie breaking functionality later)
         mat total_wins = sum(debug_total.t());
-	cout << "total wins matrix" << endl;
-	cout <<total_wins << endl;
         for(int i=0;i<30;i++){
             sim_playoff_total.row(i)[1] = sim_playoff_total.row(i)[1] +  total_wins[i];
             //cout << sim_playoff_total.row(i)[2] << endl;
@@ -143,7 +136,7 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
         //Round all wins
         for(int i=0;i<30;i++){
             sim_teams[i].set_total_wins(round(total_wins[i]));
-	    //sim_teams[i].set_htoh(htoh_records[i]); - need to fix how data is stored (int? double? should be int...)
+	    sim_teams[i].set_htoh(htoh_records[i]);
 	}
 
         random_shuffle(sim_teams.begin(),sim_teams.end());
@@ -370,13 +363,13 @@ mat mcss_function(mat mat_head_to_head, mat future_games, stdteamvec list_of_tea
  
 
 	//Debug print
-	int tm_index = 29;
-	vector<int> htoh_print = sim_teams[tm_index].get_htoh();
-	cout << sim_teams[tm_index].get_team_id() << " " << sim_teams[tm_index].get_full_team_name() << endl;
-	for(int i=0;i<30;i++){
-	cout << htoh_print[i] << " " ;
-	}
-	cout << endl;
+	//int tm_index = 29;
+	//vector<double> htoh_print = sim_teams[tm_index].get_htoh();
+	//cout << sim_teams[tm_index].get_team_id() << " " << sim_teams[tm_index].get_full_team_name() << endl;
+	//for(int i=0;i<30;i++){
+	//cout << htoh_print[i] << " " ;
+	//}
+	//cout << endl;
     }
 	
     for(int i=0;i<30;i++){
