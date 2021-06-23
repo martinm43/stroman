@@ -10,12 +10,14 @@ cimport mcss_ext
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 from cython.operator import dereference
+from cpython cimport array
+import array
 
 cdef extern from "mcss.hpp":
 
     cdef cppclass Team:
 
-        Team(int,string,string,string,string,float) except +
+        Team(int,string,string,string,string,float,vector[double]) except +
         Team() except +
 
         int get_team_id()
@@ -25,21 +27,23 @@ cdef extern from "mcss.hpp":
         string get_league()
         float get_rating()
         int get_total_wins()
-
+        vector[double] get_htoh()
 
         void set_total_wins(int val)
         void set_wild_card_odds(float val)
         void set_division_odds(float val)
         void set_playoff_odds(float val)
+        void set_htoh(vector[double] val)
         float get_wild_card_odds()
         float get_division_odds()
         float get_playoff_odds()
 
+
 cdef class PyTeam:
     cdef Team *thisptr # hold a C++ instance of a team object
 
-    def __cinit__(self,int id, string full_team_name, string abbreviation, string division, string league, float rating):
-        self.thisptr = new Team(id,full_team_name,abbreviation,division,league,rating)
+    def __cinit__(self,int id, string full_team_name, string abbreviation, string division, string league, float rating, vector[double] htoh):
+        self.thisptr = new Team(id,full_team_name,abbreviation,division,league,rating,htoh)
 
     def __dealloc__(self):
         del self.thisptr
@@ -86,6 +90,12 @@ cdef class PyTeam:
     def get_playoff_odds(self):
         return self.thisptr.get_playoff_odds()
 
+    def get_htoh(self):
+        return self.thisptr.get_htoh()
+
+    def set_htoh(self):
+        return self.thisptr.set_htoh(array.array)
+
 def simulations_result_vectorized(head_to_head, future_games, list_of_teams, int year):
     """
     
@@ -115,14 +125,15 @@ def simulations_result_vectorized(head_to_head, future_games, list_of_teams, int
     
     cpdef vector[Team] cpp_list_of_teams
 
-    for t in list_of_teams:
+    for i,t in enumerate(list_of_teams):
         team_id = int(t[0])
         full_team_name = t[1]
         abbreviation = t[2]
         division = t[3]
         league = t[4]
         rating = t[5]
-        st = PyTeam(team_id,full_team_name,abbreviation,division,league,rating)
+        htoh = head_to_head[i]
+        st = PyTeam(team_id,full_team_name,abbreviation,division,league,rating,htoh)
         st_cpp =dereference(st.thisptr)
         cpp_list_of_teams.push_back(st_cpp)
 

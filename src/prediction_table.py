@@ -9,9 +9,9 @@ and allow for integration with more 'modern' interfaces -think flask or Django
 
 #from predict.cython_mcss.mcss_ext2 import simulations_result_vectorized
 from mlb_database.mlb_models import Teams
-from mlb_database.queries import elo_ratings_list, epochtime
+from mlb_database.queries import elo_ratings_list, epochtime, team_abbreviation
 from datetime import datetime, timedelta
-
+#import inspect #spyder debug
 from pprint import pprint
 
 
@@ -36,6 +36,8 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
     each list consists of [playoff odds,average wins]
 
     """
+
+    #global local_vars
 
     from predict.cython_mcss.mcss_ext2 import simulations_result_vectorized
     from analytics.SRS import SRS
@@ -133,6 +135,7 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
     team_results = [
         [x[0] * 100.0, x[1], x[2] * 100.0, x[3] * 100.0, 100.0*(x[0]+x[2]+x[3])] for x in team_results
     ]
+    #local_vars = inspect.currentframe().f_locals #spyder debug
     return team_results
 
 

@@ -27,16 +27,16 @@ cdef extern from "mcss.hpp":
         string get_league()
         float get_rating()
         int get_total_wins()
-
+        vector[double] get_htoh()
 
         void set_total_wins(int val)
         void set_wild_card_odds(float val)
         void set_division_odds(float val)
         void set_playoff_odds(float val)
+        void set_htoh(vector[int] val)
         float get_wild_card_odds()
         float get_division_odds()
         float get_playoff_odds()
 
 cdef extern from "mcss.hpp":
     vector[vector[double]] simulations_result_vectorized(vector[vector[double]], vector[vector[double]], vector[Team],int)
-
