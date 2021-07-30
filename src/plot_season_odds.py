@@ -27,8 +27,20 @@ from prediction_table import playoff_odds_calc
 from mlb_database.queries import team_abbreviation
 from mlb_database.mlb_models import Teams
 
-#season_year = random.randint(1977,2020)
-season_year = int(input("Please select a year between 1977 and 2021: "))
+year_max = 2021
+year_min = 1977
+
+try:
+    season_year = int(input("Please select a year between 1977 and 2021, or enter 0 for random year: "))
+except ValueError:
+    print("Invalid value entered, quitting!!")
+    sys.exit(1)
+    0
+if season_year == 0:
+    season_year = random.randint(year_min,year_max)
+if season_year > year_max or season_year < year_min:
+    print("Year outside range, exiting!")
+    sys.exit(1)
 
 #Select a division
 if season_year >= 1994:
@@ -63,8 +75,13 @@ except KeyError:
 
 
 a = datetime(season_year, 3, 20)
-b = datetime(season_year, 5, 1)
+b = datetime(season_year, 3, 27)
 end = min(datetime(season_year, 11, 1), datetime.today() - timedelta(days=1))
+
+if season_year == 2020:    
+    a = datetime(season_year, 7, 23)
+    b = datetime(season_year, 7, 26)
+    end = datetime(season_year,10,29)
 
 if b >= end:
     print("Error in script, check first calc and end date")
