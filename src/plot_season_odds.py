@@ -27,7 +27,8 @@ from prediction_table import playoff_odds_calc
 from mlb_database.queries import team_abbreviation
 from mlb_database.mlb_models import Teams
 
-season_year = random.randint(1977,2020)
+#season_year = random.randint(1977,2020)
+season_year = int(input("Please select a year between 1977 and 2021: "))
 
 #Select a division
 if season_year >= 1994:
@@ -37,19 +38,19 @@ if season_year >= 1994:
     4:"NL Central",
     5:"NL East",
     6:"NL West"}
-    #print("Divisions in "+str(season_year)+" are as follows: ")
-    #print(" 1: AL Central \n 2: AL East \n 3: AL West \n 4: NL Central \n 5: NL East \n 6: NL West")
-    #dn = input("Please select a division: ")
-    dn = random.randint(1,6)
+    print("Divisions in "+str(season_year)+" are as follows: ")
+    print(" 1: AL Central \n 2: AL East \n 3: AL West \n 4: NL Central \n 5: NL East \n 6: NL West")
+    dn = int(input("Please select a division: "))
+    #dn = random.randint(1,6)
 else:
     mode_dict={1:"AL East",
     2:"AL West",
     3:"NL East",
     4:"NL West"}
-    #print("Divisions in "+str(season_year)+" are as follows: ")
-    #print(" 1: AL East \n 2: AL West \n 3: NL East \n 4: NL West")
-    #dn = input("Please select a division: ")
-    dn = random.randint(1,4)
+    print("Divisions in "+str(season_year)+" are as follows: ")
+    print(" 1: AL East \n 2: AL West \n 3: NL East \n 4: NL West")
+    dn = int(input("Please select a division: "))
+    #dn = random.randint(1,4)
 
 try:
     division_name = mode_dict[int(dn)]
@@ -62,7 +63,7 @@ except KeyError:
 
 
 a = datetime(season_year, 3, 20)
-b = datetime(season_year, 6, 1)
+b = datetime(season_year, 5, 1)
 end = min(datetime(season_year, 11, 1), datetime.today() - timedelta(days=1))
 
 if b >= end:
