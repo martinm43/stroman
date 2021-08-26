@@ -75,12 +75,12 @@ except KeyError:
 
 
 a = datetime(season_year, 3, 20)
-b = datetime(season_year, 3, 27)
+b = datetime(season_year, 4, 10)
 end = min(datetime(season_year, 11, 1), datetime.today() - timedelta(days=1))
 
 if season_year == 2020:    
     a = datetime(season_year, 7, 23)
-    b = datetime(season_year, 7, 26)
+    b = datetime(season_year, 8, 5)
     end = datetime(season_year,10,29)
 
 if b >= end:
@@ -130,7 +130,7 @@ odds_list.append(x_odds)
 dates_list = []
 dates_list.append(b)
 
-ratings_mode = "Elo"
+ratings_mode = "SRS"
 
 
 while b < end:
