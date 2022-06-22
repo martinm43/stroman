@@ -229,7 +229,7 @@ if __name__ == "__main__":
     # x = Games.select().order_by(Games.year.desc()).get()
     # end_year = x.year + 1
     start_year = 1977
-    end_year = 2022
+    end_year = 2023
 
 
     # master_results - capture all ratings over all seasons.
