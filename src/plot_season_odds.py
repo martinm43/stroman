@@ -27,11 +27,11 @@ from prediction_table import playoff_odds_calc
 from mlb_database.queries import team_abbreviation
 from mlb_database.mlb_models import Teams
 
-year_max = 2021
+year_max = 2022
 year_min = 1977
 
 try:
-    season_year = int(input("Please select a year between 1977 and 2021, or enter 0 for random year: "))
+    season_year = int(input("Please select a year between 1977 and 2022, or enter 0 for random year: "))
 except ValueError:
     print("Invalid value entered, quitting!!")
     sys.exit(1)
