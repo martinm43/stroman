@@ -130,7 +130,7 @@ odds_list.append(x_odds)
 dates_list = []
 dates_list.append(b)
 
-ratings_mode = "SRS"
+ratings_mode = "Elo"
 
 
 while b < end:
