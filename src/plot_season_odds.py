@@ -27,7 +27,7 @@ from prediction_table import playoff_odds_calc
 from mlb_database.queries import team_abbreviation
 from mlb_database.mlb_models import Teams
 
-year_max = 2022
+year_max = 2023
 year_min = 1977
 
 try:
