@@ -15,15 +15,15 @@ import time
 
 from mlb_database.queries import team_abbreviation
 
-for team_id in range(1, 32):
+for team_id in range(30, 0, -1):
     conn = sqlite3.connect("mlb_data.sqlite")
-    query = "SELECT datetime,elo_rating FROM mlb_team_elo_data where team_id = " + str(
-        team_id)+ " order by datetime desc"
+    query = "SELECT epochtime,elo_rating FROM ratings where team_id = " + str(
+        team_id)+ " order by epochtime desc"
     
 
     df = pd.read_sql_query(query, conn)
 
-    df["datetime"] = pd.to_datetime(df["datetime"], unit="s")
+    df["epochtime"] = pd.to_datetime(df["epochtime"], unit="s")
 
     # get the appropriate colours
     cursor = conn.cursor()
@@ -33,7 +33,7 @@ for team_id in range(1, 32):
     s = cursor.fetchall()
 
     plt.plot(
-        df["datetime"],
+        df["epochtime"],
         df["elo_rating"].rolling(162).mean(),
         label="41 game moving avg.",
         color=s[0][0],
@@ -42,5 +42,5 @@ for team_id in range(1, 32):
     plt.legend()
     plt.title("Elo rating history of " + team_abbreviation(team_id))
     plt.show(block=False)
-    plt.pause(3)
+    plt.pause(1)
     plt.close()

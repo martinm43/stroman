@@ -3,8 +3,8 @@
 #include <sqlite3.h>
 #include <vector>
 
-#define REBASE_FACTOR 0.85
-#define K_FACTOR 1
+#define REBASE_FACTOR 0.75 //how much of previous year to carry over
+#define K_FACTOR 0.65
 #define NUM_TEAMS 30
 #define BASE_RATING 1500.0
 
