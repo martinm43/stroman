@@ -109,7 +109,7 @@ results_table = tabulate(
         "Team",
         "Pythag. Wins",
         "Est. SRS",
-        "Elo Rating",
+        "Legacy Elo Rating",
         "Away Record",
         "Home Record",
         "Overall Record",
