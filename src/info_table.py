@@ -34,9 +34,9 @@ from random import randint
 from analytics.wins_script import get_wins
 
 # Query Testing
-season_year = 1986
+season_year = 2023
 start_datetime = datetime(season_year,3,15)
-end_datetime = datetime(season_year,10,15)
+end_datetime = datetime.today()
 
 games_list = games_query(start_datetime, end_datetime)
 
