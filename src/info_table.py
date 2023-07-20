@@ -44,13 +44,13 @@ print(len(games_list))
 
 # Custom SRS calculation options
 max_MOV = 100  # no real max MOV
-home_team_adv = 0
+home_team_adv = 2.124
 win_floor = 0
 
-teams_constant = 31
+teams_constant = 30
 
 wins_dict_list = [
-    get_wins(i, season_year, start_datetime, end_datetime) for i in range(1, teams_constant)
+    get_wins(i, season_year, start_datetime, end_datetime) for i in range(1, teams_constant+1)
 ]
 wins_list = [[x["away_record"], x["home_record"], x["record"]] for x in wins_dict_list]
 
