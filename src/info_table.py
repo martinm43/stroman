@@ -34,9 +34,9 @@ from random import randint
 from analytics.wins_script import get_wins
 
 # Query Testing
-season_year = 2023
-start_datetime = datetime(2023,3,15)
-end_datetime = datetime.today()
+season_year = 2022
+start_datetime = datetime(2022,3,15)
+end_datetime = datetime(2022,10,15)
 
 games_list = games_query(start_datetime, end_datetime)
 
@@ -47,10 +47,10 @@ max_MOV = 100  # no real max MOV
 home_team_adv = 0
 win_floor = 0
 
-teams_constant = 31
+teams_constant = 30
 
 wins_dict_list = [
-    get_wins(i, season_year, start_datetime, end_datetime) for i in range(1, teams_constant)
+    get_wins(i, season_year, start_datetime, end_datetime) for i in range(1, teams_constant+1)
 ]
 wins_list = [[x["away_record"], x["home_record"], x["record"]] for x in wins_dict_list]
 

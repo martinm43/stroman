@@ -38,7 +38,7 @@ def SRS(game, printing=False, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,nu
     # calculated as (home advantage) + (home team factor) - (away team factor)
     # First we create a matrix M which will hold the data on # who played whom
     # in each game and who had home-field advantage.
-    m_rows = numTeams + 1
+    m_rows = numTeams +1 
     m_cols = numGames
     M = numpy.zeros((m_rows, m_cols))
     # Then we create a vector S which will hold the final # relative scores
@@ -51,9 +51,9 @@ def SRS(game, printing=False, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,nu
         home, away, homescore, awayscore = gamedata
         # In the csv data, teams are numbered starting at 1
         # So we let home-team advantage be 'team 0' in our matrix
-        M[0, col] = 1.0
-        M[int(home), col] = 1.0
-        M[int(away), col] = -1.0
+        M[0, col] = 1.0 #1.0
+        M[int(home), col] = 1.0 #1.0
+        M[int(away), col] = -1.0 #-1.0
 
         diff_score = int(homescore) - int(awayscore)
         if diff_score > max_MOV:
@@ -69,6 +69,9 @@ def SRS(game, printing=False, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,nu
         else:  # demerits for a loss
             diff_score = min(-win_floor, diff_score)
         S[col] = diff_score
+
+    print(M.size())
+    print(S.size())
 
     # Now, if our theoretical model is correct, we should be able # to find a performance-factor vector W such that W*M == S
     #
