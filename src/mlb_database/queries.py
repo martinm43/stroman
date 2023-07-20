@@ -314,3 +314,52 @@ def elo_ratings_list(epochtime):
     for i in range(1, 31):
         ratings_list.append(team_elo_rating(i, epochtime))
     return ratings_list
+
+
+def new_team_elo_rating(team_id, epochtime):
+    """
+    Get the most recent Elo rating for a team given a date and the team_id
+
+    Parameters
+    ----------
+    team_id : integer team ID 1-30
+    epochtime : Unix time in seconds since epoch
+
+    Returns
+    -------
+    rtg : most recent Elo rating
+
+    """
+
+    from .mlb_models import ratings
+
+    rtg_iterable = (
+        ratings.select()
+        .where(ratings.team_id == team_id, ratings.epochtime<= epochtime)
+        .order_by(ratings.epochtime.desc())
+        .limit(1)
+    )
+    rtg = [x.elo_rating for x in rtg_iterable]
+    rtg = rtg[0]
+    return rtg
+
+
+def new_elo_ratings_list(epochtime):
+    """
+
+
+    Parameters
+    ----------
+    epochtime : Unix time in seconds since epoch
+
+    Returns
+    -------
+    ratings_list : list of most recent team ratings to date
+
+    """
+    ratings_list = []
+    for i in range(1, 31):
+        ratings_list.append(new_team_elo_rating(i, epochtime))
+    return ratings_list
+
+
