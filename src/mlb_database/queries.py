@@ -331,17 +331,22 @@ def new_team_elo_rating(team_id, epochtime):
 
     """
 
-    from .mlb_models import ratings
+    from .mlb_models import Ratings
 
     rtg_iterable = (
-        ratings.select()
-        .where(ratings.team_id == team_id, ratings.epochtime<= epochtime)
-        .order_by(ratings.epochtime.desc())
+        Ratings.select()
+        .where(Ratings.team_id == team_id, Ratings.epochtime<= epochtime)
+        .order_by(Ratings.epochtime.desc())
         .limit(1)
     )
     rtg = [x.elo_rating for x in rtg_iterable]
-    rtg = rtg[0]
-    return rtg
+    #print(rtg)
+    try:
+        rtg = rtg[0]
+        return rtg
+    except IndexError as e:
+        print("ratings don't exist for team "+str(team_id))
+        return 0
 
 
 def new_elo_ratings_list(epochtime):

@@ -19,7 +19,7 @@ from mlb_database.queries import (
     games_query,
     team_abbreviation,
     epochtime,
-    elo_ratings_list,
+    new_elo_ratings_list,
     form_query,
 )
 
@@ -65,7 +65,7 @@ srs_list = SRS(
     games_list, max_MOV=max_MOV, home_team_adv=home_team_adv, win_floor=win_floor
 )
 
-elo_list = elo_ratings_list(epochtime(end_datetime))
+elo_list = new_elo_ratings_list(epochtime(end_datetime))
 
 form_list = [form_query(i) for i in range(1, teams_constant)]
 
@@ -99,7 +99,7 @@ for x in results_print_list:
 #Remove zero entries
 results_print_list = [x for x in results_print_list if x[1] > 0]
 
-results_print_list.sort(key=lambda x: -x[2])
+results_print_list.sort(key=lambda x: -x[3])
 
 
 
@@ -109,7 +109,7 @@ results_table = tabulate(
         "Team",
         "Pythag. Wins",
         "Est. SRS",
-        "Legacy Elo Rating",
+        "Elo Rating",
         "Away Record",
         "Home Record",
         "Overall Record",

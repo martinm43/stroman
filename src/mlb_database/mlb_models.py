@@ -68,3 +68,13 @@ class MlbTeamEloData(BaseModel):
     class Meta:
         table_name = 'mlb_team_elo_data'
 
+class Ratings(BaseModel):
+    epochtime = FloatField(null=True)
+    elo_rating = FloatField(null=True)
+    year = IntegerField(null=True)
+    team_abbreviation = TextField(null=True)
+    current_abbreviation = TextField(null=True)
+    team_id = IntegerField(null=True)
+
+    class Meta:
+        table_name = 'ratings'
