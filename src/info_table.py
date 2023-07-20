@@ -34,9 +34,9 @@ from random import randint
 from analytics.wins_script import get_wins
 
 # Query Testing
-season_year = 2022
-start_datetime = datetime(2022,3,15)
-end_datetime = datetime(2022,10,15)
+season_year = 1993
+start_datetime = datetime(season_year,3,15)
+end_datetime = datetime(season_year,10,15)
 
 games_list = games_query(start_datetime, end_datetime)
 
@@ -44,7 +44,7 @@ print(len(games_list))
 
 # Custom SRS calculation options
 max_MOV = 100  # no real max MOV
-home_team_adv = 0
+home_team_adv = 2.124
 win_floor = 0
 
 teams_constant = 30
