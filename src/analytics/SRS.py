@@ -1,4 +1,4 @@
-def SRS(game, printing=True, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,numTeams = 30):
+def SRS(game, printing=False, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,numTeams = 30):
     """
 
     Inputs:
@@ -70,8 +70,8 @@ def SRS(game, printing=True, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,num
             diff_score = min(-win_floor, diff_score)
         S[col] = diff_score
 
-    print(M.size)
-    print(S.size)
+    #print(M.size)
+    #print(S.size)
 
     # Now, if our theoretical model is correct, we should be able # to find a performance-factor vector W such that W*M == S
     #
@@ -81,8 +81,8 @@ def SRS(game, printing=True, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,num
     # is minimized.
 
     init_W = numpy.array([0.0] * numTeams)
-    print(init_W.size)
-    print(init_W)
+    #print(init_W.size)
+    #print(init_W)
     def errorfn(k, m, s):
         return k.dot(m) - s
 
@@ -90,6 +90,7 @@ def SRS(game, printing=True, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,num
     homeAdvantage = W[0][0]
 
     teamStrength = W[0] #[1:]
+    print(sum(teamStrength))
     # Team strengths have meaning only by linear comparison;
     # we can add or subtract any constant to all of them without
     # changing the meaning.
