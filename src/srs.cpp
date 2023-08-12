@@ -76,3 +76,95 @@ int main() {
 
     return 0;
 }
+
+/*
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+std::vector<double> SRS(std::vector<std::vector<double>>& game, bool printing = false,
+                        double max_MOV = 100.0, double home_team_adv = 0.0,
+                        double win_floor = 0.0, int numTeams = 30) {
+    
+    int numGames = game.size();
+    // numTeams = 30; // This is already provided as a parameter
+
+    // Create a matrix M to hold game data (who played whom in each game and who had home-field advantage)
+    int m_rows = numTeams;
+    int m_cols = numGames;
+    std::vector<std::vector<double>> M(m_rows, std::vector<double>(m_cols, 0.0));
+
+    // Create a vector S to hold the final relative scores for each game
+    int s_cols = numGames;
+    std::vector<double> S(s_cols, 0.0);
+
+    // Loading M and S with game data
+    for (int col = 0; col < numGames; col++) {
+        int gameNum = col;
+        double home, away, homescore, awayscore;
+        home = game[col][2];
+        away = game[col][0];
+        homescore = game[col][3];
+        awayscore = game[col][1];
+
+        // In the csv data, teams are numbered starting at 1
+        // So we let home-team advantage be 'team 0' in our matrix
+        M[home - 1][col] = 1.0;
+        M[away - 1][col] = -1.0;
+
+        int diff_score = static_cast<int>(homescore) - static_cast<int>(awayscore);
+        if (diff_score > max_MOV) {
+            diff_score = static_cast<int>(max_MOV);
+        } else if (diff_score < -max_MOV) {
+            diff_score = static_cast<int>(-max_MOV);
+        }
+
+        // Granting a bonus based on "actually winning the game".
+        // This is intended to account for teams that can "win games when it counts".
+        // A crude adjustment for teams with significantly different talent levels from other teams.
+        if (diff_score > 0) {  // bonuses for a win
+            diff_score = std::max(static_cast<int>(win_floor), diff_score);
+        } else {  // demerits for a loss
+            diff_score = std::min(static_cast<int>(-win_floor), diff_score);
+        }
+
+        S[col] = diff_score;
+    }
+
+    // Now, if our theoretical model is correct, we should be able to find a performance-factor vector W such that W*M == S
+    // In the real world, we will never find a perfect match, so what we are looking for instead is W, which results in S'
+    // such that the least-mean-squares difference between S and S' is minimized.
+
+    std::vector<double> init_W(numTeams, 0.0);
+
+    std::vector<double> W = init_W;
+    double homeAdvantage = W[0];
+
+    // Find team strengths using the least squares optimization
+    // You'll need to implement your own least squares algorithm for C++,
+    // or use a library like Eigen or Armadillo for matrix operations and optimizations.
+
+    // Calculate teamStrength, similar to the Python code
+    // ...
+
+    // Shift teamStrength such that the average is 0.0
+    // ...
+
+    if (printing) {
+        for (size_t t = 0; t < teamStrength.size(); t++) {
+            std::cout << "Team " << (t + 1) << " has a calculated Burke Score of " << teamStrength[t] << std::endl;
+        }
+    }
+
+    return teamStrength;
+}
+
+int main() {
+    // Sample usage
+    // ...
+    return 0;
+}
+
+
+*/
