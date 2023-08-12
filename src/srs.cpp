@@ -63,14 +63,58 @@ int main() {
 
     // Process the data
     int processing_year = games[0].year;
-    double matrix[NUM_TEAMS][games.size()];
-    double scols[games.size()];
+
+    std::vector<std::vector<double> > M(games.size(), std::vector<double>(games.size(), 0.0));
+    std::vector<double> S(games.size(),0.0);
+
+    int max_MOV = 100;
+    int win_floor = 0;
+    int numTeams = 30;
 
 
-
-    for (unsigned long i=0;i<games.size();i++) {
+    for (unsigned long col=0;col<games.size();col++) {
   
+        int gameNum = col;
+        double home, away, homescore, awayscore;
+        home = games[col].home_team_id;
+        away = games[col].away_team_id;
+        homescore = games[col].home_team_runs;
+        awayscore = games[col].away_team_runs;
+
+        // In the csv data, teams are numbered starting at 1
+        // So we let home-team advantage be 'team 0' in our matrix
+        M[int(home) - 1][col] = 1.0;
+        M[int(away) - 1][col] = -1.0;
+
+        int diff_score = static_cast<int>(homescore) - static_cast<int>(awayscore);
+        if (diff_score > max_MOV) {
+            diff_score = static_cast<int>(max_MOV);
+        } else if (diff_score < -max_MOV) {
+            diff_score = static_cast<int>(-max_MOV);
+        }
+
+        // Granting a bonus based on "actually winning the game".
+        // This is intended to account for teams that can "win games when it counts".
+        // A crude adjustment for teams with significantly different talent levels from other teams.
+        if (diff_score > 0) {  // bonuses for a win
+            diff_score = std::max(static_cast<int>(win_floor), diff_score);
+        } else {  // demerits for a loss
+            diff_score = std::min(static_cast<int>(-win_floor), diff_score);
+        }
+
+        S[col] = diff_score;
     }
+
+    // Now, if our theoretical model is correct, we should be able to find a performance-factor vector W such that W*M == S
+    // In the real world, we will never find a perfect match, so what we are looking for instead is W, which results in S'
+    // such that the least-mean-squares difference between S and S' is minimized.
+
+    std::vector<double> init_W(numTeams, 0.0);
+
+    std::vector<double> W = init_W;
+    double homeAdvantage = W[0];
+
+    
 
     std::cout<<"Completion. "<<std::endl;
 
