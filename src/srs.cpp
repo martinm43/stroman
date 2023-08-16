@@ -4,6 +4,8 @@
 #include <vector>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include <Eigen/SparseQR>
+#include <Eigen/OrderingMethods>
 
 //ORM
 struct Game {
@@ -45,7 +47,7 @@ int main() {
 
     // Query the table
     const char* selectDataQuery = "SELECT id, home_team_id, home_team_runs, away_team_id, away_team_runs,"
-    " year , epochtime FROM Games where year = 2022 and (home_team_runs > 0 or away_team_runs > 0)"; 
+    " year , epochtime FROM Games where year = 1997 and (home_team_runs > 0 or away_team_runs > 0)"; 
     std::vector<Game> games;
     rc = sqlite3_exec(db, selectDataQuery, selectDataCallback, &games, &errorMsg);
     if (rc != SQLITE_OK) {
@@ -116,14 +118,14 @@ int main() {
     DenseVector Svector(games.size());     // Convert 1D vector to Eigen vector
 
     // Fill Eigen matrix and vector with data
-    for (int i = 0; i < 30; ++i) {
-        for (int j = 0; j < 1400; ++j) {
+    for (int i = 0; i < numTeams; ++i) {
+        for (int j = 0; j < games.size(); ++j) {
             if(M[i][j] != 0) {
             	Mmatrix.insert(i, j) = M[i][j];
             	}
         }
     }
-    for (int j = 0; j < 1400; ++j) {
+    for (int j = 0; j < games.size(); ++j) {
         Svector(j) = S[j];
     }
 
@@ -146,18 +148,25 @@ int main() {
         // SparseLU
     //{
 
-    //LeastSquaresConjugateGradient works
-    Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver;
+    Eigen::SparseQR<SparseMatrix,Eigen::COLAMDOrdering<int> > solver;
     solver.compute(MmatrixT);
     if (solver.info() != Eigen::Success) {
         // decomposition failed
         return -1;
     }
     DenseVector x = solver.solve(Svector);
-    std::cout << "Solution using LeastSquaresConjugateGradient:\n" << x << "\n";
+    std::cout << "Solution using SparseQR:\n" << x << "\n";
     //}
     
 
+    Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver1;
+    solver1.compute(MmatrixT);
+    if (solver1.info() != Eigen::Success) {
+        // decomposition failed
+        return -1;
+    }
+    DenseVector x1 = solver1.solve(Svector);
+    std::cout << "Solution using LeastSquaresConjugateGradient:\n" << x1 << "\n";
 
     std::cout<<"Completion. "<<std::endl;
 
