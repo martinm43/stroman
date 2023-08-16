@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sqlite3.h>
 #include <vector>
+#include <Eigen/Dense>
 
 #define REBASE_FACTOR 0.75 //how much of previous year to carry over
 #define K_FACTOR 0.65
@@ -64,13 +65,14 @@ int main() {
     // Process the data
     int processing_year = games[0].year;
 
-    std::vector<std::vector<double> > M(games.size(), std::vector<double>(games.size(), 0.0));
-    std::vector<double> S(games.size(),0.0);
+
 
     int max_MOV = 100;
     int win_floor = 0;
     int numTeams = 30;
 
+    std::vector<std::vector<double> > M(numTeams, std::vector<double>(games.size(), 0.0));
+    std::vector<double> S(games.size(),0.0);
 
     for (unsigned long col=0;col<games.size();col++) {
   
@@ -109,12 +111,34 @@ int main() {
     // In the real world, we will never find a perfect match, so what we are looking for instead is W, which results in S'
     // such that the least-mean-squares difference between S and S' is minimized.
 
+    //Eigen::MatrixXd M(30, 1400); // Convert 2D vector to Eigen matrix
+    //Eigen::VectorXd S(1400);     // Convert 1D vector to Eigen vector
+    Eigen::MatrixXd Mmatrix(numTeams, games.size()); // Convert 2D vector to Eigen matrix
+    Eigen::VectorXd Svector(games.size());     // Convert 1D vector to Eigen vector
+
+    // Fill Eigen matrix and vector with data
+    for (int i = 0; i < 30; ++i) {
+        for (int j = 0; j < 1400; ++j) {
+            Mmatrix(i, j) = M[i][j];
+        }
+    }
+    for (int j = 0; j < 1400; ++j) {
+        Svector(j) = S[j];
+    }
+
+    // Solve using least squares
+    Eigen::VectorXd x = Mmatrix.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(Svector);
+
+
+
+
+
     std::vector<double> init_W(numTeams, 0.0);
 
     std::vector<double> W = init_W;
     double homeAdvantage = W[0];
 
-    
+    std::cout << "Solution x: " << x.transpose() << std::endl;
 
     std::cout<<"Completion. "<<std::endl;
 
