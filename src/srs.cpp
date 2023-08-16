@@ -45,7 +45,7 @@ int main() {
 
     // Query the table
     const char* selectDataQuery = "SELECT id, home_team_id, home_team_runs, away_team_id, away_team_runs,"
-    " year , epochtime FROM Games where year = 2022"; 
+    " year , epochtime FROM Games where year = 2022 and (home_team_runs > 0 or away_team_runs > 0)"; 
     std::vector<Game> games;
     rc = sqlite3_exec(db, selectDataQuery, selectDataCallback, &games, &errorMsg);
     if (rc != SQLITE_OK) {
@@ -109,20 +109,25 @@ int main() {
 
     //Eigen::MatrixXd M(30, 1400); // Convert 2D vector to Eigen matrix
     //Eigen::VectorXd S(1400);     // Convert 1D vector to Eigen vector
-    Eigen::MatrixXd Mmatrix(numTeams, games.size()); // Convert 2D vector to Eigen matrix
-    Eigen::VectorXd Svector(games.size());     // Convert 1D vector to Eigen vector
+    typedef Eigen::SparseMatrix<double> SparseMatrix;
+    typedef Eigen::VectorXd DenseVector;
+    
+    SparseMatrix Mmatrix(numTeams, games.size()); // Convert 2D vector to Eigen matrix
+    DenseVector Svector(games.size());     // Convert 1D vector to Eigen vector
 
     // Fill Eigen matrix and vector with data
     for (int i = 0; i < 30; ++i) {
         for (int j = 0; j < 1400; ++j) {
-            Mmatrix(i, j) = M[i][j];
+            if(M[i][j] != 0) {
+            	Mmatrix.insert(i, j) = M[i][j];
+            	}
         }
     }
     for (int j = 0; j < 1400; ++j) {
         Svector(j) = S[j];
     }
 
-    Eigen::MatrixXd MmatrixT = Mmatrix.transpose();
+    SparseMatrix MmatrixT = Mmatrix.transpose();
     Eigen::RowVectorXd SvectorT = Svector.transpose();
     
 
@@ -136,9 +141,21 @@ int main() {
     //std::cout << Svector.segment(0,30) << std::endl;
 
     // Solve using least squares
-    Eigen::VectorXd x = MmatrixT.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(Svector);
+    //Eigen::VectorXd x = MmatrixT.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(Svector);
 
+        // SparseLU
+    //{
 
+    //LeastSquaresConjugateGradient works
+    Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver;
+    solver.compute(MmatrixT);
+    if (solver.info() != Eigen::Success) {
+        // decomposition failed
+        return -1;
+    }
+    DenseVector x = solver.solve(Svector);
+    std::cout << "Solution using SparseLU:\n" << x << "\n";
+    //}
     
 
 

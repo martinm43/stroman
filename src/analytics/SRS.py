@@ -84,7 +84,8 @@ def SRS(game, printing=False, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,nu
     #print(init_W.size)
     #print(init_W)
     def errorfn(k, m, s):
-        return k.dot(m) - s+abs(sum(k))
+        #return k.dot(m) - s+abs(sum(k))
+        return k.dot(m)-s
 
     W = scipy.optimize.leastsq(errorfn, init_W, args=(M, S))
     homeAdvantage = W[0][0]
