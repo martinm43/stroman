@@ -4,11 +4,6 @@
 #include <vector>
 #include <Eigen/Dense>
 
-#define REBASE_FACTOR 0.75 //how much of previous year to carry over
-#define K_FACTOR 0.65
-#define NUM_TEAMS 30
-#define BASE_RATING 1500.0
-
 //ORM
 struct Game {
     int id;
@@ -126,16 +121,18 @@ int main() {
         Svector(j) = S[j];
     }
 
+    Eigen::MatrixXd MmatrixT = Mmatrix.transpose();
     Eigen::RowVectorXd SvectorT = Svector.transpose();
     
 
     std::cout << "M is " << Mmatrix.rows() << " by " << Mmatrix.cols() << std::endl;
+    std::cout << "MT is " << MmatrixT.rows() << " by " << MmatrixT.cols() << std::endl;
     std::cout << "S is " << Svector.rows() << " by " << Svector.cols() << std::endl;
     std::cout << "ST is " << SvectorT.rows() << " by " << SvectorT.cols() << std::endl;
 
 
     // Solve using least squares
-    Eigen::VectorXd x = Mmatrix.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(Svector);
+    Eigen::VectorXd x = MmatrixT.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(Svector);
 
 
     
