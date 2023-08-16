@@ -3,6 +3,7 @@
 #include <sqlite3.h>
 #include <vector>
 #include <Eigen/Dense>
+#include <Eigen/Sparse>
 
 //ORM
 struct Game {
@@ -84,20 +85,20 @@ int main() {
         M[int(away) - 1][col] = -1.0;
 
         int diff_score = static_cast<int>(homescore) - static_cast<int>(awayscore);
-        if (diff_score > max_MOV) {
-            diff_score = static_cast<int>(max_MOV);
-        } else if (diff_score < -max_MOV) {
-            diff_score = static_cast<int>(-max_MOV);
-        }
+        //if (diff_score > max_MOV) {
+        //    diff_score = static_cast<int>(max_MOV);
+        //} else if (diff_score < -max_MOV) {
+        //    diff_score = static_cast<int>(-max_MOV);
+        //}
 
         // Granting a bonus based on "actually winning the game".
         // This is intended to account for teams that can "win games when it counts".
         // A crude adjustment for teams with significantly different talent levels from other teams.
-        if (diff_score > 0) {  // bonuses for a win
-            diff_score = std::max(static_cast<int>(win_floor), diff_score);
-        } else {  // demerits for a loss
-            diff_score = std::min(static_cast<int>(-win_floor), diff_score);
-        }
+        //if (diff_score > 0) {  // bonuses for a win
+        //    diff_score = std::max(static_cast<int>(win_floor), diff_score);
+        //} else {  // demerits for a loss
+        //    diff_score = std::min(static_cast<int>(-win_floor), diff_score);
+        //}
 
         S[col] = diff_score;
     }
@@ -125,11 +126,14 @@ int main() {
     Eigen::RowVectorXd SvectorT = Svector.transpose();
     
 
-    std::cout << "M is " << Mmatrix.rows() << " by " << Mmatrix.cols() << std::endl;
+    //std::cout << "M is " << Mmatrix.rows() << " by " << Mmatrix.cols() << std::endl;
     std::cout << "MT is " << MmatrixT.rows() << " by " << MmatrixT.cols() << std::endl;
     std::cout << "S is " << Svector.rows() << " by " << Svector.cols() << std::endl;
-    std::cout << "ST is " << SvectorT.rows() << " by " << SvectorT.cols() << std::endl;
+    //std::cout << "ST is " << SvectorT.rows() << " by " << SvectorT.cols() << std::endl;
 
+
+    //std::cout << Mmatrix.block(1,1,8,8) << std::endl;
+    //std::cout << Svector.segment(0,30) << std::endl;
 
     // Solve using least squares
     Eigen::VectorXd x = MmatrixT.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(Svector);
