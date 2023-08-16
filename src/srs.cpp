@@ -154,17 +154,10 @@ int main() {
         return -1;
     }
     DenseVector x = solver.solve(Svector);
-    std::cout << "Solution using SparseLU:\n" << x << "\n";
+    std::cout << "Solution using LeastSquaresConjugateGradient:\n" << x << "\n";
     //}
     
 
-
-    std::vector<double> init_W(numTeams, 0.0);
-
-    std::vector<double> W = init_W;
-    double homeAdvantage = W[0];
-
-    std::cout << "Solution x: " << x.transpose() << std::endl;
 
     std::cout<<"Completion. "<<std::endl;
 

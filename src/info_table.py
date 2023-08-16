@@ -67,7 +67,7 @@ srs_list = SRS(
 
 elo_list = new_elo_ratings_list(epochtime(end_datetime))
 
-form_list = [form_query(i) for i in range(1, teams_constant)]
+form_list = [form_query(i) for i in range(1, teams_constant+1)]
 
 lpw_results.sort(key=lambda x: x[0])
 
