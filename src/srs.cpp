@@ -47,7 +47,7 @@ int main() {
 
     // Query the table
     const char* selectDataQuery = "SELECT id, home_team_id, home_team_runs, away_team_id, away_team_runs,"
-    " year , epochtime FROM Games where year = 1997 and (home_team_runs > 0 or away_team_runs > 0)"; 
+    " year , epochtime FROM Games where year = 2013 and (home_team_runs > 0 or away_team_runs > 0)"; 
     std::vector<Game> games;
     rc = sqlite3_exec(db, selectDataQuery, selectDataCallback, &games, &errorMsg);
     if (rc != SQLITE_OK) {
