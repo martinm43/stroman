@@ -47,7 +47,7 @@ int main() {
 
     // Query the table
     const char* selectDataQuery = "SELECT id, home_team_id, home_team_runs, away_team_id, away_team_runs,"
-    " year , epochtime FROM Games where year = 2011 and (home_team_runs > 0 or away_team_runs > 0)"; 
+    " year , epochtime FROM Games where year = 2020 and (home_team_runs > 0 or away_team_runs > 0)"; 
     std::vector<Game> games;
     rc = sqlite3_exec(db, selectDataQuery, selectDataCallback, &games, &errorMsg);
     if (rc != SQLITE_OK) {
@@ -87,6 +87,7 @@ int main() {
         M[int(away) - 1][col] = -1.0;
 
         int diff_score = static_cast<int>(homescore) - static_cast<int>(awayscore);
+        // POTENTIAL FUTURE ADJUSTMENTS
         //if (diff_score > max_MOV) {
         //    diff_score = static_cast<int>(max_MOV);
         //} else if (diff_score < -max_MOV) {
@@ -109,8 +110,6 @@ int main() {
     // In the real world, we will never find a perfect match, so what we are looking for instead is W, which results in S'
     // such that the least-mean-squares difference between S and S' is minimized.
 
-    //Eigen::MatrixXd M(30, 1400); // Convert 2D vector to Eigen matrix
-    //Eigen::VectorXd S(1400);     // Convert 1D vector to Eigen vector
     typedef Eigen::SparseMatrix<double> SparseMatrix;
     typedef Eigen::VectorXd DenseVector;
     
@@ -133,36 +132,8 @@ int main() {
     Eigen::RowVectorXd SvectorT = Svector.transpose();
     
 
-    //std::cout << "M is " << Mmatrix.rows() << " by " << Mmatrix.cols() << std::endl;
-    std::cout << "MT is " << MmatrixT.rows() << " by " << MmatrixT.cols() << std::endl;
-    std::cout << "S is " << Svector.rows() << " by " << Svector.cols() << std::endl;
-    //std::cout << "ST is " << SvectorT.rows() << " by " << SvectorT.cols() << std::endl;
-
-
-    //std::cout << Mmatrix.block(1,1,8,8) << std::endl;
-    //std::cout << Svector.segment(0,30) << std::endl;
-
-    // Solve using least squares
-    //Eigen::VectorXd x = MmatrixT.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(Svector);
-
-        // SparseLU
-    //{
-
-    Eigen::SparseQR<SparseMatrix,Eigen::COLAMDOrdering<int> > solver;
-    solver.compute(MmatrixT);
-    
-    if (solver.info() != Eigen::Success) {
-        // decomposition failed
-        return -1;
-    }
-    DenseVector x = solver.solve(Svector);
-    //}
-    std::cout << "Solution using SparseQR:\n";
-    for (int i=0; i<x.size(); i++){
-    std::cout << i+1 << ": " << x[i] << "\n";
-    }
-    std::cout<<"Completion. "<<std::endl;
-    
+    //std::cout << "MT is " << MmatrixT.rows() << " by " << MmatrixT.cols() << std::endl;
+    //std::cout << "S is " << Svector.rows() << " by " << Svector.cols() << std::endl;
 
     Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver1;
     solver1.setMaxIterations(30); //known stable value
