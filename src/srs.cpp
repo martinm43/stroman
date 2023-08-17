@@ -47,7 +47,7 @@ int main() {
 
     // Query the table
     const char* selectDataQuery = "SELECT id, home_team_id, home_team_runs, away_team_id, away_team_runs,"
-    " year , epochtime FROM Games where year = 2013 and (home_team_runs > 0 or away_team_runs > 0)"; 
+    " year , epochtime FROM Games where year = 2012 and (home_team_runs > 0 or away_team_runs > 0)"; 
     std::vector<Game> games;
     rc = sqlite3_exec(db, selectDataQuery, selectDataCallback, &games, &errorMsg);
     if (rc != SQLITE_OK) {
@@ -150,24 +150,32 @@ int main() {
 
     Eigen::SparseQR<SparseMatrix,Eigen::COLAMDOrdering<int> > solver;
     solver.compute(MmatrixT);
+    
     if (solver.info() != Eigen::Success) {
         // decomposition failed
         return -1;
     }
     DenseVector x = solver.solve(Svector);
-    std::cout << "Solution using SparseQR:\n" << x << "\n";
     //}
+    std::cout << "Solution using SparseQR:\n";
+    for (int i=0; i<x.size(); i++){
+    std::cout << i+1 << ": " << x[i] << "\n";
+    }
+    std::cout<<"Completion. "<<std::endl;
     
 
     Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver1;
+    solver1.setMaxIterations(30); //known stable value
     solver1.compute(MmatrixT);
     if (solver1.info() != Eigen::Success) {
         // decomposition failed
         return -1;
     }
     DenseVector x1 = solver1.solve(Svector);
-    std::cout << "Solution using LeastSquaresConjugateGradient:\n" << x1 << "\n";
-
+    std::cout << "Solution using LeastSquaresConjugateGradient:\n";
+    for (int i=0; i<x1.size(); i++){
+    std::cout << i+1 << ": " << x1[i] << "\n";
+    }
     std::cout<<"Completion. "<<std::endl;
 
     return 0;
