@@ -343,3 +343,5 @@ healthchecksdb
 sqlite.h
 sqlite.c
 *.png
+*.txt
+*.csv
