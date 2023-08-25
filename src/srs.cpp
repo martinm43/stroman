@@ -50,132 +50,153 @@ int main() {
     std::tm timeinfo = {}; // Initialize to all zeros
     int year = 2023;
     timeinfo.tm_year = year - 1900; // Year since 1900 (2023)
-    timeinfo.tm_mon = 3;           // Month (August, 0-based index)
+    timeinfo.tm_mon = 2;           // Month (0-based index)
     timeinfo.tm_mday = 15;         // Day of the month
     std::time_t epochTime = std::mktime(&timeinfo); // Convert to epoch time
 
-     // Set up times - end time.
+     // Set up times - end time for calculation.
     std::tm endtimeinfo = {}; // Initialize to all zeros
     endtimeinfo.tm_year = year - 1900; // Year since 1900 (2023)
-    endtimeinfo.tm_mon = 8;           // Month (August, 0-based index)
-    endtimeinfo.tm_mday = 24;         // Day of the month
+    endtimeinfo.tm_mon = 5;           // Month (0-based index)
+    endtimeinfo.tm_mday = 15;         // Day of the month
     std::time_t endepochTime = std::mktime(&endtimeinfo); // Convert to epoch time
 
-    // Alternatively use the current end time.
-    //std::time_t endepochTime = std::time(nullptr); // Get the current epoch time
-    
-    //Debug print script for datetimes.
-    //std::cout << "Epoch Time for "+std::to_string(year)+"-"+std::to_string(timeinfo.tm_mon)+"-"+std::to_string(timeinfo.tm_mday) <<": " << epochTime << std::endl;
-    
+    // Set up times - end time of year.
+    std::tm yearendtimeinfo = {}; // Initialize to all zeros
+    yearendtimeinfo.tm_year = year - 1900; // Year since 1900 (2023)
+    yearendtimeinfo.tm_mon = 11;           // Month (August, 0-based index)
+    yearendtimeinfo.tm_mday = 10;         // Day of the month
+    std::time_t yearendepochTime = std::mktime(&yearendtimeinfo); // Convert to epoch time
 
-    // Query the table
-    std::string selectquery = "SELECT id, home_team_id, home_team_runs, away_team_id, away_team_runs,"
-    " year , epochtime FROM Games where (epochtime > "+std::to_string(epochTime)+" and epochtime < "+std::to_string(endepochTime)+") and (home_team_runs > 0 or away_team_runs > 0)"; 
-    const char* selectDataQuery = selectquery.c_str(); 
+    //moving necessary type declarations out of loop
+    std::string selectquery;
+    const char* selectDataQuery;
     std::vector<Game> games;
-    rc = sqlite3_exec(db, selectDataQuery, selectDataCallback, &games, &errorMsg);
-    if (rc != SQLITE_OK) {
-        std::cout << "SQL error: " << errorMsg << std::endl;
-        sqlite3_free(errorMsg);
-        sqlite3_close(db);
-        return rc;
-    }
-
-    // Close the database connection
-    sqlite3_close(db);
-
-    // Process the data
-    
-    // Multi year functionality
-    // int processing_year = games[0].year;
-
-
-
-
     const int numTeams = 30;
 
-    std::vector<std::vector<double> > M(numTeams, std::vector<double>(games.size(), 0.0));
-    std::vector<double> S(games.size(),0.0);
 
-    for (unsigned long col=0;col<games.size();col++) {
-  
-        double home, away, homescore, awayscore;
-        home = games[col].home_team_id;
-        away = games[col].away_team_id;
-        homescore = games[col].home_team_runs;
-        awayscore = games[col].away_team_runs;
+    while(endepochTime < yearendepochTime) {
+        // Alternatively use the current end time.
+        //std::time_t endepochTime = std::time(nullptr); // Get the current epoch time
+        
+        //Debug print script for datetimes.
+        //std::cout << "Epoch Time for "+std::to_string(year)+"-"+std::to_string(timeinfo.tm_mon)+"-"+std::to_string(timeinfo.tm_mday) <<": " << epochTime << std::endl;
+        
 
-        // In the csv data, teams are numbered starting at 1
-        // So we let home-team advantage be 'team 0' in our matrix
-        M[int(home) - 1][col] = 1.0;
-        M[int(away) - 1][col] = -1.0;
-
-        int diff_score = static_cast<int>(homescore) - static_cast<int>(awayscore);
-        /* POTENTIAL FUTURE ADJUSTMENTS - MORE USEFUL IN BASEBALL
-        int max_MOV = 100;
-        int win_floor = 0;
-
-        if (diff_score > max_MOV) {
-            diff_score = static_cast<int>(max_MOV);
-        } else if (diff_score < -max_MOV) {
-            diff_score = static_cast<int>(-max_MOV);
+        // Query the table
+        selectquery = "SELECT id, home_team_id, home_team_runs, away_team_id, away_team_runs,"
+        " year , epochtime FROM Games where (epochtime > "+std::to_string(epochTime)+" and epochtime < "+std::to_string(endepochTime)+") and (home_team_runs > 0 or away_team_runs > 0)"; 
+        selectDataQuery = selectquery.c_str(); 
+ 
+        rc = sqlite3_exec(db, selectDataQuery, selectDataCallback, &games, &errorMsg);
+        if (rc != SQLITE_OK) {
+            std::cout << "SQL error: " << errorMsg << std::endl;
+            sqlite3_free(errorMsg);
+            sqlite3_close(db);
+            return rc;
         }
 
-         Granting a bonus based on "actually winning the game".
-         This is intended to account for teams that can "win games when it counts".
-         A crude adjustment for teams with significantly different talent levels from other teams.
-        if (diff_score > 0) {  // bonuses for a win
-            diff_score = std::max(static_cast<int>(win_floor), diff_score);
-        } else {  // demerits for a loss
-            diff_score = std::min(static_cast<int>(-win_floor), diff_score);
-        }*/
 
-        S[col] = diff_score;
-    }
+        // Process the data
+        
+        // Multi year functionality
+        // int processing_year = games[0].year;
 
-    //the matrix with all the game results is sparse
-    //the matrix with all the actual point differentials is dense
 
-    typedef Eigen::SparseMatrix<double> SparseMatrix;
-    typedef Eigen::VectorXd DenseVector;
+
+
+        //const int numTeams = 30;
+
+        std::vector<std::vector<double> > M(numTeams, std::vector<double>(games.size(), 0.0));
+        std::vector<double> S(games.size(),0.0);
+
+        for (unsigned long col=0;col<games.size();col++) {
     
-    SparseMatrix Mmatrix(numTeams, games.size()); // Convert 2D vector to Eigen matrix
-    DenseVector Svector(games.size());     // Convert 1D vector to Eigen vector
+            double home, away, homescore, awayscore;
+            home = games[col].home_team_id;
+            away = games[col].away_team_id;
+            homescore = games[col].home_team_runs;
+            awayscore = games[col].away_team_runs;
 
-    // Fill Eigen matrix and vector with data
-    for (int i = 0; i < numTeams; ++i) {
+            // In the csv data, teams are numbered starting at 1
+            // So we let home-team advantage be 'team 0' in our matrix
+            M[int(home) - 1][col] = 1.0;
+            M[int(away) - 1][col] = -1.0;
+
+            int diff_score = static_cast<int>(homescore) - static_cast<int>(awayscore);
+            /* POTENTIAL FUTURE ADJUSTMENTS - MORE USEFUL IN BASEBALL
+            int max_MOV = 100;
+            int win_floor = 0;
+
+            if (diff_score > max_MOV) {
+                diff_score = static_cast<int>(max_MOV);
+            } else if (diff_score < -max_MOV) {
+                diff_score = static_cast<int>(-max_MOV);
+            }
+
+            Granting a bonus based on "actually winning the game".
+            This is intended to account for teams that can "win games when it counts".
+            A crude adjustment for teams with significantly different talent levels from other teams.
+            if (diff_score > 0) {  // bonuses for a win
+                diff_score = std::max(static_cast<int>(win_floor), diff_score);
+            } else {  // demerits for a loss
+                diff_score = std::min(static_cast<int>(-win_floor), diff_score);
+            }*/
+
+            S[col] = diff_score;
+        }
+
+        //the matrix with all the game results is sparse
+        //the matrix with all the actual point differentials is dense
+
+        typedef Eigen::SparseMatrix<double> SparseMatrix;
+        typedef Eigen::VectorXd DenseVector;
+        
+        SparseMatrix Mmatrix(numTeams, games.size()); // Convert 2D vector to Eigen matrix
+        DenseVector Svector(games.size());     // Convert 1D vector to Eigen vector
+
+        // Fill Eigen matrix and vector with data
+        for (int i = 0; i < numTeams; ++i) {
+            for (int j = 0; j < games.size(); ++j) {
+                if(M[i][j] != 0) {
+                    Mmatrix.insert(i, j) = M[i][j];
+                    }
+            }
+        }
         for (int j = 0; j < games.size(); ++j) {
-            if(M[i][j] != 0) {
-            	Mmatrix.insert(i, j) = M[i][j];
-            	}
+            Svector(j) = S[j];
         }
-    }
-    for (int j = 0; j < games.size(); ++j) {
-        Svector(j) = S[j];
-    }
 
-    SparseMatrix MmatrixT = Mmatrix.transpose();
-    Eigen::RowVectorXd SvectorT = Svector.transpose();
-    
+        SparseMatrix MmatrixT = Mmatrix.transpose();
+        Eigen::RowVectorXd SvectorT = Svector.transpose();
+        
 
-    //Debug print dimensions of matrices
-    //std::cout << "MT is " << MmatrixT.rows() << " by " << MmatrixT.cols() << std::endl;
-    //std::cout << "S is " << Svector.rows() << " by " << Svector.cols() << std::endl;
+        //Debug print dimensions of matrices
+        //std::cout << "MT is " << MmatrixT.rows() << " by " << MmatrixT.cols() << std::endl;
+        //std::cout << "S is " << Svector.rows() << " by " << Svector.cols() << std::endl;
 
-    Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver1;
-    solver1.setMaxIterations(30); //known stable value
-    solver1.compute(MmatrixT);
-    if (solver1.info() != Eigen::Success) {
-        // decomposition failed
-        return -1;
+        Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver1;
+        solver1.setMaxIterations(30); //known stable value
+        solver1.compute(MmatrixT);
+        if (solver1.info() != Eigen::Success) {
+            // decomposition failed
+            return -1;
+        }
+
+        DenseVector x1 = solver1.solve(Svector);
+        std::cout << "SRS results on epochtime: " << endepochTime << std::endl;
+        std::cout << "Solution using LeastSquaresConjugateGradient:\n";
+        for (int i=0; i<x1.size(); i++){
+        std::cout << i+1 << ": " << x1[i] << "\n";
+        }
+
+       std::cout<<"Completion. "<<std::endl;
+       endepochTime = endepochTime + 60*60*24*7;
+       //std::cout<<std::to_string(endepochTime)<<std::endl;
+       //std::cout<<std::to_string(yearendepochTime)<<std::endl;
     }
-    DenseVector x1 = solver1.solve(Svector);
-    std::cout << "Solution using LeastSquaresConjugateGradient:\n";
-    for (int i=0; i<x1.size(); i++){
-    std::cout << i+1 << ": " << x1[i] << "\n";
-    }
-    std::cout<<"Completion. "<<std::endl;
-
+    // Close the database connection
+    sqlite3_close(db);
     return 0;
 }
 
