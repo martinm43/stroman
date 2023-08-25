@@ -48,7 +48,7 @@ int main() {
 
     // Set up times - start time.
     std::tm timeinfo = {}; // Initialize to all zeros
-    int year = 2023;
+    int year = 2020;
     timeinfo.tm_year = year - 1900; // Year since 1900 (2023)
     timeinfo.tm_mon = 2;           // Month (0-based index)
     timeinfo.tm_mday = 15;         // Day of the month
@@ -107,6 +107,15 @@ int main() {
 
 
         //const int numTeams = 30;
+
+
+        //Dealing with seasons that started late
+        if(games.size() == 0){
+            endepochTime = endepochTime + 60*60*24*numDays;
+            continue;
+        }
+
+
 
         std::vector<std::vector<double> > M(numTeams, std::vector<double>(games.size(), 0.0));
         std::vector<double> S(games.size(),0.0);
