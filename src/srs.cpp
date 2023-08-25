@@ -111,7 +111,7 @@ int main() {
         M[int(away) - 1][col] = -1.0;
 
         int diff_score = static_cast<int>(homescore) - static_cast<int>(awayscore);
-        /* POTENTIAL FUTURE ADJUSTMENTS
+        /* POTENTIAL FUTURE ADJUSTMENTS - MORE USEFUL IN BASEBALL
         int max_MOV = 100;
         int win_floor = 0;
 
