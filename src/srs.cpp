@@ -35,6 +35,14 @@ int selectDataCallback(void* data, int argc, char** argv, char** /*azColName*/) 
     return 0;
 }
 
+struct Rating {
+    int team_id;
+    float srs_rating;
+    int year;
+    double epochtime;
+};
+
+
 int main() {
     sqlite3* db;
     char* errorMsg = nullptr;
@@ -45,10 +53,16 @@ int main() {
         std::cout << "Cannot open database: " << sqlite3_errmsg(db) << std::endl;
         return rc;
     }
+    
+    std::vector<Rating> ratings_history;
+
+    int start_year = 1977;
+    int end_year = 2023;
 
     // Set up times - start time.
     std::tm timeinfo = {}; // Initialize to all zeros
-    for(int year = 1977;year<=2023;year++){
+    for(int year = start_year;year<=end_year;year++){
+        std::cout<<"Processing year "<<std::to_string(year)<<std::endl;
         timeinfo.tm_year = year - 1900; // Year since 1900 (2023)
         timeinfo.tm_mon = 2;           // Month (0-based index)
         timeinfo.tm_mday = 15;         // Day of the month
@@ -194,18 +208,27 @@ int main() {
             }
 
             DenseVector x1 = solver1.solve(Svector);
-            std::cout << "SRS results on epochtime: " << endepochTime << std::endl;
-            std::cout << "Solution using LeastSquaresConjugateGradient:\n";
+            //std::cout << "SRS results on epochtime: " << endepochTime << std::endl;
+            //std::cout << "Solution using LeastSquaresConjugateGradient:\n";
+            
             for (int i=0; i<x1.size(); i++){
-            std::cout << i+1 << ": " << x1[i] << "\n";
+            Rating rating;
+            rating.team_id = i+1;
+            rating.year = year;
+            rating.epochtime = endepochTime;
+            rating.srs_rating = x1[i];
+            ratings_history.push_back(rating);
+            //std::cout << i+1 << ": " << x1[i] << "\n";
             }
 
-        std::cout<<"Completion. "<<std::endl;
-        endepochTime = endepochTime + 60*60*24*numDays;
-        //std::cout<<std::to_string(endepochTime)<<std::endl;
-        //std::cout<<std::to_string(yearendepochTime)<<std::endl;
+            //std::cout<<"Completion. "<<std::endl;
+        
+            endepochTime = endepochTime + 60*60*24*numDays;
+            //std::cout<<std::to_string(endepochTime)<<std::endl;
+            //std::cout<<std::to_string(yearendepochTime)<<std::endl;
         }
     }
+    std::cout << "total values calculated: " << ratings_history.size() << std::endl;
     // Close the database connection
     sqlite3_close(db);
     return 0;
