@@ -228,7 +228,66 @@ int main() {
             //std::cout<<std::to_string(yearendepochTime)<<std::endl;
         }
     }
-    std::cout << "total values calculated: " << ratings_history.size() << std::endl;
+    std::cout << "total values calculated: " << ratings_history.size() << "\nBeginning insert now" << std::endl;
+
+    // Prepare the INSERT statement using INSERT INTO VALUES 
+    std::string insertQuery = "INSERT INTO SRS (team_id, srs_rating, epochtime, year) VALUES (?, ?, ?, ?);";
+    sqlite3_stmt *stmt;
+    rc = sqlite3_prepare_v2(db, insertQuery.c_str(), -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error preparing statement: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return 1;
+    }
+
+
+     rc = sqlite3_exec(db, "BEGIN TRANSACTION;", nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error beginning transaction: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return 1;
+    }
+
+    // Bind and execute the INSERT statement for each Rating object in the ratings_history collection
+    for (unsigned long i=0;i<ratings_history.size();i++) {
+        Rating rating = ratings_history[i];
+        sqlite3_bind_int(stmt, 1, rating.team_id);
+        sqlite3_bind_double(stmt, 2, rating.srs_rating);
+        sqlite3_bind_double(stmt, 3, rating.epochtime);
+        sqlite3_bind_int(stmt, 4, rating.year);
+
+        rc = sqlite3_step(stmt);
+        if (rc != SQLITE_DONE) {
+            std::cerr << "Error executing statement: " << sqlite3_errmsg(db) << std::endl;
+            sqlite3_close(db);
+            return 1;
+        }
+        //std::cout<<i<<std::endl;
+        sqlite3_reset(stmt);
+    }
+
+    // Commit the transaction
+    rc = sqlite3_exec(db, "COMMIT;", nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error committing transaction: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return 1;
+    }
+
+    // Finalize the statement and close the database connection
+    sqlite3_finalize(stmt);
+
+    //SQL statement for updating all team abbreviations
+    std::string abbrev_update = "UPDATE SRS as r SET team_abbreviation = (SELECT abbreviation FROM teams AS t WHERE r.team_id = t.id)";
+    // Commit the transaction
+    rc = sqlite3_exec(db, abbrev_update.c_str(), nullptr, nullptr, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error updating associated abbreviations: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return 1;
+    }
+
+
     // Close the database connection
     sqlite3_close(db);
     return 0;
