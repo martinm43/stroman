@@ -30,8 +30,8 @@ from mlb_database.mlb_models import Teams
 year_max = 2023
 year_min = 1977
 
-try:
-    season_year = int(input("Please select a year between 1977 and 2022, or enter 0 for random year: "))
+""" try:
+    season_year = int(input(f"Please select a year between {year_min} and {year_max}, or enter 0 for random year: "))
 except ValueError:
     print("Invalid value entered, quitting!!")
     sys.exit(1)
@@ -69,10 +69,11 @@ try:
     print(division_name)
 except KeyError:
     print("Invalid division key provided, quitting")
-    sys.exit(1)
+    sys.exit(1) """
 
-
-
+season_year = 2023
+division_name = "NL Central"
+ratings_mode = "SRS"
 
 a = datetime(season_year, 3, 20)
 b = datetime(season_year, 4, 10)
@@ -130,7 +131,6 @@ odds_list.append(x_odds)
 dates_list = []
 dates_list.append(b)
 
-ratings_mode = "Elo"
 
 
 while b < end:
@@ -145,7 +145,7 @@ while b < end:
     odds_list.append(x_odds)
     dates_list.append(b)
     print("Finished processing "+b.strftime("%m %d %Y"))
-    b = b + timedelta(days=3) #1
+    b = b + timedelta(days=4) #1
 
 
 
@@ -180,12 +180,14 @@ plt.xlabel("Date")
 plt.ylabel("Team Playoff Odds")
 plt.title(
     division_name
-    + " Playoff Odds, "
+    + " Playoff Odds, "+ratings_mode+", "
 + str(season_year)
 + "\n (includes wild card(s) if applicable. Invalid for 1994, 1981)"
 )
 plt.legend()
 plt.xticks(rotation=15)
-plt.savefig(division_name + "_" + str(season_year) + ".png")
-plt.show()
+plt.savefig(division_name + "_" + str(season_year) + "-"+ratings_mode + ".png")
+plt.show(block=False)
+plt.pause(10)
+plt.close()
 

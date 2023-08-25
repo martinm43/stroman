@@ -91,7 +91,7 @@ def SRS(game, printing=False, max_MOV=100.0, home_team_adv=0.0, win_floor=0.0,nu
     homeAdvantage = W[0][0]
 
     teamStrength = W[0] #[1:]
-    print(sum(teamStrength))
+    # print(sum(teamStrength))
     # Team strengths have meaning only by linear comparison;
     # we can add or subtract any constant to all of them without
     # changing the meaning.
