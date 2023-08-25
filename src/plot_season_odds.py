@@ -30,7 +30,7 @@ from mlb_database.mlb_models import Teams
 year_max = 2023
 year_min = 1977
 
-try:
+""" try:
     season_year = int(input(f"Please select a year between {year_min} and {year_max}, or enter 0 for random year: "))
 except ValueError:
     print("Invalid value entered, quitting!!")
@@ -69,11 +69,11 @@ try:
     print(division_name)
 except KeyError:
     print("Invalid division key provided, quitting")
-    sys.exit(1)
+    sys.exit(1) """
 
-#season_year = 2023
-#division_name = "NL Central"
-ratings_mode = "SRS"
+season_year = 2023
+division_name = "NL Central"
+ratings_mode = "Elo"
 
 a = datetime(season_year, 3, 20)
 b = datetime(season_year, 4, 10)

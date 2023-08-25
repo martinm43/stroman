@@ -46,9 +46,32 @@ int main() {
         return rc;
     }
 
+    // Set up times - start time.
+    std::tm timeinfo = {}; // Initialize to all zeros
+    int year = 2023;
+    timeinfo.tm_year = year - 1900; // Year since 1900 (2023)
+    timeinfo.tm_mon = 3;           // Month (August, 0-based index)
+    timeinfo.tm_mday = 15;         // Day of the month
+    std::time_t epochTime = std::mktime(&timeinfo); // Convert to epoch time
+
+     // Set up times - end time.
+    std::tm endtimeinfo = {}; // Initialize to all zeros
+    endtimeinfo.tm_year = year - 1900; // Year since 1900 (2023)
+    endtimeinfo.tm_mon = 8;           // Month (August, 0-based index)
+    endtimeinfo.tm_mday = 24;         // Day of the month
+    std::time_t endepochTime = std::mktime(&endtimeinfo); // Convert to epoch time
+
+    // Alternatively use the current end time.
+    //std::time_t endepochTime = std::time(nullptr); // Get the current epoch time
+    
+    //Debug print script for datetimes.
+    //std::cout << "Epoch Time for "+std::to_string(year)+"-"+std::to_string(timeinfo.tm_mon)+"-"+std::to_string(timeinfo.tm_mday) <<": " << epochTime << std::endl;
+    
+
     // Query the table
-    const char* selectDataQuery = "SELECT id, home_team_id, home_team_runs, away_team_id, away_team_runs,"
-    " year , epochtime FROM Games where year = 2023 and (home_team_runs > 0 or away_team_runs > 0)"; 
+    std::string selectquery = "SELECT id, home_team_id, home_team_runs, away_team_id, away_team_runs,"
+    " year , epochtime FROM Games where (epochtime > "+std::to_string(epochTime)+" and epochtime < "+std::to_string(endepochTime)+") and (home_team_runs > 0 or away_team_runs > 0)"; 
+    const char* selectDataQuery = selectquery.c_str(); 
     std::vector<Game> games;
     rc = sqlite3_exec(db, selectDataQuery, selectDataCallback, &games, &errorMsg);
     if (rc != SQLITE_OK) {
