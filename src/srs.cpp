@@ -73,6 +73,7 @@ int main() {
     const char* selectDataQuery;
     std::vector<Game> games;
     const int numTeams = 30;
+    int numDays=4;
 
 
     while(endepochTime < yearendepochTime) {
@@ -191,7 +192,7 @@ int main() {
         }
 
        std::cout<<"Completion. "<<std::endl;
-       endepochTime = endepochTime + 60*60*24*7;
+       endepochTime = endepochTime + 60*60*24*numDays;
        //std::cout<<std::to_string(endepochTime)<<std::endl;
        //std::cout<<std::to_string(yearendepochTime)<<std::endl;
     }
