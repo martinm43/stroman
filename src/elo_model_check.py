@@ -14,8 +14,8 @@ Outputs: None
 import numpy as np
 
 from random import randint
-from queries import season_query, team_elo_rating
-from mlb_models import Games
+from mlb_database.queries import season_query, team_elo_rating
+from mlb_database.mlb_models import Games
 from analytics.morey import Elo_regress
 
 x = Games.select().order_by(Games.year.asc()).get()

@@ -1,3 +1,9 @@
+"""
+A script for checking whether the pythagorean odds
+you calculated make sense. 
+
+"""
+
 if __name__=="__main__":
     from analytics.pythag import pythagorean_wins
     from mlb_database.mlb_models import Games

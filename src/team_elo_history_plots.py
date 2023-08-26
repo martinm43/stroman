@@ -15,6 +15,8 @@ import time
 
 from mlb_database.queries import team_abbreviation
 
+rolling_average=41
+
 for team_id in range(30, 0, -1):
     conn = sqlite3.connect("mlb_data.sqlite")
     query = "SELECT epochtime,elo_rating FROM ratings where team_id = " + str(
@@ -34,7 +36,7 @@ for team_id in range(30, 0, -1):
 
     plt.plot(
         df["epochtime"],
-        df["elo_rating"].rolling(162).mean(),
+        df["elo_rating"].rolling(rolling_average).mean(),
         label="41 game moving avg.",
         color=s[0][0],
     )
