@@ -20,6 +20,7 @@ from mlb_database.queries import (
     team_abbreviation,
     epochtime,
     new_elo_ratings_list,
+    new_srs_ratings_list,
     form_query,
 )
 
@@ -34,9 +35,9 @@ from random import randint
 from analytics.wins_script import get_wins
 
 # Query Testing
-season_year = 2014
+season_year = 2023
 start_datetime = datetime(season_year,3,15)
-end_datetime = datetime(season_year,11,5)
+end_datetime = datetime.today()
 
 games_list = games_query(start_datetime, end_datetime)
 
@@ -61,11 +62,13 @@ lpw_results = league_pythagorean_wins(
     maxcalcdatetime=epochtime(end_datetime),
 )
 
-srs_list = SRS(
+""" srs_list = SRS(
     games_list, max_MOV=max_MOV, home_team_adv=home_team_adv, win_floor=win_floor
-)
+) """
 
 elo_list = new_elo_ratings_list(epochtime(end_datetime))
+
+srs_list = new_srs_ratings_list(epochtime(end_datetime))
 
 form_list = [form_query(i) for i in range(1, teams_constant+1)]
 
