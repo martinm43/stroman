@@ -41,6 +41,7 @@ for team_id in range(30, 0, -1):
     plt.xticks(rotation=45)
     plt.legend()
     plt.title("Elo rating history of " + team_abbreviation(team_id))
+    plt.savefig("Elo rating history of " + team_abbreviation(team_id)+".png")
     plt.show(block=False)
     plt.pause(1)
     plt.close()
