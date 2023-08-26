@@ -124,7 +124,8 @@ int main() {
 
 
             //Dealing with seasons that started late
-            if(games.size() == 0){
+            int game_size_tol = 605;
+            if(games.size() < game_size_tol){
                 endepochTime = endepochTime + 60*60*24*numDays;
                 continue;
             }
@@ -200,7 +201,8 @@ int main() {
             //std::cout << "S is " << Svector.rows() << " by " << Svector.cols() << std::endl;
 
             Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver1;
-            solver1.setMaxIterations(30); //known stable value
+            int maxIterations = 20; //Accurate enough and doesn't give blow up solutions
+            solver1.setMaxIterations(maxIterations); //known stable value
             solver1.compute(MmatrixT);
             if (solver1.info() != Eigen::Success) {
                 // decomposition failed
@@ -218,7 +220,7 @@ int main() {
             rating.epochtime = endepochTime;
             rating.srs_rating = x1[i];
             ratings_history.push_back(rating);
-            //std::cout << i+1 << ": " << x1[i] << "\n";
+            //std::cout << rating.team_id << ": " << rating.srs_rating << "\n";
             }
 
             //std::cout<<"Completion. "<<std::endl;
@@ -229,6 +231,37 @@ int main() {
         }
     }
     std::cout << "total values calculated: " << ratings_history.size() << "\nBeginning insert now" << std::endl;
+
+    //Delete existing table
+    std::string deleteQuery = "DROP TABLE IF EXISTS SRS;";
+    rc = sqlite3_exec(db, deleteQuery.c_str(), nullptr, nullptr, &errorMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error deleting table: " << errorMsg << std::endl;
+        sqlite3_free(errorMsg);
+        sqlite3_close(db);
+        return 1;
+    } else {
+        std::cout << "Original SRS ratings table deleted successfully." << std::endl;
+    }
+
+    // Create the table again
+    std::string createQuery = "CREATE TABLE SRS ("
+                              "id INTEGER PRIMARY KEY, "
+                              "team_id INTEGER, "
+                              "srs_rating FLOATs, "
+                              "epochtime REAL, "
+                              "team_abbreviation STRING, "
+                              "current_abbreviation STRING, "
+                              "year INTEGER);";
+    rc = sqlite3_exec(db, createQuery.c_str(), nullptr, nullptr, &errorMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error creating table: " << errorMsg << std::endl;
+        sqlite3_free(errorMsg);
+        sqlite3_close(db);
+        return 1;
+    } else {
+        std::cout << "New blank ratings table created. Populating." << std::endl;
+    }
 
     // Prepare the INSERT statement using INSERT INTO VALUES 
     std::string insertQuery = "INSERT INTO SRS (team_id, srs_rating, epochtime, year) VALUES (?, ?, ?, ?);";
@@ -290,6 +323,7 @@ int main() {
 
     // Close the database connection
     sqlite3_close(db);
+    std::cout<<"Operations completed succesfully"<<std::endl;
     return 0;
 }
 
