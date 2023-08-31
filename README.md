@@ -3,14 +3,17 @@
 A Python/C++ program to calculate basic statistics about baseball seasons and 
 to determine the playoff picture at any given time since 1977 
 (free agency/true desegregation). It was named after my favourite pitcher for 
-the Toronto Blue Jays and now New York Mets, Marcus Stroman.
+the Toronto Blue Jays and now New York Mets, and now Chicago Cubs, Marcus Stroman.
 
 ## <u>**The Files, and What they Do**</u>
 **baseball_csv_importer.py**  -- processes the .csv files supplied by the ben_kite 
 baseball_data library. Minor changes have been made to that library in order to 
 facilitate the acquisition of historical data
 
-        
+**build_elo_script.sh** and **build_srs_script.py**  -- sample command line snippets
+to compile the code, the srs script is conditional based on the presumed location of the Eigen 
+file
+
 **points_analysis.py** -- used to calculate the parameters of a normal 
 distribution of runs in baseball  
 
@@ -18,10 +21,19 @@ distribution of runs in baseball
 given start date and end date. Useful if you want to see "performance over 
 second half" or something similar
 
-**elo_calculator.py** - Calculates the Elo model for baseball from 1977 to 2020
-(current end of the dataset)
+**elo_calculator.py** - Calculates the Elo model for baseball from 1977 to 2023
 
 **team_elo_history_plots.py** - Plots Elo history for every team.
+
+![Elo rating shistory of the Cubs](src/Elo%20rating%20history%20of%20CHC.png)
+
+![Elo rating shistory of the NYM](src/Elo%20rating%20history%20of%20NYM.png)
+
+**team_srs_history_plots.py** - Plots SRS history for every team.
+
+![SRS rating history of the Blue Jays](src/SRS%20rating%20history%20of%20TOR.png)
+
+![SRS ratings history of the Brewers](src/SRS%20rating%20history%20of%20MIL.png)
 
 **elo_model_check.py** - Checks to see if the Elo model would have predicted
 the correct winner for each game for every season.
@@ -75,15 +87,10 @@ numpy, scipy, matplotlib, and cython - but these can be obtained from Anaconda.
 
 **C++ requirements:**
 
-**(All)** Newer compilers (mid-2020 onwards) may not work due to an issue with how memory is allocated. In particular, gcc-11 
-does not appear to work as of May 2021. 
-
-**Apple** LLVM 10 has been tested successfully.
-
 On **Windows** in order to build the Monte Carlo simulation extension, you will require Microsoft Visual C++ as described in the .vsconfig file (tested with VC.141.x86.64)
 
 Armadillo libraries have been included for portability - accessing and integrating these libraries might be particularly difficult for non-root users or
-as any user on Windows.  
+as any user on Windows. Eigen is used for SRS calculations.
 
 Note that the program runs much slower under Windows.
 
