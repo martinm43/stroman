@@ -13,7 +13,7 @@ import pandas as pd
 import sqlite3
 
 from mlb_database.queries import team_abbreviation
-rolling_average = 41
+rolling_average = 162
 
 for team_id in range(30, 0, -1):
     conn = sqlite3.connect("mlb_data.sqlite")
@@ -35,7 +35,7 @@ for team_id in range(30, 0, -1):
     plt.plot(
         df["epochtime"],
         df["srs_rating"].rolling(rolling_average).mean(),
-        label="41 game moving avg.",
+        label=f"{rolling_average} game moving avg.",
         color=s[0][0],
     )
     plt.xticks(rotation=45)
