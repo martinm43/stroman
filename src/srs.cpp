@@ -57,7 +57,7 @@ int main() {
     
     std::vector<Rating> ratings_history;
 
-    int start_year = 2021;
+    int start_year = 1977;
     int end_year = 2024;
 
     // Set up times - start time.
@@ -202,7 +202,7 @@ int main() {
             //std::cout << "S is " << Svector.rows() << " by " << Svector.cols() << std::endl;
 
             Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver1;
-            int maxIterations = 20; //Accurate enough and doesn't give blow up solutions
+            int maxIterations = 35; //Accurate enough and doesn't give blow up solutions
             solver1.setMaxIterations(maxIterations); //known stable value
             solver1.compute(MmatrixT);
             if (solver1.info() != Eigen::Success) {

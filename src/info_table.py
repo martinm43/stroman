@@ -37,7 +37,7 @@ from analytics.wins_script import get_wins
 # Query Testing
 season_year = 2024
 start_datetime = datetime(season_year,3,15)
-end_datetime = datetime.today()
+end_datetime = datetime(season_year,11,1)
 
 games_list = games_query(start_datetime, end_datetime)
 
@@ -102,7 +102,7 @@ for x in results_print_list:
 #Remove zero entries
 results_print_list = [x for x in results_print_list if x[1] > 0]
 
-results_print_list.sort(key=lambda x: -x[2])
+results_print_list.sort(key=lambda x: -x[3])
 
 
 
