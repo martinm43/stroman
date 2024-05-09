@@ -102,7 +102,7 @@ for x in results_print_list:
 #Remove zero entries
 results_print_list = [x for x in results_print_list if x[1] > 0]
 
-results_print_list.sort(key=lambda x: -x[3])
+results_print_list.sort(key=lambda x: -x[2])
 
 
 

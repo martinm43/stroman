@@ -123,7 +123,7 @@ def simulations_result_vectorized(head_to_head, future_games, list_of_teams, int
     """
     #Convert Python list of teams to a list of C++ team objects
     
-    cpdef vector[Team] cpp_list_of_teams
+    cdef vector[Team] cpp_list_of_teams
 
     for i,t in enumerate(list_of_teams):
         team_id = int(t[0])
