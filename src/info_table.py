@@ -36,7 +36,7 @@ from analytics.wins_script import get_wins
 
 # Query Testing
 season_year = 2024
-start_datetime = datetime(season_year,5,15)
+start_datetime = datetime(season_year,3,15)
 end_datetime = datetime(season_year,11,1)
 
 games_list = games_query(start_datetime, end_datetime)
