@@ -95,6 +95,8 @@ def abbrev_to_id(team_abbrev):
         team_abbrev = "LAA"
     if team_abbrev == "MON":
         team_abbrev = "WSN"
+    if team_abbrev == "ATH":
+        team_abbrev = "OAK"
     s_query = Teams.select(Teams.team_id).where(
         Teams.abbreviation == team_abbrev
     )
