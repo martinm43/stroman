@@ -35,7 +35,7 @@ from random import randint
 from analytics.wins_script import get_wins
 
 # Query Testing
-season_year = 2025
+season_year = 2026
 start_datetime = datetime(season_year,3,15)
 end_datetime = datetime(season_year,11,1)
 
@@ -56,11 +56,14 @@ wins_dict_list = [
 wins_list = [[x["away_record"], x["home_record"], x["record"]] for x in wins_dict_list]
 
 # Pythagorean Wins
-lpw_results = league_pythagorean_wins(
-    Games,
-    mincalcdatetime=epochtime(start_datetime),
-    maxcalcdatetime=epochtime(end_datetime),
-)
+#lpw_results = league_pythagorean_wins(
+#    Games,
+#    mincalcdatetime=epochtime(start_datetime),
+#    maxcalcdatetime=epochtime(end_datetime),
+#)
+
+#early season quick fix
+lpw_results = [0 for i in range(1, teams_constant+1)]
 
 """ srs_list = SRS(
     games_list, max_MOV=max_MOV, home_team_adv=home_team_adv, win_floor=win_floor
@@ -72,14 +75,17 @@ srs_list = new_srs_ratings_list(epochtime(end_datetime))
 
 form_list = [form_query(i) for i in range(1, teams_constant+1)]
 
-lpw_results.sort(key=lambda x: x[0])
+#lpw_results.sort(key=lambda x: x[0])
 
 results = list(zip(lpw_results, srs_list, wins_list, elo_list, form_list))
 
-results = [
-    [x[0][0], x[0][1], x[1], x[2][0], x[2][1], x[2][2], x[3], x[4]] for x in results
-]
+#results = [
+#    [x[0][0], x[0][1], x[1], x[2][0], x[2][1], x[2][2], x[3], x[4]] for x in results
+#]
 
+results = [
+    [x[0], x[0], x[1], x[2][0], x[2][1], x[2][2], x[3], x[4]] for x in results
+]
 results_print_list = [
     [
         team_abbreviation(x[0]),
