@@ -10,7 +10,7 @@ Output: table (string)
 """
 # Standard imports
 from datetime import datetime, timedelta
-
+from pprint import pprint
 # Third Party Imports
 from tabulate import tabulate
 
@@ -41,7 +41,9 @@ end_datetime = datetime(season_year,11,1)
 
 games_list = games_query(start_datetime, end_datetime)
 
-print(len(games_list))
+#print(len(games_list))
+
+#pprint(games_list)
 
 # Custom SRS calculation options
 max_MOV = 100  # no real max MOV
@@ -63,7 +65,7 @@ wins_list = [[x["away_record"], x["home_record"], x["record"]] for x in wins_dic
 #)
 
 #early season quick fix
-lpw_results = [0 for i in range(1, teams_constant+1)]
+lpw_results = [(i,0) for i in range(1, teams_constant+1)]
 
 """ srs_list = SRS(
     games_list, max_MOV=max_MOV, home_team_adv=home_team_adv, win_floor=win_floor
@@ -79,13 +81,14 @@ form_list = [form_query(i) for i in range(1, teams_constant+1)]
 
 results = list(zip(lpw_results, srs_list, wins_list, elo_list, form_list))
 
+results = [
+    [x[0][0], x[0][1], x[1], x[2][0], x[2][1], x[2][2], x[3], x[4]] for x in results
+]
+
 #results = [
-#    [x[0][0], x[0][1], x[1], x[2][0], x[2][1], x[2][2], x[3], x[4]] for x in results
+#    [x[0], x[0], x[1], x[2][0], x[2][1], x[2][2], x[3], x[4]] for x in results
 #]
 
-results = [
-    [x[0], x[0], x[1], x[2][0], x[2][1], x[2][2], x[3], x[4]] for x in results
-]
 results_print_list = [
     [
         team_abbreviation(x[0]),
@@ -106,11 +109,11 @@ for x in results_print_list:
         x[0] = "MON"
 
 #Remove zero entries
-results_print_list = [x for x in results_print_list if x[1] > 0]
+#results_print_list = [x for x in results_print_list if x[1] > 0]
 
 results_print_list.sort(key=lambda x: -x[2])
 
-
+#pprint(results_print_list)
 
 results_table = tabulate(
     results_print_list,
