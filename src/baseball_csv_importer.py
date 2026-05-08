@@ -38,8 +38,9 @@ for season_year_start in range(start_year,end_year,-1):
     #Renamings to match peewee
     df["home_team"]=df["HomeTeam"]
     df["away_team"]=df["AwayTeam"]
-    df["home_team_runs"]=int(df["HomeTeamRuns"])
-    df["away_team_runs"]=int(df["AwayTeamRuns"])
+    df["home_team_runs"]=df["HomeTeamRuns"]
+    df["home_team_runs"]=int(df["home_team_runs"][0])
+    df["away_team_runs"]=df["AwayTeamRuns"]
     df["home_wl"]=df["HomeWL"]
     df["inn"]=df["Inn"]
     df["gb"]=df["GB"]
