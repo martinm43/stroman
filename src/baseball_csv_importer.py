@@ -26,7 +26,8 @@ for season_year_start in range(start_year,end_year,-1):
     # Convert date into standard date object
     df["Date"] = df["Date"].astype(str)
     df["Date"] = df["Date"].map(lambda x: str(x)[:-1])
-    df["Date"] = pd.to_datetime(df["Date"],format='%Y%m%d', errors='ignore')
+    print(df["Date"])
+    df["Date"] = pd.to_datetime(df["Date"],format='%Y%m%d') #, errors='ignore')
     #Create the epochtime and then convert the date
     df["epochtime"] = df["Date"].astype('int64')//1e9
     df["Date"] = df["Date"].apply(lambda x: x.strftime("%Y-%m-%d"))
@@ -37,8 +38,8 @@ for season_year_start in range(start_year,end_year,-1):
     #Renamings to match peewee
     df["home_team"]=df["HomeTeam"]
     df["away_team"]=df["AwayTeam"]
-    df["home_team_runs"]=df["HomeTeamRuns"]
-    df["away_team_runs"]=df["AwayTeamRuns"]
+    df["home_team_runs"]=int(df["HomeTeamRuns"])
+    df["away_team_runs"]=int(df["AwayTeamRuns"])
     df["home_wl"]=df["HomeWL"]
     df["inn"]=df["Inn"]
     df["gb"]=df["GB"]
@@ -70,7 +71,8 @@ for season_year_start in range(start_year,end_year,-1):
     # q.execute()
     # print("Entries cleared, restoring entries.")
     
-    
+
+    pprint(season_dicts[1])
     for key,value in season_dicts.items():
         season_dict_list.append(value)
     
