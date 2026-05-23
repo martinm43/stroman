@@ -67,13 +67,13 @@ wins_list = [[x["away_record"], x["home_record"], x["record"]] for x in wins_dic
 #early season quick fix
 lpw_results = [(i,0) for i in range(1, teams_constant+1)]
 
-srs_list = SRS(
-    games_list, max_MOV=max_MOV, home_team_adv=home_team_adv, win_floor=win_floor
-) 
+#srs_list = SRS(
+#    games_list, max_MOV=max_MOV, home_team_adv=home_team_adv, win_floor=win_floor
+#) 
 
 elo_list = new_elo_ratings_list(epochtime(end_datetime))
 
-#srs_list = new_srs_ratings_list(epochtime(end_datetime))
+srs_list = new_srs_ratings_list(epochtime(end_datetime))
 
 form_list = [form_query(i) for i in range(1, teams_constant+1)]
 
