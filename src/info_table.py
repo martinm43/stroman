@@ -58,14 +58,14 @@ wins_dict_list = [
 wins_list = [[x["away_record"], x["home_record"], x["record"]] for x in wins_dict_list]
 
 # Pythagorean Wins
-#lpw_results = league_pythagorean_wins(
-#    Games,
-#    mincalcdatetime=epochtime(start_datetime),
-#    maxcalcdatetime=epochtime(end_datetime),
-#)
+lpw_results = league_pythagorean_wins(
+    Games,
+    mincalcdatetime=epochtime(start_datetime),
+    maxcalcdatetime=epochtime(end_datetime),
+)
 
 #early season quick fix
-lpw_results = [(i,0) for i in range(1, teams_constant+1)]
+#lpw_results = [(i,0) for i in range(1, teams_constant+1)]
 
 #srs_list = SRS(
 #    games_list, max_MOV=max_MOV, home_team_adv=home_team_adv, win_floor=win_floor

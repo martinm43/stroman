@@ -47,15 +47,16 @@ def pythagorean_wins(
         Game.epochtime >= mincalcdatetime,
         Game.epochtime <= maxcalcdatetime,
     )
-    #team_away_team_runs = sum([p.away_team_runs if p.away_team_runs is not None else 0 for p in pts])
-    team_away_team_runs = sum([p.away_team_runs for p in pts])
+    #pprint(pts)
+    team_away_team_runs = sum([p.away_team_runs if p.away_team_runs is not None else 0 for p in pts])
+    #team_away_team_runs = sum([p.away_team_runs for p in pts])
     pts = Game.select(Game.home_team_runs).where(
         Game.home_team_id == team_id,
         Game.epochtime >= mincalcdatetime,
         Game.epochtime <= maxcalcdatetime,
     )
-    #team_home_team_runs = sum([p.home_team_runs if p.home_team_runs is not None else 0 for p in pts])
-    team_home_team_runs = sum([p.home_team_runs for p in pts])
+    team_home_team_runs = sum([p.home_team_runs if p.home_team_runs is not None else 0 for p in pts])
+    #team_home_team_runs = sum([p.home_team_runs for p in pts])
     team_team_runs_for = team_away_team_runs + team_home_team_runs
     team_team_runs_against_home = Game.select(Game.away_team_runs).where(
         Game.home_team_id == team_id,
@@ -68,12 +69,12 @@ def pythagorean_wins(
         Game.epochtime <= maxcalcdatetime,
     )
     team_team_runs_against_home = sum(
-         [p.away_team_runs for p in team_team_runs_against_home]
-    #    [p.away_team_runs if p.away_team_runs is not None else 0 for p in team_team_runs_against_home]
+    #     [p.away_team_runs for p in team_team_runs_against_home]
+        [p.away_team_runs if p.away_team_runs is not None else 0 for p in team_team_runs_against_home]
     )
     team_team_runs_against_away = sum(
-         [p.home_team_runs for p in team_team_runs_against_away]
-    #    [p.home_team_runs if p.home_team_runs is not None else 0 for p in team_team_runs_against_away]
+    #     [p.home_team_runs for p in team_team_runs_against_away]
+        [p.home_team_runs if p.home_team_runs is not None else 0 for p in team_team_runs_against_away]
     )
     team_team_runs_against = team_team_runs_against_away + team_team_runs_against_home
 
