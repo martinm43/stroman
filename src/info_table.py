@@ -77,7 +77,7 @@ srs_list = new_srs_ratings_list(epochtime(end_datetime))
 
 form_list = [form_query(i) for i in range(1, teams_constant+1)]
 
-#lpw_results.sort(key=lambda x: x[0])
+lpw_results.sort(key=lambda x: x[0])
 
 results = list(zip(lpw_results, srs_list, wins_list, elo_list, form_list))
 
