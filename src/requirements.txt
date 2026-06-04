@@ -1,0 +1,29 @@
+beautifulsoup4==4.14.3
+Brotli @ file:///home/builder/.termux-build/python-brotli/src
+bs4==0.0.2
+certifi==2026.2.25
+charset-normalizer==3.4.6
+contourpy @ file:///home/builder/.termux-build/python-contourpy/src/dist/contourpy-1.3.3-cp313-cp313-android_aarch64.whl#sha256=32bb3daa08435db785b67124a06541b1146679f7cc8a0e6813a65345cb3c4138
+Cython==3.2.5
+idna==3.11
+lxml==6.1.1
+nba_api==1.11.4
+numpy @ file:///home/builder/.termux-build/python-numpy/src/dist/numpy-2.4.4-cp313-cp313-android_aarch64.whl#sha256=b9a4731d6bfc5c469dd2fd61e327c90748ee544201108b102775549269faeda3
+pandas==2.3.3
+peewee==4.0.2
+pillow @ file:///home/builder/.termux-build/python-pillow/src
+proot-distro @ file:///home/builder/.termux-build/proot-distro/src
+pycryptodomex @ file:///home/builder/.termux-build/python-pycryptodomex/src
+python-dateutil==2.9.0.post0
+pytz==2026.2
+requests==2.32.5
+scipy @ file:///home/builder/.termux-build/python-scipy/src/dist/scipy-1.17.1-cp313-cp313-android_aarch64.whl#sha256=68e22d5f7543c509616910d502e3ece2208ed0f962f8f7b0b81c263ca344571b
+setuptools==82.0.1
+six==1.17.0
+soupsieve==2.8.4
+tabulate==0.10.0
+typing_extensions==4.15.0
+tzdata==2026.2
+urllib3==2.6.3
+yt-dlp @ file:///home/builder/.termux-build/python-yt-dlp/src
+yt-dlp-ejs @ file:///home/builder/.termux-build/yt-dlp-ejs/src/dist/yt_dlp_ejs-0.8.0-py3-none-any.whl#sha256=57482db8a7315ec3c1bd9df4130b67436ae75a7b4ba502aa156abb52866f6adc
