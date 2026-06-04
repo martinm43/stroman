@@ -16,7 +16,7 @@ proot-distro @ file:///home/builder/.termux-build/proot-distro/src
 pycryptodomex @ file:///home/builder/.termux-build/python-pycryptodomex/src
 python-dateutil==2.9.0.post0
 pytz==2026.2
-requests==2.32.5
+requests==2.33.0
 scipy @ file:///home/builder/.termux-build/python-scipy/src/dist/scipy-1.17.1-cp313-cp313-android_aarch64.whl#sha256=68e22d5f7543c509616910d502e3ece2208ed0f962f8f7b0b81c263ca344571b
 setuptools==82.0.1
 six==1.17.0
