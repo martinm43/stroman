@@ -41,6 +41,11 @@ def predicted_rd_formula(a, b):
     """
     mean = 0.19020
     stddev = 2.3966
+
+    a = a[0]
+    b = b[0]
+
+
     DoS = -1 + 2 / (1 + exp((b - a - mean) / stddev))
     return DoS
 
