@@ -102,7 +102,7 @@ pydocstyle==6.3.0
 pyflakes==3.2.0
 PyGithub==2.6.1
 Pygments==2.19.1
-PyJWT==2.10.1
+PyJWT==2.13.0
 pylint==3.3.7
 pylint-venv==3.0.4
 pyls-spyder==0.4.0
