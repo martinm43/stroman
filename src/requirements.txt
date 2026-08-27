@@ -138,7 +138,7 @@ rpds-py==0.25.1
 rtree==1.4.0
 scipy==1.16.3
 SecretStorage==3.3.3
-setuptools==80.9.0
+setuptools==83.0.0
 six==1.17.0
 snowballstemmer==3.0.1
 sortedcontainers==2.4.0
