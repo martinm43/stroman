@@ -6862,7 +6862,7 @@ static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
                 unsigned char *bytes = (unsigned char *)&val;
                 int ret = _PyLong_AsByteArray((PyLongObject *)v,
                                               bytes, sizeof(val),
-                                              is_little, !is_unsigned, 1); //added 1 for Python 3.14 compatibility.
+                                              is_little, !is_unsigned);
                 Py_DECREF(v);
                 if (likely(!ret))
                     return val;
@@ -7134,7 +7134,7 @@ static CYTHON_INLINE size_t __Pyx_PyInt_As_size_t(PyObject *x) {
                 unsigned char *bytes = (unsigned char *)&val;
                 int ret = _PyLong_AsByteArray((PyLongObject *)v,
                                               bytes, sizeof(val),
-                                              is_little, !is_unsigned,1 ); //python 3.14 fix
+                                              is_little, !is_unsigned);
                 Py_DECREF(v);
                 if (likely(!ret))
                     return val;
@@ -7330,7 +7330,7 @@ static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *x) {
                 unsigned char *bytes = (unsigned char *)&val;
                 int ret = _PyLong_AsByteArray((PyLongObject *)v,
                                               bytes, sizeof(val),
-                                              is_little, !is_unsigned,1); //3.14 fix
+                                              is_little, !is_unsigned);
                 Py_DECREF(v);
                 if (likely(!ret))
                     return val;
