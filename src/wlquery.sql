@@ -45,5 +45,4 @@ FROM (
 )
 GROUP BY team
 ORDER BY
-    SUM(wins) DESC,
     run_diff DESC;
