@@ -12,35 +12,36 @@ SELECT
 FROM (
     SELECT
         home_team AS team,
-        home_runs > away_runs AS wins,
-        home_runs < away_runs AS losses,
+        home_team_runs > away_team_runs AS wins,
+        home_team_runs < away_team_runs AS losses,
 
-        home_runs > away_runs AS home_wins,
-        home_runs < away_runs AS home_losses,
+        home_team_runs > away_team_runs AS home_wins,
+        home_team_runs < away_team_runs AS home_losses,
 
         0 AS away_wins,
         0 AS away_losses,
 
-        home_runs AS runs_for,
-        away_runs AS runs_against
+        home_team_runs AS runs_for,
+        away_team_runs AS runs_against
     FROM games
-
+    WHERE year = 2026
     UNION ALL
 
     SELECT
         away_team AS team,
-        away_runs > home_runs AS wins,
-        away_runs < home_runs AS losses,
+        away_team_runs > home_team_runs AS wins,
+        away_team_runs < home_team_runs AS losses,
 
         0 AS home_wins,
         0 AS home_losses,
 
-        away_runs > home_runs AS away_wins,
-        away_runs < home_runs AS away_losses,
+        away_team_runs > home_team_runs AS away_wins,
+        away_team_runs < home_team_runs AS away_losses,
 
-        away_runs AS runs_for,
-        home_runs AS runs_against
+        away_team_runs AS runs_for,
+        home_team_runs AS runs_against
     FROM games
+    WHERE year = 2026
 )
 GROUP BY team
 ORDER BY
