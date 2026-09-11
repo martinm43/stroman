@@ -44,5 +44,5 @@ FROM (
     WHERE year = 2026
 )
 GROUP BY team
-ORDER BY
-    run_diff DESC;
+
+
