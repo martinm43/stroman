@@ -74,7 +74,7 @@ matplotlib==3.11.0
 matplotlib-inline==0.1.7
 mccabe==0.7.0
 mdurl==0.1.2
-mistune==3.3.0
+mistune==3.3.3
 more-itertools==10.7.0
 msgpack==1.2.2
 multidict==6.4.4
