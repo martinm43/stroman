@@ -9,7 +9,7 @@ and allow for integration with more 'modern' interfaces -think flask or Django
 
 #from predict.cython_mcss.mcss_ext2 import simulations_result_vectorized
 from mlb_database.mlb_models import Teams
-from mlb_database.queries import elo_ratings_list, epochtime, team_abbreviation
+from mlb_database.queries import new_srs_ratings_list, elo_ratings_list, epochtime, team_abbreviation
 from datetime import datetime, timedelta
 #import inspect #spyder debug
 from pprint import pprint
@@ -100,9 +100,7 @@ def playoff_odds_calc(start_datetime, end_datetime, season_year, ratings_mode="E
 
     if ratings_mode == "SRS":
         # Get Team Ratings (and create Team object list)
-        ratings_list = SRS(
-            games_query(start_datetime, end_datetime)
-        ).tolist()  # get ratings for that time.
+        ratings_list = new_srs_ratings_list(end_datetime)  # get ratings for that time.
 
         for i, x in enumerate(teams_list):
             x.append(ratings_list[i])
@@ -248,7 +246,7 @@ if __name__ == "__main__":
     # end_datetime = datetime(season_year,11,15) 
     # in-season option: end_datetime = datetime.today()-timedelta(days=1)
 
-    ratings_mode = "SRS"
+    ratings_mode = "Elo"
     print("Working mode is "+ratings_mode)
     results = playoff_odds_calc(
         start_datetime, end_datetime, season_year, ratings_mode=ratings_mode)

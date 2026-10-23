@@ -24,7 +24,7 @@ import random
 
 from prediction_table import playoff_odds_calc
 
-from mlb_database.queries import team_abbreviation
+from mlb_database.queries import team_abbreviation, new_srs_ratings_list
 from mlb_database.mlb_models import Teams
 
 year_max = 2023
@@ -62,7 +62,7 @@ else:
     print("Divisions in "+str(season_year)+" are as follows: ")
     print(" 1: AL East \n 2: AL West \n 3: NL East \n 4: NL West")
     dn = int(input("Please select a division: "))
-    #dn = random.randint(1,4)
+    #dn = random.andint(1,4)
 
 try:
     division_name = mode_dict[int(dn)]
@@ -71,9 +71,9 @@ except KeyError:
     print("Invalid division key provided, quitting")
     sys.exit(1) """
 
-season_year = 2023
-division_name = "NL Central"
-ratings_mode = "Elo"
+season_year = 2026
+division_name = "AL East"
+ratings_mode = "SRS"
 
 a = datetime(season_year, 3, 20)
 b = datetime(season_year, 4, 10)
