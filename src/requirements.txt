@@ -39,7 +39,7 @@ docstring-to-markdown==0.17
 docutils==0.22.4
 executing==2.2.1
 fastjsonschema==2.22.2
-filelock==4.2.0
+filelock==4.2.1
 flake8==7.1.2
 fonttools==4.65.0
 frozenlist==1.8.0
